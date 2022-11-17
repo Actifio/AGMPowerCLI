@@ -16,6 +16,7 @@ This document contains usage examples that include both AGMPowerCLI and AGMPower
 **[Listing AppTypes](#listing-apptypes)**<br>
 **[Find Images for a particular application](#find-images-for-a-particular-application)**<br>
 **[Find the Latest Image For a Particular Application](#find-the-latest-image-for-a-particular-application)**<br>
+**[Removing an Application](#removing-an-application)**</br>
 
 **[Audit](#audit)**</br>
 >**[Exploring the Audit Log](#exploring-the-audit-log)**</br>
@@ -59,20 +60,25 @@ This document contains usage examples that include both AGMPowerCLI and AGMPower
 **[Hosts](#hosts)**<br>
 >**[Finding a Host ID by Host Name](#finding-a-host-id-by-host-name)**<br>
 **[Finding a Host ID by Operating System Type](#finding-a-host-id-by-operating-system-type)**<br>
-**[Listing your Hosts](#listing-your-hosts)**<br>
+**[Listing Your Hosts](#listing-your-hosts)**<br>
+**[Managing Host Ports](#managing-host-ports)**</br>
+**[Removing a Host](#removing-a-host)**</br>
 
 **[Images](#images)**<br>
 >**[Image Creation With An On-Demand Job](#image-creation-with-an-ondemand-job)**<br>
 **[Image Creation In Bulk Using Policy ID](#image-creation-in-bulk-using-policy-id)**<br>
+**[Image Expiration](#image-expiration)**<br>
 **[Image Expiration In Bulk](#image-expiration-in-bulk)**<br>
 **[Image Import From OnVault](#image-import-from-onvault)**<br>
 **[Persistent Disk Import From OnVault](#persistent-disk-import-from-onvault)**<br>
 **[Image Restore](#image-restore)**<br>
 **[Setting an Image Label](#setting-an-image-label)**</br>
+**[Setting an Image Label in Bulk](#setting-an-image-label-in-bulk)**</br>
 
 **[Jobs](#jobs)**<br>
 >**[Finding Jobs](#finding-jobs)**</br>
 **[Finding Running Jobs](#finding-running-jobs)**<br>
+**[Canceling a Running Job](#canceling-a-running-jobs)**<br>
 **[Following a Running Job](#following-a-running-job)**<br>
 
 **[Logical Groups](#logical-groups)**<br>
@@ -632,7 +638,6 @@ SqlInstance
 SqlServerWriter
 VMBackup
 ```
-
 ## Find Images for a particular application
 
 If we know the application ID, we can find any images for that application with this command:
@@ -676,6 +681,12 @@ policyname      : daily snap
 The default is for snapshot, but you can also specify a jobclass:
 * ```-jobclass OnVault``` To look for OnVault images
 
+## Removing an Application
+You can delete an application using this command:
+```
+$appid = 2133445
+Remove-AGMApplication $appid
+```
 # Audit
 
 ## Exploring the Audit log
@@ -1925,6 +1936,33 @@ In this example we filter on hostname:
 ```
 Get-AGMHost -filtervalue name=bastion
 ```
+## Managing host ports
+This command **adds** iSCSI port name iqn1 to host ID 105008 on appliance ID 143112195179:
+```
+New-AGMHost -applianceid 143112195179 -hostid "12345" iscsiname "iqn1"
+```
+To learn applianceid, use this command:  ```Get-AGMAppliance``` and use the clusterid as applianceid.  If you have multiple applianceIDs, comma separate them
+To learn hostid, use this command:  ```Get-AGMHost```
+
+This command **removes** iSCSI port name iqn1:
+```
+Remove-AGMHost -applianceid 143112195179 -hostid "12345" iscsiname "iqn1"
+```
+## Removing a host
+You can remove a host with the command.  Note you cannot remove a host if there are still applications depending on it.  In this example we learn the host ID and cluster ID:
+```
+Get-AGMHost -filtervalue hostname=testvm | select id,name,clusterid
+
+id     name   clusterid
+--     ----   ---------
+430741 testvm 144091747698
+```
+We then remove it:
+```
+Remove-AGMHost -id 430741 -clusterid 144091747698
+```
+
+
 # Images
 
 ## Image creation with an OnDemand Job
@@ -2097,6 +2135,12 @@ $imagegrab = Get-AGMImage -filtervalue "sltname=FSSnaps_RW_OV&jobclass=OnVault"
 $imagegrab.count
 8
 ```
+## Image Expiration
+This command expires a single image:
+```
+Remove-AGMImage Image_2133445
+```
+
 ## Image Expiration In Bulk
 
 You may have a requirement to expire large numbers of images at one time.   One way to approach this is to use the Remove-AGMImage command in a loop. However this may fail as shown in the example below.  The issue is that the first expiration job is still running while you attempt to execute the following jobs, which causes a collission:
@@ -2260,6 +2304,12 @@ There are a number of parameters we can use:
 * $poweroffvm:  For VMware restore, specified if the VM should be restored in the powered off state.  By default this is false and the VM is powered on at restore time time.
 
 ## Setting an Image Label
+You can label an image with a command like this, specifying the imagename and desired label:
+```
+Set-AGMImage -imagename Image_2133445 -label "testimage"
+```
+
+## Setting an Image Label in bulk
 
 This function is used to label a large number of images in a single command.  This is done by supplying one of the following:
 * A list of images to label, normally created with New-AGMLibImageRange.  We then use:   ```Set-AGMLibImage -imagelist <imagelist>```
@@ -2316,6 +2366,12 @@ You can also use a variety of options:
 * ```-monitor``` To track all running jobs with automated refresh
 * ```-refresh 5``` Used with ```-monitor``` to change the refresh rate in seconds to a different value
 * ```-sltname gold``` Track jobs started by a specific policy template, in this example one named *gold*
+
+## Cancelling a Running Job
+This command will cancel a running job.  You need to know the job name:
+```
+Remove-AGMJob Job_2133445
+```
 
 ## Following a Running Job
  
