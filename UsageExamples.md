@@ -1752,7 +1752,8 @@ If we are onboarding large numbers of Compute Engine Instances or we want to aut
 ### Using a CSV file to work with multiple zones 
 
 This function can use a CSV file as input to supply the following data to the function which you specify with:
- ```-discoveryfile **filename.csv**```
+
+```-discoveryfile **filename.csv**```
 
 The CSV needs the following columns:
 
@@ -1827,6 +1828,11 @@ We then specify additional options to control how backups are run:
 * ```-sltid xxx``` To apply the specified Service Template ID for the backup plan
 * ```-sltname xxx``` To apply the specified Service Template Name for the backup plan
 * ``` -usertag backupplan``` To look for a user specified tag on each VM, in this example the tag is **backupplan**
+
+So an example command would look like this.  In this example we backup all appliances using the sltname found in the **backupplan** label on each instance.
+```
+New-AGMLibGCEInstanceDiscovery -credentialid 259643 -applianceid 141805487622 -projectid avwservicelab1 -zone australia-southeast1-b -usertag backupplan -backup
+```
 
 ### FAQ
 
