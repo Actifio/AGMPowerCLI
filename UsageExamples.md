@@ -420,7 +420,7 @@ Note this is a system wide parameter. There is no way to set this on a per host 
 ### Changing maximum mount and backup jobs per appliance using slots (appliance level - affects all hosts)
 
 
-Each backup appliance uses a pacing mechanism known as *slots* to manage the number of jobs that can run simultaneously on that appliance.   This means that if has a policy has more applications attempting to start a backup job than there are available slots, that the appliance running your jobs may hit a slot limit, resulting in the excess jobs over the slot limit going into *queued* status, waiting for free slots, rather than starting immediately.    There is nothing inherantly wrong this, its simply a form of *pacing*.
+Each backup appliance uses a pacing mechanism known as *slots* to manage the number of jobs that can run simultaneously on that appliance.   This means that if has a policy has more applications attempting to start a backup job than there are available slots, that the appliance running your jobs may hit a slot limit, resulting in the excess jobs over the slot limit going into *queued* status, waiting for free slots, rather than starting immediately.    There is nothing inherently wrong this, its simply a form of *pacing*.
 
 To manage this we can adjust what are called slot values.  Note that while we are using AGMPowerLib commands to do this, you need to ensure your AGMPowerCLI is on version 0.0.0.35 or higher.   You can check your AGMPowerCLI version with this command:
 **Get-Command -module AGMPowerCLI**
@@ -626,7 +626,7 @@ Get-AGMApplicationCount -filtervalue "apptype=VMBackup&managed=true"
 ```
 
 ## Application Discovery
-To run application discovery againats a host we need to know the host ID and the Appliance ID.  Then run this:
+To run application discovery against a host we need to know the host ID and the Appliance ID.  Then run this:
 ```
 New-AGMAppDiscovery -hostid 5678 -applianceid 1415071155
 ```
