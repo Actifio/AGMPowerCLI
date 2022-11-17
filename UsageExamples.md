@@ -70,7 +70,7 @@ This document contains usage examples that include both AGMPowerCLI and AGMPower
 **[Image Expiration](#image-expiration)**<br>
 **[Image Expiration In Bulk](#image-expiration-in-bulk)**<br>
 **[Image Import From OnVault](#image-import-from-onvault)**<br>
-**[Persistent Disk Import From OnVault](#persistent-disk-import-from-onvault)**<br>
+**[Persistent Disk Import From OnVault](#persistent-disk-import-from-onvault)**<canc>
 **[Image Restore](#image-restore)**<br>
 **[Setting an Image Label](#setting-an-image-label)**</br>
 **[Setting an Image Label in Bulk](#setting-an-image-label-in-bulk)**</br>
@@ -2367,7 +2367,7 @@ You can also use a variety of options:
 * ```-refresh 5``` Used with ```-monitor``` to change the refresh rate in seconds to a different value
 * ```-sltname gold``` Track jobs started by a specific policy template, in this example one named *gold*
 
-## Cancelling a Running Job
+## Canceling a Running Job
 This command will cancel a running job.  You need to know the job name:
 ```
 Remove-AGMJob Job_2133445
