@@ -2836,7 +2836,7 @@ To break down this command:
 * In this example, the file **Database01_log.ldf** found in **E:\Logs** will be migrated to **E:\Dev\Logs\DevDB01_log.ldf**
 * The order of the fields must be **source_volume,targetfolder** so for two files **source_volume1,target_folder1;source_volume2,target_folder2**
 
-We could have specified file migration rather than folder migration, or we could have not specified either and let the files go back to their original locations (provided those locations exist).
+We could have specified file clone rather than folder clone, or we could have not specified either and let the files go back to their original locations (provided those locations exist).
 
 Once the job is running, the user finds the running job:
 
@@ -2855,12 +2855,14 @@ The user tracks the job to success:
 ```
 Get-AGMLibFollowJobStatus Job_1242018
 ```
-Output should look like this:
+Output should look like this when piped to ```format-table```:
 ```
 jobname     status  progress queuedate           startdate           duration targethost
 -------     ------  -------- ---------           ---------           -------- ----------
 Job_1242018 running       57 2022-11-17 13:00:10 2022-11-17 13:00:11 00:01:05 winsql-2
-
+```
+Or in regular column mode:
+```
 jobname    : Job_1242018
 status     : succeeded
 message    : Success
