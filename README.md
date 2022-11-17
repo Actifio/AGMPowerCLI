@@ -305,7 +305,7 @@ There are three common options that may be available for a command (if shown wit
 -keyword   This is a case insensitive search of certain fields for a stated keyword.  This is useful for finding an object that has a unique value, like a unique DB name.  You  can only specify one keyword.
 
 #### filtering
--filtervalue   This is a filtering function.  To get a list of available filters, run the command with option -o.   The filters allow for searches using equals, less than, greater than or fuzzy.   To combine searches use & between each filter and encase the whole thing in double quotes.   Here are some examples:
+```-filtervalue```   This is a filtering function.  To get a list of available filters, run the command with option ```-o```   The filters allow for searches using equals, less than, greater than or fuzzy.   To combine searches use & between each filter and encase the whole thing in double quotes.   Here are some examples:
 
 There are five filter types
 
@@ -321,12 +321,12 @@ Multiple filtervalues can be used and will combine results.  Note also they need
 
 | example | result
 | ------ | ------- 
-| -filtervalue appname=smalldb  | filter on appname
-| -filtervalue "appname=smalldb&hostname=prodserver"  | filter on appname and hostname
-| -filtervalue id<10000   | filter on objects where the ID is less than 10000
-| -filtervalue id>10000   | filter on objects where the ID is greater than 10000
-| -filtervalue appname~smalldb  | fuzzy search for appname like smalldb,  so you could get SmallDb, smalldb1, smalldbold.
-| -filtervalue "appname=smalldb&appname=bigdb" | will show both smalldb and bigdb in the results.
+| ```-filtervalue appname=smalldb```  | filter on appname
+| ```-filtervalue "appname=smalldb&hostname=prodserver"```  | filter on appname and hostname
+| ```-filtervalue id<10000```   | filter on objects where the ID is less than 10000
+| ```-filtervalue id>10000```   | filter on objects where the ID is greater than 10000
+| ```-filtervalue appname~smalldb```  | fuzzy search for appname like smalldb,  so you could get SmallDb, smalldb1, smalldbold.
+| ```-filtervalue "appname=smalldb&appname=bigdb"``` | will show both smalldb and bigdb in the results.
 
 #### Timeouts
 
@@ -334,7 +334,7 @@ This is for Actifio only. Click [here](https://github.com/Actifio/AGMPowerCLI/bl
 
 The default timeout for initial logins is set to 60 seconds.   
 
-For all other functions (after initial login) you can change the timeout by adding **-agmtimeout XX** to the **connect-agm** command where **XX** is the desired value.
+For all other functions (after initial login) you can change the timeout by adding ```-agmtimeout XX``` to the ```connect-agm``` command where **XX** is the desired value.
 
 So to set a 10 second timeout for all functions after login:
 ```
@@ -343,7 +343,7 @@ Connect-AGM 10.61.5.114 admin -passwordfile "c:\temp\password.key" -ignorecerts 
 
 #### API Limit
 
-The module has no API limit which means if you run Get-AGMJobHistory you can easily get results in the thousands or millions.   So we added a command to prevent giant lookups by setting a limit on the number of returned objects, although by default this limit is off.  You can set the limit with:   Set-AGMAPILimit
+The module has no API limit which means if you run Get-AGMJobHistory you can easily get results in the thousands or millions.   So we added a command to prevent giant lookups by setting a limit on the number of returned objects, although by default this limit is off.  You can set the limit with:   ```Set-AGMAPILimit```
 
 In the example below, we login and search for snapshot jobs and find there are over sixty thousand.  A smart move would be to use more filters (such as date or appname), but we could also limit the number of results using an API limit, so we set it to 100 and only get 100 jobs back:
 
