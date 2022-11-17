@@ -331,7 +331,7 @@ HostName AppName MDLStat(GB)
 -------- ------- -----------
 tiny     tiny    20.000
 ```
-#### Running a commnd with multiple arguments
+#### Running a command with multiple arguments
 If you need to send multiple arguments separate them with an **&**, for example, this command sends the **reportimages** command to appliance ID 406219 with the **-a 0** and **-s** parameters and exports it to CSV.
 ```
 Get-AGMAPIApplianceReport -applianceid 406219 -command reportimages -arguments "-a 0&-s" |  Export-Csv disks.csv
@@ -609,7 +609,7 @@ In this example we have 99 applications:
 Get-AGMApplicationCount
 99  
 ```   
-We now add filters, first to see how manay are managed (have a backup plan applied:
+We now add filters, first to see how many are managed (have a backup plan applied:
 ```
 Get-AGMApplicationCount -filtervalue managed=true
 22
@@ -1179,9 +1179,11 @@ serviceaccount : avw-gcsops@glabco.iam.gserviceaccount.com
 
 ## Compute Engine Instance Discovery
 
-### Listing new Compute Engine Instances. Use this syntax:
+### Listing new Compute Engine Instances. 
 
-By default this command only shows up to 50 new VMs:
+To learn what Compute Engine VMs are available for discovery, in that they exist in Compute Engine but are not known to Backup and DR.
+
+We search by project and zone and by default this command only shows up to 50 **new** VMs:
 ```
 Get-AGMCloudVM -credentialid 35548 -clusterid 144292692833 -projectid "avwlab2" -zone "australia-southeast1-c"
 ```
@@ -1747,7 +1749,9 @@ New-AGMLibGCEConversion -projectname project1 -machinetype n1-standard-2 -instan
 
 If we are onboarding large numbers of Compute Engine Instances or we want to auto protect new instances using automation, we can use a function called: **New-AGMLibGCEInstanceDiscovery**
 
-This function needs a CSV file as input to supply the following data to the function:
+### Using a CSV file to work with multiple zones 
+
+This function can use a CSV file as input to supply the following data to the function which you specify with ```-discoveryfile **filename.sqv**```
 
 * **credentialid**  This is used to determine which stored credential is used to connect to Google Cloud. Learn this by running Get-AGMLibCredentialSrcID
 * **applianceid**  This is used to determine which backup appliance will manage the new Compute Engine Instance. Learn this by running Get-AGMLibCredentialSrcID
@@ -1762,9 +1766,9 @@ credentialid,applianceid,project,zone
 6654,143112195179,avwarglab1,australia-southeast2-a
 6654,143112195179,avwarglab1,australia-southeast2-b
 ```
-When you run  **New-AGMLibGCEInstanceDiscovery** you have to specify one of these two choices:
-* **-nobackup**  This will add all new Compute Engine Instances it finds without protecting them
-* **-backup**  This will add  all new Compute Engine Instances it finds and for each Instance it will look for a label called **googlebackupplan** (or a label you specify with **-usertag**)  If the value for that label is the name of an existing policy template, it will automatically protect that instance using that template
+When you run  ```New-AGMLibGCEInstanceDiscovery``` you have to specify one of these two choices:
+* ```-nobackup```  This will add all new Compute Engine Instances it finds without protecting them
+* ```-backup```  This will add  all new Compute Engine Instances it finds and for each Instance it will look for a label called **googlebackupplan** (or a label you specify with ```-usertag```)  If the value for that label is the name of an existing policy template, it will automatically protect that instance using that template
 
 An example run is as follows.  In the first zone, no new instances were found.  In the second zone, 3 were found and two protected.   A second run is made on each zone where more than 50 instances need to be processed (since we process 50 at a time).  The third zone had no new VMs.   
 ```
@@ -1800,8 +1804,27 @@ zone                 : australia-southeast2-b
 newgceinstances      : 0
 newgceinstancebackup : 0
 ```
-Some FAQ:
 
+### Using a single command per project/zone
+
+Instead of using a discovery file we can specify the four variables needed by the command.   
+
+* ```-applianceid 141805487622``` The appliance we will use to manage for discovery Compute Engine Instances
+* ```-credentialid 259643``` The cloud credential used for discovery
+* ```-projectid avwservicelab1``` The Project we will examine for new Compute Engine Instances
+* ```-zone australia-southeast1-b``` The Zone we will examine for new Compute Engine Instances
+
+We then specify additional options to control how backups are run:
+
+* ```-backup``` To specify that all discovered Compute Engine Instances should have a backup plan applied
+* ```-bootonly``` To specify that all discovered Compute Engine Instances should only have their boot drives protected by any backup plan
+* ```-limit xx``` To change the number 
+* ```-nobackup``` To specify that all discovered Compute Engine Instances should **not** have a backup plan applied
+* ```-sltid xxx``` To apply the specified Service Template ID for the backup plan
+* ```-sltname xxx``` To apply the specified Service Template Name for the backup plan
+* ``` -usertag backupplan``` To look for a user specified tag on each VM, in this example the tag is **backupplan``
+
+### FAQ
 
 1. How do I tag the VM?    
 
@@ -1826,6 +1849,7 @@ You can either look at Templates in the SLA Architect in Web GUI or run: **Get-A
 This function has to add them all to ensure each instance is examined.   If you add them then delete them, they won't be added back in a second run because an Actifio label with a value of **unmanaged** will be added to them.
 
 [Back to top](#usage-examples)
+
 # Consistency Groups
 
 ## Consistency Group Management
