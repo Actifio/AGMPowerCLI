@@ -12,11 +12,14 @@ This document contains usage examples that include both AGMPowerCLI and AGMPower
 
 **[Applications](#applications)**<br>
 >**[Application IDs](#application-ids)**<br>
+**[Counting your Applications](#counting-your-applications)**<br>
+**[Listing AppTypes](#listing-apptypes)**<br>
 **[Find Images for a particular application](#find-images-for-a-particular-application)**<br>
 **[Find the Latest Image For a Particular Application](#find-the-latest-image-for-a-particular-application)**<br>
 
 **[Audit](#audit)**</br>
->**[Finding the Last Command a User Issued](#finding-the-last-command-a-user-issued)**</br>
+>**[Exploring the Audit Log](#exploring-the-audit-log)**</br>
+**[Finding the Last Command a User Issued](#finding-the-last-command-a-user-issued)**</br>
 
 **[Backup Plans](#backup-plans)**</br>
 >**[Applying a Backup Plan](#applying-a-backup-plan)**</br>
@@ -45,7 +48,10 @@ This document contains usage examples that include both AGMPowerCLI and AGMPower
 >**[Consistency Group Management](#consistency-group-management)**<br>
 
 **[DB2](#db2)**</br>
-**[Creating a DB2 mount](#creating-a-db2-mount)**</br>
+>**[Creating a DB2 mount](#creating-a-db2-mount)**</br>
+
+**[Events](#events)**</br>
+>**[Listing Your Events](#listing-your-events)**</br>
 
 **[FileSystem](#filesystem)**</br>
 >**[Creating a FileSystem mount](#creating-a-filesystem-mount)**</br>
@@ -53,6 +59,7 @@ This document contains usage examples that include both AGMPowerCLI and AGMPower
 **[Hosts](#hosts)**<br>
 >**[Finding a Host ID by Host Name](#finding-a-host-id-by-host-name)**<br>
 **[Finding a Host ID by Operating System Type](#finding-a-host-id-by-operating-system-type)**<br>
+**[Listing your Hosts](#listing-your-hosts)**<br>
 
 **[Images](#images)**<br>
 >**[Image Creation With An On-Demand Job](#image-creation-with-an-ondemand-job)**<br>
@@ -64,8 +71,13 @@ This document contains usage examples that include both AGMPowerCLI and AGMPower
 **[Setting an Image Label](#setting-an-image-label)**</br>
 
 **[Jobs](#jobs)**<br>
->**[Finding Running Jobs](#finding-running-jobs)**<br>
+>**[Finding Jobs](#finding-jobs)**</br>
+**[Finding Running Jobs](#finding-running-jobs)**<br>
 **[Following a Running Job](#following-a-running-job)**<br>
+
+**[Logical Groups](#logical-groups)**<br>
+>**[Listing Your Logical Groups](#listing-your-logical-groups)**<br>
+**[Listing members in a Logical Group](#listing-members-in-a-logical-group)**</br>
 
 **[Mount](#mount)**</br>
 >**[Active Mounts](#active-mounts)**</br>
@@ -99,6 +111,9 @@ This document contains usage examples that include both AGMPowerCLI and AGMPower
 **[SQL Server Instance Mount](#sql-server-instance-mount)**</br>
 **[SQL Server Multi Mount and Migrate](#sql-server-multi-mount-and-migrate)**</br>
 **[SQL Server Protecting and Rewinding Child Apps](#sql-server-protecting-and-rewinding-child-apps)**</br>
+
+**[Storage Pools](#storage-pools)**</br>
+**[Listing Your Storage Pools](#listing-your-storage-pools)**</br>
 
 **[VMware](#vmware)**</br>
 >**[Using a VMware mount to create a new VMware VM](#using-a-vmware-mount-to-create-a-new-vmware-vm)**</br>
@@ -576,6 +591,48 @@ There are many search options, for instance if you don't know the full name you 
 ```
 Get-AGMLibApplicationID -appname bastio -fuzzy
 ```
+## Counting Your Applications
+A very simple way to count the total number of applications is with a command like this, which will return a number.
+
+In this example we have 99 applications:
+```
+Get-AGMApplicationCount
+99  
+```   
+We now add filters, first to see how manay are managed (have a backup plan applied:
+```
+Get-AGMApplicationCount -filtervalue managed=true
+22
+```
+Then we look for VMware VMs:
+```
+Get-AGMApplicationCount -filtervalue apptype=VMBackup
+50
+```
+And see how many of them have backup plans:
+```                                                                                                                               
+Get-AGMApplicationCount -filtervalue "apptype=VMBackup&managed=true"
+4
+```
+## Listing AppTypes
+If we want to learn what apptypes we are currently working with, we can list them with this command:
+```
+Get-AGMApplicationTypes
+```
+Output will look like this:
+```
+CIFS                                                                                                                                                                                     ConsistGrp
+FileSystem
+GCPInstance
+NFS
+POSTGRESQL
+POSTGRESQLInstance
+SAPHANA
+SqlInstance
+SqlServerWriter
+VMBackup
+```
+
 ## Find Images for a particular application
 
 If we know the application ID, we can find any images for that application with this command:
@@ -621,6 +678,19 @@ The default is for snapshot, but you can also specify a jobclass:
 
 # Audit
 
+## Exploring the Audit log
+We can list events in the audit log with this command, but the resulting output will be very long:
+```
+Get-AGMAudit
+```
+We need to use filters and limits.  You can list all filterable fields with this command:
+```
+Get-AGMAudit -o
+```
+In this example we filter on issue date, user name as  well as use a limit:
+```
+Get-AGMAudit -filtervalue "username=apiuser@iam.gserviceaccount.com&issuedate>2022-11-18" -limit 15
+```
 ## Finding the last command a user issued
 
 While the audit log contains a lot of events where users look at data (get) we may want to see commands where users changed things (post, put and delete).  So if we know the username we can use this command which looks at posts by default:
@@ -1787,6 +1857,21 @@ This command will create a DB2 mount using a guided menu:
 New-AGMLibDb2Mount
 ```
 
+# Events
+
+## Listing your events
+To list events use this command.  The output can be extensive so filters and limits are recommended.
+```
+Get-AGMEvent
+```
+You can list all filterable fields with this command:
+```
+Get-AGMEvent -o
+```
+In this example we use date and limits:
+```
+Get-AGMEvent -filtervalue "eventdate>2022-11-17" -limit 3
+```
 # FileSystem
 
 ## Creating a FileSystem Mount
@@ -1794,6 +1879,7 @@ This command will create a FileSystem mount using a guided menu:
 ```
 New-AGMLibFSMount
 ```
+
 
 # Hosts
 
@@ -1825,6 +1911,19 @@ Output will look like this:
 id     hostname ostype ApplianceName
 --     -------- ------ -------------
 744253 windows  Win32  backup-server-29736
+```
+## Listing Your Hosts
+We can use this command to display all hosts.  The output may be very long.
+```
+Get-AGMHost
+```
+You can list all filterable fields with this command:
+```
+Get-AGMHost -o
+```
+In this example we filter on hostname:
+```
+Get-AGMHost -filtervalue name=bastion
 ```
 # Images
 
@@ -2169,6 +2268,26 @@ This function is used to label a large number of images in a single command.  Th
 
 # Jobs
 
+## Finding Jobs
+There are several commands to find jobs.  
+
+This command will find running and queued jobs, although we recommend you use [Get-AGMLibRunningJobs](#finding-running-jobs):
+```
+Get-AGMJob
+```
+This command will find jobs that are not running or queued, but the output will be long, so run this with filters:
+```
+Get-AGMJobHistory
+```
+For instance this command will list the most recent snapshot for appid 992586
+```
+Get-AGMJobHistory -filtervalue "appid=992586&jobclass=snapshot" -sort id:desc -limit 1
+```
+If you are unsure if a job is finished or still running, then use this command, again always with filters:
+```
+Get-AGMJobStatus -filtervalue "appid=992586&jobclass=snapshot"  -limit 1
+```
+
 ## Finding Running Jobs
 
 To list all running jobs use this command:
@@ -2210,6 +2329,21 @@ Output will look like this:
 jobname     status  progress queuedate           startdate           duration targethost
 -------     ------  -------- ---------           ---------           -------- ----------
 Job_0198174 running        0 2022-11-16 12:24:38 2022-11-16 12:24:38 00:00:18 esxi-109187.a130d0de.australia-southeast1.gve.goog
+```
+
+# Logical Groups
+
+Logicial Groups are groups of applications that all share the same backup plan (and nothing else)
+## Listing Your Logical Groups
+Use this command:
+```
+Get-AGMLogicalGroup
+```
+## Listing members in a Logical Group
+If we know the logical group ID, we can learn about its members like this:
+```
+$groupid = 460452
+Get-AGMLogicalGroupMember -id $groupid
 ```
 
 # Mount
@@ -3101,6 +3235,14 @@ enddate   : 2020-09-04 17:05:08
 duration  : 00:01:20
 ```
 We can then continue to work with our child app, creating new snapshots or even new child apps using those snapshots.
+
+# Storage Pools
+
+## Listing your Storage Pools
+To list your storage pools use this command:
+```
+Get-AGMDiskPool
+```
 
 # VMware
 
