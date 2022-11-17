@@ -96,16 +96,16 @@ This document contains usage examples that include both AGMPowerCLI and AGMPower
 **[Unmounting an Image](#unmounting-an-image)**</br>
 
 **[MySQL](#mysql)**</br>
-**[Creating a MySQL mount](#creating-a-mysql-mount)**</br>
+>**[Creating a MySQL mount](#creating-a-mysql-mount)**</br>
 
 **[Oracle](#oracle)**</br>
-**[Creating a Oracle mount](#creating-a-oracle-mount)**</br>
+>**[Creating a Oracle mount](#creating-a-oracle-mount)**</br>
 
 **[Organizations](#organizations)**<br>
 >**[Organization Creation](#organization-creation)**<br>
 
 **[PostgreSQL](#postgresql)**</br>
-**[Creating a PostgresSQL mount](#creating-a-postgresql-mount)**</br>
+>**[Creating a PostgresSQL mount](#creating-a-postgresql-mount)**</br>
 
 **[SAP HANA](#sap-hana)**</br>
 >**[SAP HANA Mount](#sap-hana-mount)**</br>
@@ -122,7 +122,7 @@ This document contains usage examples that include both AGMPowerCLI and AGMPower
 **[SQL Server Protecting and Rewinding Child Apps](#sql-server-protecting-and-rewinding-child-apps)**</br>
 
 **[Storage Pools](#storage-pools)**</br>
-**[Listing Your Storage Pools](#listing-your-storage-pools)**</br>
+>**[Listing Your Storage Pools](#listing-your-storage-pools)**</br>
 
 **[VMware](#vmware)**</br>
 >**[Using a VMware mount to create a new VMware VM](#using-a-vmware-mount-to-create-a-new-vmware-vm)**</br>
