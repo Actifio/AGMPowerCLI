@@ -2855,13 +2855,13 @@ The user tracks the job to success:
 ```
 Get-AGMLibFollowJobStatus Job_1242018
 ```
-Output should look like this when piped to ```format-table```:
+Output should look like this:
 ```
 jobname     status  progress queuedate           startdate           duration targethost
 -------     ------  -------- ---------           ---------           -------- ----------
 Job_1242018 running       57 2022-11-17 13:00:10 2022-11-17 13:00:11 00:01:05 winsql-2
 ```
-Or in regular column mode:
+When it completes we should see ```status=succeeded```
 ```
 jobname    : Job_1242018
 status     : succeeded
@@ -2881,7 +2881,7 @@ id      friendlytype hostname hostid appname appliancename    applianceip    app
 --      ------------ -------- ------ ------- -------------    -----------    -----------  ------------- -------
 1325504 SQLServer    winsql-2 33666  DevDB01 au-backup-sky-01 192.168.192.13 145138699730 Sky              True
 ```
-If the target MS SQL Instance has a "Database Inclusion Rule" set for All databases, or User Databases, then it's very likely that you will see the managed = True setting, which indicates that your cloned database will be protected on the next snapshot of that instance.
+If the target MS SQL Instance has a "Database Inclusion Rule" set for All databases, or User Databases, then it's very likely that you will see the ```managed = True``` setting, which indicates that your cloned database will be protected on the next snapshot of that instance.
 
 
 ## SQL Server Database Mount
