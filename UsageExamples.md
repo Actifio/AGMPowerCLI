@@ -2164,7 +2164,7 @@ Remove-AGMImage Image_2133445
 
 ## Image Expiration In Bulk
 
-You may have a requirement to expire large numbers of images at one time.   One way to approach this is to use the Remove-AGMImage command in a loop. However this may fail as shown in the example below.  The issue is that the first expiration job is still running while you attempt to execute the following jobs, which causes a collission:
+You may have a requirement to expire large numbers of images at one time.   One way to approach this is to use the ```Remove-AGMImage``` command in a loop. However this may fail as shown in the example below.  The issue is that the first expiration job is still running while you attempt to execute the following jobs, which causes a collission:
 ```
 $images = Get-AGMImage -filtervalue appid=35590 | select backupname
 $images
