@@ -326,7 +326,7 @@ Multiple filtervalues can be used and will combine results.  Note also they need
 | -filtervalue id<10000   | filter on objects where the ID is less than 10000
 | -filtervalue id>10000   | filter on objects where the ID is greater than 10000
 | -filtervalue appname~smalldb  | fuzzy search for appname like smalldb,  so you could get SmallDb, smalldb1, smalldbold.
-| filtervalue "appname=smalldb&appname=bigdb" | will show both smalldb and bigdb in the results.
+| -filtervalue "appname=smalldb&appname=bigdb" | will show both smalldb and bigdb in the results.
 
 #### Timeouts
 

@@ -2339,7 +2339,7 @@ Set-AGMImage -imagename Image_2133445 -label "testimage"
 ## Setting an Image Label in bulk
 
 This function is used to label a large number of images in a single command.  This is done by supplying one of the following:
-* A list of images to label, normally created with New-AGMLibImageRange.  We then use:   ```Set-AGMLibImage -imagelist <imagelist>```
+* A list of images to label, normally created with ```New-AGMLibImageRange```  We then use:   ```Set-AGMLibImage -imagelist <imagelist>```
 * A CSV file contained a list of images with new labels.  The file needs to have at least id,backupname,label as headings.  You could use ```New-AGMLibImageRange``` to create this file.  Then use:  ```Set-AGMLibImage -filename <filename.csv>```
 * An imagename.   You could learn this in the Web GUI.   Then use:  ```Set-AGMLibImage -imagename <imagename> -label <newlabel>"```
 
@@ -2347,9 +2347,13 @@ This function is used to label a large number of images in a single command.  Th
 # Jobs
 
 ## Displaying Job History
-This command will find jobs that are not running or queued, but the output will be long, so always run this with filters:
+This command will find the history of jobs that are not running or queued, but the output will be long, so always run this command with [filters](README.md/#filtering):
 ```
 Get-AGMJobHistory
+```
+You can display all valid filters with this command:
+```
+Get-AGMJobHistory -o
 ```
 For instance this command will list the most recent snapshot for appid 992586
 ```
