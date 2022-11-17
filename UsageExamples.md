@@ -13,6 +13,7 @@ This document contains usage examples that include both AGMPowerCLI and AGMPower
 **[Applications](#applications)**<br>
 >**[Application IDs](#application-ids)**<br>
 **[Counting your Applications](#counting-your-applications)**<br>
+**[Application Discovery](#application-discovery)**<br>
 **[Listing AppTypes](#listing-apptypes)**<br>
 **[Find Images for a particular application](#find-images-for-a-particular-application)**<br>
 **[Find the Latest Image For a Particular Application](#find-the-latest-image-for-a-particular-application)**<br>
@@ -58,7 +59,8 @@ This document contains usage examples that include both AGMPowerCLI and AGMPower
 >**[Creating a FileSystem mount](#creating-a-filesystem-mount)**</br>
 
 **[Hosts](#hosts)**<br>
->**[Finding a Host ID by Host Name](#finding-a-host-id-by-host-name)**<br>
+>**[Adding a Host](#adding-a-host)**<br>
+**[Finding a Host ID by Host Name](#finding-a-host-id-by-host-name)**<br>
 **[Finding a Host ID by Operating System Type](#finding-a-host-id-by-operating-system-type)**<br>
 **[Listing Your Hosts](#listing-your-hosts)**<br>
 **[Managing Host Ports](#managing-host-ports)**</br>
@@ -87,7 +89,8 @@ This document contains usage examples that include both AGMPowerCLI and AGMPower
 
 **[Mount](#mount)**</br>
 >**[Active Mounts](#active-mounts)**</br>
-**[Create new mount to a Container](#create-new-mount-to-a-container)**</br>
+**[Create a new mount](#create-a-new-mount)**</br>
+**[Create a new mount to a Container](#create-a-new-mount-to-a-container)**</br>
 **[Display Container Mount YAML](#display-container-mount-yaml)**</br>
 **[Multi Mount for Ransomware Analysis](#multi-Mount-for-ransomware-analysis)**</br>
 **[Unmounting an Image](#unmounting-an-image)**</br>
@@ -620,6 +623,13 @@ And see how many of them have backup plans:
 Get-AGMApplicationCount -filtervalue "apptype=VMBackup&managed=true"
 4
 ```
+
+## Application Discovery
+To run application discovery againats a host we need to know the host ID and the Appliance ID.  Then run this:
+```
+New-AGMAppDiscovery -hostid 5678 -applianceid 1415071155
+```
+
 ## Listing AppTypes
 If we want to learn what apptypes we are currently working with, we can list them with this command:
 ```
@@ -1810,8 +1820,6 @@ You can either look at Templates in the SLA Architect in Web GUI or run: **Get-A
 
 This function has to add them all to ensure each instance is examined.   If you add them then delete them, they won't be added back in a second run because an Actifio label with a value of **unmanaged** will be added to them.
 
-
-
 # Consistency Groups
 
 ## Consistency Group Management
@@ -1891,8 +1899,14 @@ This command will create a FileSystem mount using a guided menu:
 New-AGMLibFSMount
 ```
 
-
 # Hosts
+
+## Adding a Host
+
+To add a host we need to use a command like this where we specify the desired hostname and IP address and supply of the Appliance where you want it created which you can learn with [Get-AGMAppliance](#appliances):
+```
+New-AGMHost -applianceid 144292692833 -hostname "prodhost1" -ipaddress "10.0.0.1"
+```
 
 ## Finding a Host ID by Host Name
 
@@ -2303,6 +2317,12 @@ There are a number of parameters we can use:
 * $datastore:  For VMware restores, specifies which datastore will be used for the restored VM
 * $poweroffvm:  For VMware restore, specified if the VM should be restored in the powered off state.  By default this is false and the VM is powered on at restore time time.
 
+
+We then form our command.  This example uses image ID 1234 to restore DB1 and DB2 in Instance or a Consistency Group
+```
+Restore-AGMApplication -imageid 1234 -objectlist "DB1,DB2" 
+```
+
 ## Setting an Image Label
 You can label an image with a command like this, specifying the imagename and desired label:
 ```
@@ -2447,8 +2467,30 @@ You can filter output with the following filters:
 * ```-label "labeltext"``` To filter on the label field
 * ```-unmount``` To only display images in the unmounted state
 
+## Create a new mount
 
-## Create new mount to a Container
+For many application types there are application specific mount functions such as:
+
+* [Compute Engine Instance Mount](#compute-engine-instance-mount)
+* [DB2](#creating-a-db2-mount)
+* [FileSystem](#creating-a-filesystem-mount)
+* [My SQL](#creating-a-mysql-mount)
+* [Oracle](#creating-a-oracle-mount)
+* [PostgreSQL](#creating-a-postgresql-mount)
+* [SAP HANA](#sap-hana-mount)
+* [SQL Server](#sql-server-database-mount)
+* [VMWare VM as a new VM](#using-a-vmware-mount-to-create-a-new-vmware-vm)
+
+However you can create a simple file system mount with this command like this:
+```
+New-AGMMount -imageid 1234 -targethostid 5678
+```
+If you know the well formed JSON for a mount you could do this:
+```
+New-AGMMount -imageid 53776703 -jsonbody '{"@type":"mountRest","label":"test mount","host":{"id":"43673548"},"poweronvm":false,"migratevm":false}'
+```
+
+## Create a new mount to a Container
 
 This command runs a guided menu to mount an image to a container
 ```
@@ -2587,6 +2629,13 @@ You can also use the following:
 * ```-preservevm ``` This applies to Compute Engine Instances created from Persistent Disk Snapshot.   When used the Appliance Image of the mount is removed, but on the Compute Engine  side the new VM is retained.   
 * ```-gceinstanceforget```  Forgets all mounted Compute Engine Instance.  This is the same as running ```-preservevm``` against them
 
+# MySQL
+
+## Creating a MySQL Mount
+This command will create a MySQL mount using a guided menu:
+```
+New-AGMLibMySQLMount
+```
 
 # Oracle
 
