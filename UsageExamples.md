@@ -2763,7 +2763,7 @@ To restore an SAP HANA database we can use this command which will run a guided 
 ```
 Restore-AGMLibSAPHANA 
 ```
-
+[Back to top](#usage-examples)
 # SQL Server
 
 ## SQL Server Database Clone
