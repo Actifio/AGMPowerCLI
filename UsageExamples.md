@@ -78,7 +78,7 @@ This document contains usage examples that include both AGMPowerCLI and AGMPower
 **[Jobs](#jobs)**<br>
 >**[Finding Jobs](#finding-jobs)**</br>
 **[Finding Running Jobs](#finding-running-jobs)**<br>
-**[Canceling a Running Job](#canceling-a-running-jobs)**<br>
+**[Canceling a Running Job](#canceling-a-running-job)**<br>
 **[Following a Running Job](#following-a-running-job)**<br>
 
 **[Logical Groups](#logical-groups)**<br>
