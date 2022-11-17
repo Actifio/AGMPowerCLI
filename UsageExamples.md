@@ -2351,7 +2351,7 @@ This command will find the history of jobs that are not running or queued, but t
 ```
 Get-AGMJobHistory
 ```
-You can display all valid filters with this command:
+You can display all valid [filters](README.md/#filtering) with this command:
 ```
 Get-AGMJobHistory -o
 ```
