@@ -554,6 +554,7 @@ timezone
 --------
 Australia/Sydney
 ```
+[Back to top](#usage-examples)
 
 # Applications
 
@@ -697,6 +698,7 @@ You can delete an application using this command:
 $appid = 2133445
 Remove-AGMApplication $appid
 ```
+[Back to top](#usage-examples)
 # Audit
 
 ## Exploring the Audit log
