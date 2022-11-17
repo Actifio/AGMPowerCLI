@@ -2336,6 +2336,7 @@ This function is used to label a large number of images in a single command.  Th
 * A CSV file contained a list of images with new labels.  The file needs to have at least id,backupname,label as headings.  You could use ```New-AGMLibImageRange``` to create this file.  Then use:  ```Set-AGMLibImage -filename <filename.csv>```
 * *An imagename.   You could learn this in the AGM Web GUI.   Then use:  ```Set-AGMLibImage -imagename <imagename> -label <newlabel>"```
 
+
 # Jobs
 
 ## Finding Jobs
@@ -3560,3 +3561,4 @@ jobclass    status    startdate           enddate
 --------    ------    ---------           -------
 reprovision succeeded 2020-10-17 11:52:57 2020-10-17 11:55:08
 ```
+[Back to top](#usage-examples)
