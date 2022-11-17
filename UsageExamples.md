@@ -562,7 +562,7 @@ Applications are effectively data sources.  They contain the data we want to bac
 
 ## Application IDs
 
-The most common requirement for many commands is to supply the application ID, which is a unique number for each application.   This command is the default choice however if you run it without filters or select statements you will be overwhelmed:
+The most common requirement for many commands is to supply the application ID, which is a unique number for each application.   This command is the default choice however if you run it without [filters](README.md/#filtering) or select statements you will be overwhelmed:
 ```
 Get-AGMApplication
 ```
@@ -706,7 +706,7 @@ We can list events in the audit log with this command, but the resulting output 
 ```
 Get-AGMAudit
 ```
-We need to use filters and limits.  You can list all filterable fields with this command:
+We need to use [filters](README.md/#filtering) and limits.  You can list all filterable fields with this command:
 ```
 Get-AGMAudit -o
 ```
@@ -1885,7 +1885,7 @@ New-AGMLibDb2Mount
 # Events
 
 ## Listing your events
-To list events use this command.  The output can be extensive so filters and limits are recommended.
+To list events use this command.  The output can be extensive so [filters](README.md/#filtering) and limits are recommended.
 ```
 Get-AGMEvent
 ```
@@ -1989,7 +1989,7 @@ Remove-AGMHost -id 430741 -clusterid 144091747698
 ## Image creation with an OnDemand Job
 
 When we want to manually create a new backup image, this is called running an on-demand job.   We can do this with the ```New-AGMLibImage``` command.
-You can learn the application ID of the application in question with:  ```Get-AGMApplication```  You may want to use filters. 
+You can learn the application ID of the application in question with:  ```Get-AGMApplication```  You may want to use [filters](README.md/#filtering). 
 This is a good example of a filter:
 ```
 Get-AGMApplication -filtervalue managed=true -sort appname:asc | select id,appname,apptype
@@ -2359,7 +2359,7 @@ For instance this command will list the most recent snapshot for appid 992586
 ```
 Get-AGMJobHistory -filtervalue "appid=992586&jobclass=snapshot" -sort id:desc -limit 1
 ```
-If you are unsure if a job is finished or still running, then use this command, again always with filters:
+If you are unsure if a job is finished or still running, then use this command, again always with [filters](README.md/#filtering):
 ```
 Get-AGMJobStatus -filtervalue "appid=992586&jobclass=snapshot"  -limit 1
 ```
