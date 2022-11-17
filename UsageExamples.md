@@ -2772,10 +2772,116 @@ Restore-AGMLibSAPHANA
 
 ## SQL Server Database Clone
 
-As opposed to a mount which rapidly creates a virtual copy of the database(s) where the data is being accessed via the backup appliance, a clone creates a new full copy of the database on the host server disk.  To do this run this command in guided mode:
+As opposed to a mount which rapidly creates a virtual copy of the database(s) where the data is being accessed via the backup appliance, a clone creates a new full copy of the database on the target host server disk. To do this run this command in guided mode:
 ```
 New-AGMLibMSSQLClone
 ```
+
+SQL Server Clones are very much like a traditional database restore job to the same host as the source & SQL Instance, or to an alternate target host & SQL Instance. Database names can also be changed for Clones, along with the filenames for data and log files, and also stored in drive and folder locations that a user decides. Here is an example of a clone job for a single database to an alternate host:
+
+```
+New-AGMLibMSSQLClone -appid 80988 -cloneapplianceid 145138699730 -targethostid 33666 -sqlinstance "WINSQL-2" -renamedatabasefiles -recoverypoint "latest" -dbrenamelist "Database01,DevDB01" -recoverymodel "Same as source" -overwrite "no" -recoverdb "true" -userlogins "false" -volumes -restorelist "D:\,D:\Dev;E:\,E:\Dev"
+```
+
+In the above 'story' a user wants to clone a database to a different target host, using the latest copy of the database (including rolling logs forward) and putting the files in an alternate folder structure.
+
+First we need to learn what the AppID is for the source MS SQL instance:
+```
+Get-AGMLibApplicationID WINSQL-1 |ft
+```
+Output should look like this:
+```
+id    friendlytype hostname hostid appname  appliancename    applianceip    applianceid  appliancetype managed
+--    ------------ -------- ------ -------  -------------    -----------    -----------  ------------- -------
+80862 SqlInstance  winsql-2 33666  WINSQL-2 au-backup-sky-01 192.168.192.13 145138699730 Sky              True
+```
+
+Because applications can have images on multiple appliances, if we don't specify an Image name or Image ID, we need to tell the system which appliance to use for the source image. We do this specifying the clusterid of the relevant appliance with -cloneapplianceid. To learn the clusterids we run this command:
+```
+Get-AGMAppliance | select-object name,clusterid
+```
+
+The user validates the name of the target host:
+```
+Get-AGMLibHostID winsql-2 |ft
+```
+Output should look like this:
+```
+id    hostname osrelease                                    appliancename    applianceip    appliancetype
+--    -------- ---------                                    -------------    -----------    -------------
+33666 winsql-2 Microsoft Windows Server 2019 (version 1809) au-backup-sky-01 192.168.192.13 Sky
+```
+
+The user validates the SQL instance name on the target host. Because the user isn't sure about naming of the hostname they used '~' to get a fuzzy search. Because they couldn't remember the exact apptype for SQL Instance, they again just used a fuzzy search for 'instance':
+
+```
+Get-AGMApplication -filtervalue "hostname~winsql-2&apptype~instance" | select pathname
+```
+Output should look like this:
+```
+pathname
+--------
+WINSQL-2
+```
+To break down this command:
+* This starts a clone for a database with ImageID 80862 on target host WinSQL-2 and uses the SQL Instance WINSQL-2.
+* Files will be renamed to match the new database name because we didn't specify:  **-dontrenamedatabasefiles**
+* The database will be recovered, and also logs will be applied to the most recent available to roll-forward.
+* The database will be renamed as DevDB01, where as the source database is called Database01, this has a comma between source name and target name : **source_database_name,cloned_database_name**
+* The database will be recovered using the same recovery model as the source, alternatively you can choose: **Simple, Full or Bulk Logged**
+* The database will be not overwrite an existing database if one exists with the same name, alternatively you can specify yes, or only if the database is stale : **no, yes, stale**
+* The database will be set to RESTORE with RECOVERY, alternatively you can specify false, which will set the database to RESTORE with NORECOVERY mode: **true, falsee**
+* Each volume is separated by a semicolon, the two fields for each folder are comma separated.
+* In this example, the file **Database01.mdf** found in **D:\Data** will be migrated to **D:\Dev\Data\DevDB01.mdf**
+* In this example, the file **Database01_log.ldf** found in **E:\Logs** will be migrated to **E:\Dev\Logs\DevDB01_log.ldf**
+* The order of the fields must be **source_volume,targetfolder** so for two files **source_volume1,target_folder1;source_volume2,target_folder2**
+
+We could have specified file migration rather than folder migration, or we could have not specified either and let the files go back to their original locations (provided those locations exist).
+
+Once the job is running, the user finds the running job:
+
+```
+Get-AGMLibRunningJobs |ft
+```
+Output should look like this:
+```
+jobname     jobclass apptype                    hostname             appname  appid   appliancename    status  queuedate           startdate
+-------     -------- -------                    --------             -------  -----   -------------    ------  ---------           ---------
+Job_1242018 clone    SqlInstance                winsql-1             WINSQL-1 80988   au-backup-sky-01 running 2022-11-17 13:00:10 2022-11-17 13:00:11
+```
+
+The user tracks the job to success:
+
+```
+Get-AGMLibFollowJobStatus Job_1242018
+```
+Output should look like this:
+```
+jobname     status  progress queuedate           startdate           duration targethost
+-------     ------  -------- ---------           ---------           -------- ----------
+Job_1242018 running       57 2022-11-17 13:00:10 2022-11-17 13:00:11 00:01:05 winsql-2
+
+jobname    : Job_1242018
+status     : succeeded
+message    : Success
+startdate  : 2022-11-17 13:00:11
+enddate    : 2022-11-17 13:02:13
+duration   : 00:02:01
+targethost : winsql-2
+```
+The user validates the clone exists:
+```
+Get-AGMLibApplicationID DevDB01 |ft
+```
+Output should look like this:
+```
+id      friendlytype hostname hostid appname appliancename    applianceip    applianceid  appliancetype managed
+--      ------------ -------- ------ ------- -------------    -----------    -----------  ------------- -------
+1325504 SQLServer    winsql-2 33666  DevDB01 au-backup-sky-01 192.168.192.13 145138699730 Sky              True
+```
+If the target MS SQL Instance has a "Database Inclusion Rule" set for All databases, or User Databases, then it's very likely that you will see the managed = True setting, which indicates that your cloned database will be protected on the next snapshot of that instance.
+
+
 ## SQL Server Database Mount
 
 In this 'story' a user wants to mount the latest snapshot of a SQL DB to a host
