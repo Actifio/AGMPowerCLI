@@ -1751,7 +1751,10 @@ If we are onboarding large numbers of Compute Engine Instances or we want to aut
 
 ### Using a CSV file to work with multiple zones 
 
-This function can use a CSV file as input to supply the following data to the function which you specify with ```-discoveryfile **filename.sqv**```
+This function can use a CSV file as input to supply the following data to the function which you specify with:
+ ```-discoveryfile **filename.csv**```
+
+The CSV needs the following columns:
 
 * **credentialid**  This is used to determine which stored credential is used to connect to Google Cloud. Learn this by running Get-AGMLibCredentialSrcID
 * **applianceid**  This is used to determine which backup appliance will manage the new Compute Engine Instance. Learn this by running Get-AGMLibCredentialSrcID
@@ -1759,12 +1762,13 @@ This function can use a CSV file as input to supply the following data to the fu
 * **zone** this is the zone where we are going to look for new Compute Engine Instances
 
 So if you have two projects, then ensure the credential you have added as a Cloud Credential has been added to both projects as a service account in IAM and then add a line in the CSV for each zone in that project where you want to search.  This does mean if you add new zones to your project you will need to update the CSV to search in those zones.
+
 An example CSV file is as follows:
 ```
 credentialid,applianceid,project,zone
-6654,143112195179,avwarglab1,australia-southeast1-c
 6654,143112195179,avwarglab1,australia-southeast2-a
 6654,143112195179,avwarglab1,australia-southeast2-b
+6654,143112195179,avwarglab1,australia-southeast1-c
 ```
 When you run  ```New-AGMLibGCEInstanceDiscovery``` you have to specify one of these two choices:
 * ```-nobackup```  This will add all new Compute Engine Instances it finds without protecting them
@@ -1818,11 +1822,11 @@ We then specify additional options to control how backups are run:
 
 * ```-backup``` To specify that all discovered Compute Engine Instances should have a backup plan applied
 * ```-bootonly``` To specify that all discovered Compute Engine Instances should only have their boot drives protected by any backup plan
-* ```-limit xx``` To change the number 
+* ```-limit xx``` To change the number of instances we grab in each run
 * ```-nobackup``` To specify that all discovered Compute Engine Instances should **not** have a backup plan applied
 * ```-sltid xxx``` To apply the specified Service Template ID for the backup plan
 * ```-sltname xxx``` To apply the specified Service Template Name for the backup plan
-* ``` -usertag backupplan``` To look for a user specified tag on each VM, in this example the tag is **backupplan``
+* ``` -usertag backupplan``` To look for a user specified tag on each VM, in this example the tag is **backupplan**
 
 ### FAQ
 
@@ -1842,7 +1846,7 @@ New-AGMLibGCEInstanceDiscovery -discoveryfile ./disco.csv -backup -usertag "corp
 ```
 3. How do I learn the names of the templates to use as values for the tags?    
 
-You can either look at Templates in the SLA Architect in Web GUI or run: **Get-AGMSLT**
+You can either look at Templates in the SLA Architect in Web GUI or run: ```Get-AGMSLT```
 
 4. What if I don't want all instances to be added?   
 
