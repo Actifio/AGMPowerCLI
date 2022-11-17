@@ -737,6 +737,7 @@ We can look for other command types with either:
 * ```-delete``` To look for deletes normally associated with deleting things 
 * ```-put``` To look for puts, normally associated with changing things
 * ```-limit 2``` To get the last 2 commands.   You can look for as many commands as you like.
+
 [Back to top](#usage-examples)
 # Backup Plans
 
@@ -1048,6 +1049,7 @@ id    name
 21067 FSSnaps_RW_OV
 ```
 Our import is now complete.
+
 [Back to top](#usage-examples)
 # Billing
 
@@ -1075,6 +1077,7 @@ skudescription : Default Backup SKU for VM (Compute Engine and VMware) and File 
 skuusageGiB    : 4.051
 ```
 If the SKU description is not listed then please open an Issue in GitHub and share the listed apptype.
+
 [Back to top](#usage-examples)
 
 # Compute Engine Instances
@@ -1821,6 +1824,7 @@ You can either look at Templates in the SLA Architect in Web GUI or run: **Get-A
 4. What if I don't want all instances to be added?   
 
 This function has to add them all to ensure each instance is examined.   If you add them then delete them, they won't be added back in a second run because an Actifio label with a value of **unmanaged** will be added to them.
+
 [Back to top](#usage-examples)
 # Consistency Groups
 
@@ -3344,6 +3348,7 @@ enddate   : 2020-09-04 17:05:08
 duration  : 00:01:20
 ```
 We can then continue to work with our child app, creating new snapshots or even new child apps using those snapshots.
+
 [Back to top](#usage-examples)
 # Storage Pools
 
@@ -3490,6 +3495,7 @@ You can just specify one esxhost ID with -esxhostid.   If you are using NFS data
 #### datastore vs datastorelist
 
 You can also specify a single datastore rather than a list.
+
 [Back to top](#usage-examples)
 # Workflows
 
