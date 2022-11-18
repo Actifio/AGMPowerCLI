@@ -2,6 +2,9 @@
 # Usage Examples
 This document contains usage examples that include both AGMPowerCLI and AGMPowerLIB commands.
 
+**[AGM](#agm)**<br>
+>**[AGM Version](#agm-version)**<br>
+
 **[Appliances](#appliances)**<br>
 >**[Appliance Add And Remove](#appliance-add-and-remove)**<br>
 **[Appliance Discovery Schedule](#appliance-discovery-schedule)**<br>
@@ -134,6 +137,26 @@ This document contains usage examples that include both AGMPowerCLI and AGMPower
 **[Running a Workflow](#running-a-workflow)**</br>
 
 
+# AGM
+
+An AGM or Actifio Global Manager is the management end point for all our activities.  We login to the AGM with ```Connect-AGM``` and then issue our commands.   Google Cloud Backup and DR uses a Management Console which performs the same function.
+
+## AGM Login
+
+We login with the ```Connect-AGM``` command but the exact syntax will vary:
+
+| Product | Device 
+| ---- | ---- 
+| Actifio | [Actifio Global Manager](README.md/#4-Login-to-your-AGM)
+| Google Cloud Backup and DR | [Management Console](GCBDR.md)
+
+
+## AGM Version
+
+The following command will display the version.   It is a simple command to use to confirm connectivity:
+```
+Get-AGMVersion
+```
 # Appliances
 
 An Appliance does the work of creating backups.  There are two kinds of Appliance depending on which product you are using.  These commands apply to both unless otherwise stated.
@@ -1812,7 +1835,7 @@ newgceinstancebackup : 0
 
 ### Using a single command per project/zone
 
-Instead of using a discovery file we can specify the four variables needed by the command.   
+Instead of using a discovery file we can specify the four variables needed by the command:  
 
 * ```-applianceid 141805487622``` The appliance we will use to manage for discovery Compute Engine Instances
 * ```-credentialid 259643``` The cloud credential used for discovery

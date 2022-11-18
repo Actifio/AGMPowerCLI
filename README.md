@@ -257,7 +257,7 @@ You can save your password in a secret manager and call it during login.   For e
 gcloud secrets versions access latest --secret=agmadminpassword
 ```
  
-### 4)  Login to your AGM - Actifio only
+### 4 Login to your AGM 
 
 This is for Actifio only. Click [here](https://github.com/Actifio/AGMPowerCLI/blob/main/GCBDR.md "GCBDR") for Google Cloud Backup and DR
 
