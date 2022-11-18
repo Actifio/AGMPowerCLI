@@ -153,10 +153,13 @@ We login with the ```Connect-AGM``` command but the exact syntax will vary:
 
 ## AGM Version
 
-The following command will display the version.   It is a simple command to use to confirm connectivity:
+The following command will display the version.   It can also be used as a simple command to confirm connectivity:
 ```
 Get-AGMVersion
 ```
+
+[Back to top](#usage-examples)
+
 # Appliances
 
 An Appliance does the work of creating backups.  There are two kinds of Appliance depending on which product you are using.  These commands apply to both unless otherwise stated.
