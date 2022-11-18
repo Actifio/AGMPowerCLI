@@ -5,8 +5,9 @@ A Powershell module to issue API calls to an Actifio Global Manager or a Google 
 **[What does this module do?](#what-does-this-module-do)**<br>
 **[Usage](#usage)**<br>
 **[What else do I need to know?](#what-else-do-i-need-to-know)**<br>
-**[Contributing](#contributing)**<br>
+**[Usage Examples](#usage-examples)**<br>
 **[User Stories](#user-stories)**<br>
+**[Contributing](#contributing)**<br>
 **[Disclaimer](#disclaimer)**<br>
 
 ## What does this module do?
@@ -502,9 +503,15 @@ PS > $LASTEXITCODE
  
  The goal of AGMPowerCLI is to expose all the REST API end points that are available on an AGM so you can automate functions using PowerShell.  However this requires a knowledge of the END points and particularly for commands that create new things (like mounts), these commands need a body that is made of well formed JSON.  For this reason we have started a second module that is dedicated to composite functions.   A composite function is a function that contains multiple end-points or a function that includes guided wizards.   
 
+# User Examples
+
+Usage examples are in a separate document that you will find [here](UsageExamples.md) 
+
 # User Stories
 
-Usage examples are in a separate document that you will find [here](UsageExamples.md)   Note that some usage examples will use the AGMPowerLib module, so also ensure you have [AGMPowerLib](https://github.com/Actifio/AGMPowerLib/blob/main/README.md) installed:
+All User Stories previously in the Readme have moved to  [here](UsageExamples.md) 
+
+Note that some usage examples will use the AGMPowerLib module, so also ensure you have [AGMPowerLib](https://github.com/Actifio/AGMPowerLib/blob/main/README.md) installed:
 
 The following examples were all moved from the Readme to the Usage Examples page but are here in case you bookmarked them:
 
