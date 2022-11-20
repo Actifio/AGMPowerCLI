@@ -18,7 +18,7 @@ In this example (yours will be different!):
 
 * Management Console URL:  ```https://agm-666993295923.backupdr.actifiogo.com/actifio```
     * You only need the end point part of the URL:  ```agm-666993295923.backupdr.actifiogo.com```
-* OAuth 2.0 client ID:     ```486522031570-fimdb0rbeamc17l3akilvquok1dssn6t.apps.googleusercontent.com```
+* OAuth 2.0 client ID:     ```123456-fimdb0rbeamc17l3akilvquok1dssn6t.apps.googleusercontent.com```
 
 
 ## Creating your Service Account
