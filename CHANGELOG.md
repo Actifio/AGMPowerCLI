@@ -1,6 +1,9 @@
 # Change log
 
 Started Change log file as per release 0.0.0.39
+## AGMPowerCLI 0.0.0.48
+* Connect-AGM will auto detect GCBDR if manually run with no parms
+
 ## AGMPowerCLI 0.0.0.47
 * Added many more options to Restore-AGMApplication 
 
