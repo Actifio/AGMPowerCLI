@@ -47,7 +47,7 @@ In your project create or select an instance that you want to use for API operat
 
 2. Activate your service account on a host
 
-In option 2, we are going to use a Compute Engine instance or external host/VM to run our API commands/automation, but we are going to 'activate' the Service account using a JSON Key.   The host needs the **gcloud** CLI installed.
+In option 2, we are going to use a Compute Engine instance or external host/VM to run our API commands/automation, but we are going to *activate* the Service account using a JSON Key.   The host needs the **gcloud** CLI installed.
 
 We need to activate our service account since we are not executing this command from a Compute Engine instance with an attached service account.
 So firstly we need to download a JSON key from the Google Cloud Console and copy that key to our relevant host:
@@ -140,7 +140,7 @@ errormessage
 ------------
 OpenID Connect token expired: JWT has expired
 ```
-You will need to re-run Connect-AGM to generate a new token.
+You will need to run Connect-AGM to generate a new one hour token.
 
 
 ## Converting Scripts From Actifio GO to Backup and DR
@@ -191,7 +191,7 @@ To prevent unauthorized access, be sure to secure access to the automation host,
 ## FAQ
 ### I can connect but don't seem to stay connected
 
-You may see a pattern like this, where connect-agm works, but most commands say you are not logged in.
+You may see a pattern like this, where **connect-agm** works, but most commands say you are not logged in.
 ```
 PS /Users/avw/Documents> Connect-AGM -agmip agm-666993295923.backupdr.actifiogo.com -agmuser iapaccess@avwservicelab1.iam.gserviceaccount.com -oauth2ClientId 486522031570-fimdb0rbeamc17l3akilvquok1dssn6t.apps.googleusercontent.com
 Login Successful!
@@ -220,7 +220,7 @@ The issue is that your Management Console user has no role.   Go to the Manageme
 
 ### Can I use this Service Account to login to the Management Console WEB GUI?
 
-No you cannot.   A service account cannot be used to login to a Web Browser to authorize Console access
+No you cannot.  A service account cannot be used to login to a Web Browser to authorize Console access
 
 
 ### Can I use one service account into two projects?
@@ -228,7 +228,7 @@ No you cannot.   A service account cannot be used to login to a Web Browser to a
 Let's say we have two projects, ProjectA and ProjectB:
 
 1. You activate Google Cloud Back and DR in both projects.   
-1. You create a service account api@saprojectA  in projectA and give it the roles/permissions needed to perform API operations in ProjectA
-1. You can now add  api@saprojectA to project B and provided you give it the same role/permissions it can now do API operations in both ProjectA and ProjectB
+1. You create a service account **api@saprojectA** in projectA and give it the roles/permissions needed to perform API operations in ProjectA
+1. You can now add **api@saprojectA** to project B and provided you give it the same role/permissions it can now do API operations in both ProjectA and ProjectB
 
 The one thing you cannot do is run an instance in ProjectB as the SA from ProjectA using Option 2: Activate your service account on a host
