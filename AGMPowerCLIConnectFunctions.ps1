@@ -69,13 +69,20 @@ function Connect-AGM
     The prompt will request a secure password.
 
     .EXAMPLE
+    Connect-AGM -agmip 172.24.1.117 -agmuser admin -i
+    This will connect to AGM with a username of "admin" to the IP address 172.24.1.117.
+    The prompt will securely request a password.
+    Because -i is specified certificate validation of the AGM is ignored
+
+    .EXAMPLE
     Connect-AGM -agmip 172.24.1.117 -agmuser admin -passwordfile av.key
     This will connect to AGM with a username of "admin" to the IP address 172.24.1.117.
     The password will be provided by using a previously created password file using Save-AGMPassword
 
     .EXAMPLE
-    Connect-AGM 172.24.1.117 admin password -i
-    This will connect to AGM with a username of "admin" to the IP address 172.24.1.117.  It unsecurely supplies the password and bypasses the SSL certificate check by specifying -i
+    Connect-AGM -agmip agm-12345678.backupdr.actifiogo.com -agmuser apiuser@project1.iam.gserviceaccount.com -oauth2ClientId 123456789-fimdb0rbeamc17l3akilabcdefgh.apps.googleusercontent.com
+
+    Connects to a Google Cloud Backup and DR Management Console.  The key difference is that rather than a password, an oauth2ClientId is specified instead
 
     #>
 
@@ -93,11 +100,25 @@ function Connect-AGM
     {
     $agmip = Read-Host "IP or Name of AGM"
     }
+
+    if (!($agmuser))
+    {
+    $agmuser = Read-Host "AGM user"
+    }
+
     if (!($agmtimeout))
     {
         [int]$agmtimeout = 300
     }
 
+
+    if ((!($agmpassword)) -and (!($passwordfile)) -and (!($oauth2ClientId)))
+    {
+        if ($agmip | select-string "backupdr")
+        {
+            $oauth2ClientId = Read-Host "oauth2ClientId"
+        }
+    }
 
     # based on the action, do the right thing.
     if ( $certaction -eq "i" -or $certaction -eq "I" )
@@ -258,10 +279,7 @@ function Connect-AGM
         }
     }
 
-    if (!($agmuser))
-    {
-    $agmuser = Read-Host "AGM user"
-    }
+
 
 
     if (!($passwordfile))

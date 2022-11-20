@@ -150,7 +150,7 @@ Name        Version ModuleBase
 ----        ------- ----------
 AGMPowerCLI 0.0.0.6 C:\Program Files\PowerShell\Modules\AGMPowerCLI
 
-PS C:\Users\av> Connect-AGM 10.65.5.38 av passw0rd -i
+PS C:\Users\av> Connect-AGM -agmip 10.65.5.38 -agmuser av -agmpassword passw0rd -i
 Login Successful!
 PS C:\Users\av> Get-AGMVersion
 
@@ -264,15 +264,15 @@ This is for Actifio only. Click [here](https://github.com/Actifio/AGMPowerCLI/bl
 
 To login to an AGM (10.61.5.114) as admin and enter password interactively:
 ```
-Connect-AGM 10.61.5.114 admin -ignorecerts
+Connect-AGM -agmip 10.61.5.114 -agmuser admin -ignorecerts
 ```
 Or login to the AGM using the password file created in the previous step:
 ```
-Connect-AGM 10.61.5.114 admin -passwordfile "c:\temp\password.key" -ignorecerts
+Connect-AGM -agmip 10.61.5.114 -agmuser admin -passwordfile "c:\temp\password.key" -ignorecerts
 ```
 If you are using Google secret manager, then if your AGM password is stored in a secret called **agmadminpassword** then this syntax will work:
 ```
-connect-agm 10.152.0.5 admin $(gcloud secrets versions access latest --secret=agmadminpassword) -i 
+connect-agm -agmip 10.152.0.5 -agmuser admin -agmpassword $(gcloud secrets versions access latest --secret=agmadminpassword) -i 
 ```
 Note you can use **-quiet** to suppress messages.   This is handy when scripting.
 
@@ -282,7 +282,7 @@ This is for Actifio only.
 
 If you are connecting to AGM over port forwarding then you will want to override the default TCP port of 443.   To do this simple add your desired port to the AGMIP.   For instance if you are using local port forwarding through a bastion host where port 8443 is being forwarded to port 443:
 ```
-Connect-AGM 127.0.0.1:8443 admin -passwordfile "c:\temp\password.key" -ignorecerts
+Connect-AGM -agmip 127.0.0.1:8443 -agmuser admin -passwordfile "c:\temp\password.key" -ignorecerts
 ```
 
 ### 5)  Run your first command:
@@ -339,7 +339,7 @@ For all other functions (after initial login) you can change the timeout by addi
 
 So to set a 10 second timeout for all functions after login:
 ```
-Connect-AGM 10.61.5.114 admin -passwordfile "c:\temp\password.key" -ignorecerts -agmtimeout 10
+Connect-AGM -agmip 10.61.5.114 -agmuser admin -passwordfile "c:\temp\password.key" -ignorecerts -agmtimeout 10
 ```
 
 #### API Limit
@@ -431,7 +431,7 @@ One design goal of AGMPowerCLI is for all user messages to be easy to understand
 
 Successful login:
 ```
-PS > Connect-AGM 172.24.1.180 av passw0rd -i
+PS > Connect-AGM -agmip 172.24.1.180 -agmuser av -agmpassword passw0rd -i
 Login Successful!
 PS > $?
 True
@@ -439,7 +439,7 @@ True
 
 Unsuccessful login:
 ```
-PS > Connect-AGM 172.24.1.180 av password -i
+PS > Connect-AGM -agmip 172.24.1.180 -agmuser av -agmpassword passw0rd -i
 
 err_code errormessage
 -------- ------------
@@ -455,14 +455,14 @@ Lets repeat the same exercise but using -q for quiet login
 In a successful login the variable $loginattempt is empty
 
 ```
-PS > $loginattempt = Connect-AGM 172.24.1.180 av passw0rd -i -q
+PS > $loginattempt = Connect-AGM -agmip 172.24.1.180 -agmuser av -agmpassword passw0rd -i -q
 PS > $loginattempt
 ```
 
 But an unsuccessful login can be 'seen'.  
 
 ```
-PS > $loginattempt = Connect-AGM 172.24.1.180 av password -i -q
+PS > $loginattempt = Connect-AGM -agmip 172.24.1.180 -agmuser av -agmpassword password -i -q
 PS > $loginattempt
 
 err_code errormessage
