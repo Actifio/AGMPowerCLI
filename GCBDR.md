@@ -12,32 +12,31 @@ To perform Backup and DR PowerShell operations, you need the following:
 
 ## Getting Management Console details
 
-Once you have deployed Backup and DR, then a management console will be configured.     Open the Show API Credentials twisty to learn the Management Console API URL and OAuth 2.0 client ID.  You will need these.
+Once you have deployed Backup and DR, then a management console will be configured.     Open the ```Show API Credentials``` twisty to learn the Management Console API URL and OAuth 2.0 client ID.  You will need these.
 
 In this example (yours will be different!):
 
 * Management Console URL:  ```https://agm-666993295923.backupdr.actifiogo.com/actifio```
+    * You only need the end point part of the URL:  ```agm-666993295923.backupdr.actifiogo.com```
 * OAuth 2.0 client ID:     ```486522031570-fimdb0rbeamc17l3akilvquok1dssn6t.apps.googleusercontent.com```
 
 
 ## Creating your Service Account
 
-> **Warning**: Do not use a default (auto generated) service account for this process such as the ```Compute Engine Service Agent``` Use either a new service account or one that was previously manually created.  
+> **Warning**: Do not use a default (auto generated) service account for this process such as the ```Compute Engine Service Agent``` because that will have a fixed scope. Use either a new service account or one that was previously manually created.  
 
-From Cloud Console IAM & Admin panel in the project where Backup and DR was activated, go to **Service Account** and choose **Create Service Account**.  You can also modify an existing one if desired.
+From Cloud Console **IAM & Admin** panel in the project where Backup and DR was activated, go to **Service Account** and choose **Create Service Account**.  You can also modify an existing one if desired.
 
-Ensure it has **one** of the two following roles:
-
+Ensure it has **one** of the two following roles (not both, just one!):
 
 * ```Backup and DR User``` 
 * ```Backup and DR Admin```
 
-You then need to go to **IAM & Admin** > **Service Accounts**.  Find that service account, select it, go to **PERMISSIONS,** select **GRANT ACCESS**, enter the principal (email address) of the service account we will activate or attach with one of the following roles (you don't need both).  You can assign this to the same service account that was assigned the ```Backup and DR``` role:
+You then need to go to **IAM & Admin** > **Service Accounts**.  Find that service account, select it, go to **PERMISSIONS,** select **GRANT ACCESS**, enter the principal (email address) of the service account we will activate or attach with the following role.  You can assign this to the same service account that was assigned the ```Backup and DR``` role:
 
 * ```Service Account Token Creator```
-* ```Service Account OpenID Connect Identity Token Creator```
 
-> **Warning**: Do not assign either of these ```Token Creator``` roles to a service account at the project level.  Doing so will allow that account to _impersonate_ any other service account, which will make that user able to login as any user that has access to a **Backup and DR** role.
+> **Warning**: Do not assign ```Token Creator``` roles to a service account at the project level.  Doing so will allow that account to _impersonate_ any other service account, which will allow that user to login as any user that has access to a **Backup and DR** role.
 
 Decide where/how you will run your service account. You have two options:
 1. Compute Engine Instance with attached service account
