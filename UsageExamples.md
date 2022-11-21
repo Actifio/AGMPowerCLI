@@ -2066,6 +2066,8 @@ We can then delete them with this script:
 ```
 foreach ($object in $stalehosts) { Remove-AGMHost -id $object.id -applianceid $object.sourcecluster }
 ```
+> **Note**:   The ```Remove-AGMHost``` does not currently return a message, so don't be concerned if the deletion appears to be slow or stuck. 
+
 
 [Back to top](#usage-examples)
 
