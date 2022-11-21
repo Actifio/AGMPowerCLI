@@ -2337,7 +2337,7 @@ First learn the ID of the affected bucket using this command:
 ```
 Get-AGMDiskPool -filtervalue pooltype=vault | select id,name
 ```
-Typical example will look like this:
+Typical output will look like this:
 ```
 id      name
 --      ----
@@ -2347,7 +2347,8 @@ id      name
 ```
 Now confirm this pool does represent the bucket that was accidentally deleted:
 ```
-Get-AGMDiskPool 1065513 | select id,@{N="bucket";E={$_.vaultprops.bucket}},@{N="applianceid";E={$_.cluster.clusterid}}
+$diskpoolid = 1065513
+Get-AGMDiskPool $diskpoolid | select id,@{N="bucket";E={$_.vaultprops.bucket}},@{N="applianceid";E={$_.cluster.clusterid}}
 ```
 Typical output would look like this:
 ```
@@ -2359,7 +2360,7 @@ Now use the ID as diskpoolid and the applianceid and run this command:
 ```
 Import-AGMLibOnVault -diskpoolid 1065513 -applianceid 144091747698 -forget
 ```
-Typical output will look like this:
+Typical output will look like this, where 2 images were forgotten:
 ```
 count items
 ----- -----
