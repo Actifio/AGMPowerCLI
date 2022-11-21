@@ -67,7 +67,8 @@ This document contains usage examples that include both AGMPowerCLI and AGMPower
 **[Finding a Host ID by Operating System Type](#finding-a-host-id-by-operating-system-type)**<br>
 **[Listing Your Hosts](#listing-your-hosts)**<br>
 **[Managing Host Ports](#managing-host-ports)**</br>
-**[Removing a Host](#removing-a-host)**</br>
+**[Deleting a Host](#deleting-a-host)**</br>
+**[Deleting Stale Hosts](#deleting-stale-hosts)**</br>
 
 **[Images](#images)**<br>
 >**[Image Creation With An On-Demand Job](#image-creation-with-an-ondemand-job)**<br>
@@ -2029,7 +2030,7 @@ This command **removes** iSCSI port name iqn1:
 ```
 Remove-AGMHost -applianceid 143112195179 -hostid "12345" iscsiname "iqn1"
 ```
-## Removing a host
+## Deleting a Host
 You can remove a host with the command.  Note you cannot remove a host if there are still applications depending on it.  In this example we learn the host ID and cluster ID:
 ```
 Get-AGMHost -filtervalue hostname=testvm | select id,name,clusterid
@@ -2042,6 +2043,26 @@ We then remove it:
 ```
 Remove-AGMHost -id 430741 -clusterid 144091747698
 ```
+
+## Deleting Stale Hosts
+
+You may have a situation where you have many stale hosts after a DR or failover test.   You can only delete a single host at a time using the GUI, so we can use this four step process to delete many stale hosts:
+
+These these commands learn all hosts that have applications ```$hostswithapps``` and then all known hosts ```$allhosts``` which are then compared to generate a list of stale hosts (hosts that have no applications):
+```
+$hostswithapps = Get-AGMApplication | select @{N="id";E={$_.host.id}},@{N="sourcecluster";E={$_.host.sourcecluster}} | sort-object id | get-unique -AsString
+$allhosts = Get-AGMhost -filtervalue "hosttype!VMCluster&hosttype!vcenter&hosttype!esxhost" -sort id:asc | select id,sourcecluster
+$stalehosts = Compare-Object -ReferenceObject $allhosts -DifferenceObject $hostswithapps -Property id,sourcecluster | where-object {$_.SideIndicator -eq "<="}
+```
+We then validate if we have stale hosts.   If the count is non-zero, we delete them one at a time:
+```
+$stalehosts.id.count
+```
+If the count is non-zero, we delete them one at a time:
+```
+foreach ($object in $stalehosts) { Remove-AGMHost -id $object.id -applianceid $object.sourcecluster }
+```
+
 [Back to top](#usage-examples)
 
 # Images
