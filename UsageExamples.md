@@ -2046,19 +2046,23 @@ Remove-AGMHost -id 430741 -clusterid 144091747698
 
 ## Deleting Stale Hosts
 
-You may have a situation where you have many stale hosts after a DR or failover test.   You can only delete a single host at a time using the GUI, so we can use this four step process to delete many stale hosts:
+You may have a situation where you have many stale hosts after a DR or failover test.   You can only delete a single host at a time using the GUI, so we can use this multi step process to delete many stale hosts:
 
-These these commands learn all hosts that have applications ```$hostswithapps``` and then all known hosts ```$allhosts``` which are then compared to generate a list of stale hosts (hosts that have no applications):
+The first three commands learn all hosts that have applications ```$hostswithapps``` and then all known hosts ```$allhosts``` which are then compared to generate a list of stale hosts ```$stalehosts``` that are hosts that have no applications:
 ```
 $hostswithapps = Get-AGMApplication | select @{N="id";E={$_.host.id}},@{N="sourcecluster";E={$_.host.sourcecluster}} | sort-object id | get-unique -AsString
 $allhosts = Get-AGMhost -filtervalue "hosttype!VMCluster&hosttype!vcenter&hosttype!esxhost" -sort id:asc | select id,sourcecluster
 $stalehosts = Compare-Object -ReferenceObject $allhosts -DifferenceObject $hostswithapps -Property id,sourcecluster | where-object {$_.SideIndicator -eq "<="}
 ```
-We then validate if we have stale hosts.   If the count is non-zero, we delete them one at a time:
+We then validate if we have stale hosts:
 ```
 $stalehosts.id.count
 ```
-If the count is non-zero, we delete them one at a time:
+If the count is non-zero and you are curious what these hosts are, we can list them out:
+```
+foreach ($object in $stalehosts) { Get-AGMHost -id | select id,hostname,hosttype }
+```
+We can then delete them with this script:
 ```
 foreach ($object in $stalehosts) { Remove-AGMHost -id $object.id -applianceid $object.sourcecluster }
 ```
