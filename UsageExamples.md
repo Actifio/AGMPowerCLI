@@ -2060,7 +2060,7 @@ $stalehosts.id.count
 ```
 If the count is non-zero and you are curious what these hosts are, we can list them out:
 ```
-foreach ($object in $stalehosts) { Get-AGMHost -id | select id,hostname,hosttype }
+foreach ($object in $stalehosts) { Get-AGMHost -id $object.id | select id,hostname,hosttype }
 ```
 We can then delete them with this script:
 ```
