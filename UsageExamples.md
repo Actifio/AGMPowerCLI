@@ -2372,6 +2372,8 @@ count items
 ----- -----
     0 {}
 ```
+You can now remove the bad pool from any Backup Plan Resource Profiles and then delete the bad pool from Storage Pools.
+
 If you targeted the wrong pool and regret what you just did, simply run the command again without ```-forget``` to import the images.
 
 
