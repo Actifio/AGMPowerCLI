@@ -2334,7 +2334,7 @@ If you have a situation where you have deleted a Cloud Storage bucket, then all 
 At this point you will have images that are stuck.   To clean this up, use the following procedure:
 
 First learn the ID of the affected bucket using this command:
-``
+```
 Get-AGMDiskPool -filtervalue pooltype=vault | select id,name
 ```
 Typical example will look like this:
