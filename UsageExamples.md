@@ -75,6 +75,7 @@ This document contains usage examples that include both AGMPowerCLI and AGMPower
 **[Image Creation In Bulk Using Policy ID](#image-creation-in-bulk-using-policy-id)**<br>
 **[Image Expiration](#image-expiration)**<br>
 **[Image Expiration In Bulk](#image-expiration-in-bulk)**<br>
+**[Image Expiration For a Deleted Cloud Storage Bucket](#image-expiration-for-a-deleted-cloud-storage-bucket))**<br>
 **[Image Import From OnVault](#image-import-from-onvault)**<br>
 **[Persistent Disk Import From OnVault](#persistent-disk-import-from-onvault)**<canc>
 **[Image Restore](#image-restore)**<br>
@@ -2325,6 +2326,53 @@ Image_0266247 2021-09-14 00:00:00
 Image_0265223 2021-09-14 00:00:00
 ```
 The images will expire over the next hour.
+
+## Image Expiration For a Deleted Cloud Storage Bucket
+
+If you have a situation where you have deleted a Cloud Storage bucket, then all OnVault operations to that bucket including expirations, will fail.  
+
+At this point you will have images that are stuck.   To clean this up, use the following procedure:
+
+First learn the ID of the affected bucket using this command:
+``
+Get-AGMDiskPool -filtervalue pooltype=vault | select id,name
+```
+Typical example will look like this:
+```
+id      name
+--      ----
+1065513 badbucketarglab
+1065490 autoclasstest
+408763  avwargolis
+```
+Now confirm this pool does represent the bucket that was accidentally deleted:
+```
+Get-AGMDiskPool 1065513 | select id,@{N="bucket";E={$_.vaultprops.bucket}},@{N="applianceid";E={$_.cluster.clusterid}}
+```
+Typical output would look like this:
+```
+id      bucket          applianceid
+--      ------          ---------
+1065513 badbucketarglab 144091747698
+```
+Now use the ID as diskpoolid and the applianceid and run this command: 
+```
+Import-AGMLibOnVault -diskpoolid 1065513 -applianceid 144091747698 -forget
+```
+Typical output will look like this:
+```
+count items
+----- -----
+    1 {@{@type=vaultPoolForgetResultRest; imagecount=2; application=}}
+```
+If there were no images you will see this:
+```
+count items
+----- -----
+    0 {}
+```
+If you targeted the wrong pool and regret what you just did, simply run the command again without ```-forget``` to import the images.
+
 
 ## Image Import from OnVault
 
