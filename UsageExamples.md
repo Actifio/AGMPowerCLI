@@ -75,7 +75,7 @@ This document contains usage examples that include both AGMPowerCLI and AGMPower
 **[Image Creation In Bulk Using Policy ID](#image-creation-in-bulk-using-policy-id)**<br>
 **[Image Expiration](#image-expiration)**<br>
 **[Image Expiration In Bulk](#image-expiration-in-bulk)**<br>
-**[Image Expiration For a Deleted Cloud Storage Bucket](#image-expiration-for-a-deleted-cloud-storage-bucket))**<br>
+**[Image Expiration For a Deleted Cloud Storage Bucket](#image-expiration-for-a-deleted-cloud-storage-bucket)**<br>
 **[Image Import From OnVault](#image-import-from-onvault)**<br>
 **[Persistent Disk Import From OnVault](#persistent-disk-import-from-onvault)**<canc>
 **[Image Restore](#image-restore)**<br>
