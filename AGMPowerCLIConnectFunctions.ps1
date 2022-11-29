@@ -138,10 +138,9 @@ function Connect-AGM
     # OATH handling
     if ($oauth2ClientId)
     {
-        $hostVersionInfo = (get-host).Version.Major
         if (((get-host).Version.Major -eq 7) -and ((get-host).Version.Minor -eq 3))
         {
-            $PSNativeCommandArgumentPassing = "Legacy"
+            Set-Variable -Name "PSNativeCommandArgumentPassing" -value "Legacy"
         }
         # first we get a token
         $Url = "https://iamcredentials.googleapis.com/v1/projects/-/serviceAccounts/$agmuser" +":generateIdToken"
