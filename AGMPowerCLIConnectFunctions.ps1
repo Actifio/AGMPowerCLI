@@ -140,7 +140,7 @@ function Connect-AGM
     {
         if (((get-host).Version.Major -eq 7) -and ((get-host).Version.Minor -eq 3))
         {
-            Set-Variable -Name "PSNativeCommandArgumentPassing" -value "Legacy"
+            $PSNativeCommandArgumentPassing = "Legacy"
         }
         # first we get a token
         $Url = "https://iamcredentials.googleapis.com/v1/projects/-/serviceAccounts/$agmuser" +":generateIdToken"
