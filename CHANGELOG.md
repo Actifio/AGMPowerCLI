@@ -1,6 +1,9 @@
 # Change log
 
 Started Change log file as per release 0.0.0.39
+## AGMPowerCLI 0.0.0.49
+* Handle issue with PowerShell 7.3 and Gcloud commands
+
 ## AGMPowerCLI 0.0.0.48
 * Connect-AGM will auto detect GCBDR if manually run with no parms
 
