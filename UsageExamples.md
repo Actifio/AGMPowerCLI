@@ -56,7 +56,7 @@ This document contains usage examples that include both AGMPowerCLI and AGMPower
 >**[Creating a DB2 mount](#creating-a-db2-mount)**</br>
 
 **[Disaster Recovery Automation](#disaster-recovery-automation)**</br>
->>**[Recovering Virtual Machines](#recovering-virtual-machines)**</br>
+>**[Recovering Virtual Machines](#recovering-virtual-machines)**</br>
 >**[Recovering Databases](#recoverying-databases)**</br>
 
 **[Events](#events)**</br>
