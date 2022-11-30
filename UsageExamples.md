@@ -1801,7 +1801,7 @@ credentialid,applianceid,project,zone
 ```
 When you run  ```New-AGMLibGCEInstanceDiscovery``` you have to specify one of these two choices:
 * ```-nobackup```  This will add all new Compute Engine Instances it finds without protecting them
-* ```-backup```  This will add  all new Compute Engine Instances it finds and for each Instance it will look for a label called **googlebackupplan** (or a label you specify with ```-usertag```)  If the value for that label is the name of an existing policy template, it will automatically protect that instance using that template
+* ```-backup```  This will add  all new Compute Engine Instances it finds and for each Instance it will look for a label you specify with ```-usertag```  If the value for that label is the name of an existing policy template, it will automatically protect that instance using that template
 
 An example run is as follows.  In the first zone, no new instances were found.  In the second zone, 3 were found and two protected.   A second run is made on each zone where more than 50 instances need to be processed (since we process 50 at a time).  The third zone had no new VMs.   
 ```
@@ -1855,13 +1855,25 @@ We then specify additional options to control how backups are run:
 * ```-nobackup``` To specify that all discovered Compute Engine Instances should **not** have a backup plan applied
 * ```-sltid xxx``` To apply the specified Service Template ID for the backup plan
 * ```-sltname xxx``` To apply the specified Service Template Name for the backup plan
-* ``` -usertag backupplan``` To look for a user specified tag on each VM, in this example the tag is **backupplan**
+* ``` -usertag backupplan``` To look for a user specified label on each VM to determine which SLT to use. In this example the key would be **backupplan**  and the value of the key should be a valid SLT name
+* ```-diskbackuplabel diskbackup ``` To look for a user specified lavel on each VM to determine which disks to backup. In this example the key would be **diskbackup**  and the value should be **bootonly**.  If any other value is specified then all disks will be backed up.
 
-So an example command would look like this.  In this example we backup all appliances using the sltname found in the **backupplan** label on each instance.
+So an example command would look like this.  In this example we backup all instances using the sltname found in the **backupplan** label on each instance.
 ```
-New-AGMLibGCEInstanceDiscovery -credentialid 259643 -applianceid 141805487622 -projectid avwservicelab1 -zone australia-southeast1-b -usertag backupplan -backup
+GMLibGCEInstanceDiscovery -credentialid 706606 -applianceid 144091747698 -project avwarglab1 -zone australia-southeast2-a -backupplanlabel backupplan -backup
 ```
-
+In this example we also look for a label called **diskbackup** and any instance with a value of **bootonly** will only have the boot disk protected.
+```
+New-AGMLibGCEInstanceDiscovery -credentialid 706606 -applianceid 144091747698 -project avwarglab1 -zone australia-southeast2-a -backupplanlabel backupplan -diskbackuplabel diskbackup -backup
+```
+Here is the same command but with a default sltname... meaning if the isntance does have a backupplan label, it will still be protected with the 'default slt' of 'bronze':
+```
+New-AGMLibGCEInstanceDiscovery -credentialid 706606 -applianceid 144091747698 -project avwarglab1 -zone australia-southeast2-a -backupplanlabel backupplan -diskbackuplabel diskbackup -backup -sltname bronze
+```
+Finally this command will discover but not apply backup plan to any discovered instances regardless of label:
+```
+New-AGMLibGCEInstanceDiscovery -credentialid 706606 -applianceid 144091747698 -project avwarglab1 -zone australia-southeast2-a -nobackup
+```
 ### FAQ
 
 1. How do I tag the VM?    
