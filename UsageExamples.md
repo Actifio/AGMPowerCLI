@@ -56,6 +56,8 @@ This document contains usage examples that include both AGMPowerCLI and AGMPower
 >**[Creating a DB2 mount](#creating-a-db2-mount)**</br>
 
 **[Disaster Recovery Automation](#disaster-recovery-automation)**</br>
+>>**[Recovering Virtual Machines](#recovering-virtual-machines)**</br>
+>**[Recovering Databases](#recoverying-databases)**</br>
 
 **[Events](#events)**</br>
 >**[Listing Your Events](#listing-your-events)**</br>
@@ -1323,7 +1325,7 @@ Get-AGMSLP
 
 ### How to learn the IP address of a Compute Engine Instance
 
-If we know the name of the GCP VM, then use this command: 
+If we know the name of the Compute Engine VM, then use this command: 
 ```
 Get-AGMApplication -filtervalue appname=bastion
 ```
@@ -1392,10 +1394,10 @@ There are many parameters that may need to be supplied:
 -projectname     This is the unique Google Project name where the new instance will be created.
 -sharedvpcprojectid  If the instance is being created in a service project, what is the ID the project that is sharing the VPC (optional)
 -nodegroup       If creating an instance into a sole tenant node group, this is the name of the node group (optional)
--region          This is the GCP Region such as:   australia-southeast1
--zone            This is the GCP Zone such as: australia-southeast1-c
+-region          This is the Google Cloud Region such as:   australia-southeast1
+-zone            This is the Google Cloud Zone such as: australia-southeast1-c
 -instancename    This is the name of the new instance that will be created.   It needs to be unique in that project
--machinetype     This is the GCP instance machine type such as:  e2-micro
+-machinetype     This is the Google Cloud instance machine type such as:  e2-micro
 -networktags     Comma separate as many tags as you have, for instance:   -networktags "http-server,https-server"   
 -labels          Labels are key value pairs.   Separate key and value with colons and each label with commas.   For example:   -labels "pet:cat,food:fish"
 -nic0network     The network name in URL format for nic0
@@ -1431,11 +1433,11 @@ If you get timeouts, then increase the timeout value with **-timeout 60** when r
 
 ## Compute Engine Instance Multi Conversion from VMware VM
 
-The expected configuration in this scenario is that the end-user will be looking to recover workloads from VMware into a GCP Zone
+The expected configuration in this scenario is that the end-user will be looking to recover workloads from VMware into a Google Cloud Zone
 
 | Production Site  | DR Site |
 | ------------- | ------------- |
-| VMware | GCP Zone |
+| VMware | Google Cloud Zone |
 
 The goal is to offer a simplified way to manage failover from Production to DR where:
 * The backup mechanism is to use VMware snapshots
@@ -1456,7 +1458,7 @@ If you want to manually construct the output, or get some variables to tweak the
 
 ### VMware to Compute Engine Instance CSV file
 
-We can take the **New-AGMLibGCEConversion** command to create a new GCP VM and store the parameters needed to run that command in a CSV file. 
+We can take the **New-AGMLibGCEConversion** command to create a new Compute Engine VM and store the parameters needed to run that command in a CSV file. 
 
 If the applications are not yet imported you can use the appname  field provided the VMnames are unique.
 Here is an example of the CSV file:
@@ -1537,7 +1539,7 @@ New-AGMLibGCEConversion -projectname project1 -machinetype n1-standard-2 -instan
 
 ### Managing the mounted Compute Engine Instance Instance 
 
-Once we have created a new GCP Instance from PD snapshot, there is no dependency on the appliance because the disks for the instance are all Persistent Disks rather than shared disks from an appliance Storage Pool,  but the mount is still shown as an Active Image, which means it needs to be managed.   We can see the Active Images with this command:
+Once we have created a new Compute Engine Instance from PD snapshot, there is no dependency on the appliance because the disks for the instance are all Persistent Disks rather than shared disks from an appliance Storage Pool,  but the mount is still shown as an Active Image, which means it needs to be managed.   We can see the Active Images with this command:
 ```
 Get-AGMLibActiveImage
 ```
@@ -1558,12 +1560,12 @@ imagestate       : Mounted
 ```
 We have two choices on how to handle this image:
 
-1. Unmount and delete. This command deletes the mounted image record on the appliance side and the Compute Engine Instance on the GCP side.
+1. Unmount and delete. This command deletes the mounted image record on the appliance side and the Compute Engine Instance on the Google Cloud side.
 
 ```
  Remove-AGMMount Image_0021181  -d
 ```
-2. Preserve the image on GCP side. This command deletes the mounted image record on the appliance side but leaves the Compute Engine Instance on the GCP side. In the Web GUI this is called forgetting the image.   You can see the only difference with the choice above is the -p for preserve.
+2. Preserve the image on Google Cloud side. This command deletes the mounted image record on the appliance side but leaves the Compute Engine Instance on the Google Cloud side. In the Web GUI this is called forgetting the image.   You can see the only difference with the choice above is the -p for preserve.
 ```
  Remove-AGMMount Image_0021181  -d -p
 ```
@@ -1625,15 +1627,15 @@ Get-AGMImage -filtervalue "apptype=GCPInstance&jobclass=snapshot" | select appna
 ```
 There are many parameters that need to be supplied:
 ```
--appid           The application ID of the source GCP Instance you want to mount.  If you use this you don't need to specify an image ID or name.   It will use the latest snapshot of that application.
+-appid           The application ID of the source Compute Engine Instance you want to mount.  If you use this you don't need to specify an image ID or name.   It will use the latest snapshot of that application.
 -imageid         You need to supply either the imageid or the imagename or both (or specify -appid instead to get the latest image)
 -imagename       You need to supply either the imageid or the imagename or both (or specify -appid instead to get the latest image)
 -srcid           Learn this with Get-AGMLibCredentialSrcID.   You need to use the correct srcid that matches the appliance that is protecting the application. 
 -serviceaccount  The service account that is being used to request the instance creation.  This is optional.  Otherwise it will use the account from the cloud credential (which is the preferred method)
 -projectname     This is the unique Google Project name 
--zone            This is the GCP Zone such as: australia-southeast1-c
+-zone            This is the Compute Engine Zone such as: australia-southeast1-c
 -instancename    This is the name of the new instance that will be created.   It needs to be unique in that project
--machinetype     This is the GCP instance machine type such as:  e2-micro
+-machinetype     This is the Compute Engine instance machine type such as:  e2-micro
 -networktags     Comma separate as many tags as you have, for instance:   -networktags "http-server,https-server"   
 -labels          Labels are key value pairs.   Separate key and value with colons and each label with commas.   For example:   -labels "pet:cat,drink:milk"
 -retainlabel     Specify true and then any labels in the selected image will be retained in the new Compute Engine instance. Partial label retention is not supported.
@@ -1653,7 +1655,7 @@ Optionally you can request a second NIC with these parameters:
 -nic1externalip  Only 'none' and 'auto' are valid choices.  If you don't use this variable then the default for nic1 is 'none'
 -nic1internalip  Only specify this is you want to set an internal IP.  Otherwise the IP for nic1 will be auto assigned.  
 ```
-Optionally you can also change the disk type of the disks in the new GCP VM:
+Optionally you can also change the disk type of the disks in the new Compute Engine VM:
 ```
 -disktype        Has to be one of:   pd-balanced, pd-extreme, pd-ssd, pd-standard   All disks in the instance will use this disk type
 ```
@@ -1679,11 +1681,11 @@ New-AGMLibGCPInstance -imageid 56410933 -srcid 1234 -zone australia-southeast1-c
 
 ## Compute Engine Instance Multi Mount Disaster Recovery
 
-The expected configuration in this scenario is that the end-user wants to recover workloads from one GCP zone into another one:
+The expected configuration in this scenario is that the end-user wants to recover workloads from one Google Cloud zone into another one:
 
 | Production Site  | DR Site |
 | ------------- | ------------- |
-| GCP Zone | GCP Zone |
+| Google Cloud Zone | Google Cloud Zone |
 
 The goal is to offer a simplified way to manage failover or failback where:
 * The backup mechanism is persistent disk snapshots
@@ -1700,7 +1702,7 @@ Note this is the same as the video linked in the previous section.
 
 ### Compute Engine Instance to Compute Engine Instance CSV file
 
-In the previous section we explored using the **New-AGMLibGCPInstance** command to create a new GCP VM.  
+In the previous section we explored using the **New-AGMLibGCPInstance** command to create a new Compute Engine VM.  
 
 What we can do is store the parameters needed to run that command in a CSV file.  
 We can generate the CSV file by running **New-AGMLibGCPInstance** in guided mode.
@@ -1955,7 +1957,25 @@ New-AGMLibDb2Mount
 
 # Disaster Recovery Automation
 
-There are several automation tools available to recovery multiple VMs and databases in a single command.  Most of these use a CSV file as an input.  Additional tools are being added based on demand.
+There are several automation tools available to recovery multiple VMs and databases in a single command.  Most of these use a CSV file as an input.  Additional tools are being added based on demand.  
+
+## Recovering Virtual Machines
+
+There are three principal recovery scenarios:
+
+| Production Site  | DR Site | Recovery needed
+| ------------- | ------------- | ------------- | 
+| Google Cloud Zone | Google Cloud Zone | [Create Multiple Compute Engine instances](#compute-engine-instance-multi-mount-disaster-recovery)
+| VMware | Google Cloud VMware Engine | [Zero Footprint DR Automation](https://github.com/Actifio/zfdr)
+| VMware | Google Cloud Zone | [Create Multiple Compute Engine instances](#compute-engine-instance-multi-conversion-from-vmware-vm)
+
+## Recoverying Databases
+
+While you can mount any databases using PowerShell, there are also some automation examples to mount many databases at once:
+
+* [SAP HANA](#sap-hana-multi-mount)
+* [SQL Server](#sql-server-multi-mount-and-migrate)
+
 
 # Events
 
