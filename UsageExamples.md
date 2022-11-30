@@ -3609,10 +3609,41 @@ Get-AGMDiskPool
 # VMware
 
 ## Using a VMware mount to create a new VMware VM
-To create a new VMware VM from backup use this command:
+To create a new VMware VM from backup use this command which runs a guided menu:
 ```
 New-AGMLibVM 
 ```
+In this example we mount image ID 53773979 as a new VM called testvm9 to the specified vCenter/ESX host.  
+Valid values for mountmode are:   nfs, vrdm or prdm with nfs being the default if nothing is selected.
+```
+New-AGMLibVM -imageid 53773979 -vmname avtestvm9 -datastore "ORA-RAC-iSCSI" -vcenterid 5552150 -esxhostid 5552164 -mountmode nfs 
+```
+There are several mandatory parameters:
+* ```-vmname www```  Specifies the name of the new VMware VM
+* ```-vcenterid xxx``` Specifies the vCenter that will manage the VM
+* ```-esxhostid yyy```  Specifies the ESXi host where the VM will run
+* ```-datastore zzz``` Specifies the name of the datastore where we will store the VMX file and VM swap file
+
+Image selection will be determined by:
+
+* ```-appid nnn```       If you specify this, then the most recent image for that app will be mounted.  This is the most exact choice to get the latest image.
+* ```-appname aaa```     If you specify this, then the most recent image for that app will be mounted provided the appname is unique.   If the appname is not unique, then you will need to switch to appid.
+* ```-imageid iii```     If you specify this, then this image will be mounted. You will need to learn this imageid before you run the command.
+* ```-imagename mmm```   If you specify this, then this image will be mounted. You will need to learn this imagename before you run the command.
+* ```-onvault true```    Will use the latest OnVault image rather than latest snapshot image when used with ```-appid``` or ```-appname```
+
+If mounting from OnVault we can use this:
+*  ```-perfoption <choice>```    You can specify either:  **StorageOptimized**, **Balanced**, **PerformanceOptimized** or **MaximumPerformance**.   Note if you run this option when mounting a snapshot image, the mount will fail
+
+There are some other options:
+* ```-label LLLL```   To set a label
+* ```-restoremacaddr``` This will assign the MAC Address from the source VM to the target VM.   Do this in DR situations where you need to preserve the MAC Address
+
+Monitoring options:
+* ```-wait```     This will wait up to 2 minutes for the job to start, checking every 15 seconds to show you the job name
+* ```-monitor```  Same as -wait but will also run Get-AGMLibFollowJobStatus to monitor the job to completion 
+
+
 
 ## Mounting a VMware VM backup to an existing VM
 To mount to an existing host use this command:
