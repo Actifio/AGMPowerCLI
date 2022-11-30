@@ -55,6 +55,8 @@ This document contains usage examples that include both AGMPowerCLI and AGMPower
 **[DB2](#db2)**</br>
 >**[Creating a DB2 mount](#creating-a-db2-mount)**</br>
 
+**[Disaster Recovery Automation](#disaster-recovery-automation)**</br>
+
 **[Events](#events)**</br>
 >**[Listing Your Events](#listing-your-events)**</br>
 
@@ -1950,6 +1952,11 @@ This command will create a DB2 mount using a guided menu:
 New-AGMLibDb2Mount
 ```
 [Back to top](#usage-examples)
+
+# Disaster Recovery Automation
+
+There are several automation tools available to recovery multiple VMs and databases in a single command.  Most of these use a CSV file as an input.  Additional tools are being added based on demand.
+
 # Events
 
 ## Listing your events
