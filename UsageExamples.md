@@ -1681,7 +1681,7 @@ New-AGMLibGCPInstance -imageid 56410933 -srcid 1234 -zone australia-southeast1-c
 
 ## Compute Engine Instance Multi Mount Disaster Recovery
 
-The expected configuration in this scenario is that the end-user wants to recover workloads from one Google Cloud zone into another one:
+The configuration in this scenario is that you want to recover workloads from one Google Cloud zone into another Google Cloud zone:
 
 | Production Site  | DR Site |
 | ------------- | ------------- |
@@ -1702,11 +1702,11 @@ Note this is the same as the video linked in the previous section.
 
 ### Compute Engine Instance to Compute Engine Instance CSV file
 
-In the previous section we explored using the **New-AGMLibGCPInstance** command to create a new Compute Engine VM.  
+In this [section](#compute-engine-instance-mount) we show how to use the **New-AGMLibGCPInstance** command to create a new Compute Engine VM.  
 
-What we can do is store the parameters needed to run that command in a CSV file.  
-We can generate the CSV file by running **New-AGMLibGCPInstance** in guided mode.
-We then run the **New-AGMLibGCPInstanceMultiMount** command specifying the CSV file.
+* What we can do is store the parameters needed to run that command in a CSV file.  
+* We can also generate the CSV file by running **New-AGMLibGCPInstance** in guided mode.
+* We then run the **New-AGMLibGCPInstanceMultiMount** command specifying the CSV file.
 
 Here is an example of the CSV file:
 ```
@@ -1720,7 +1720,7 @@ We can then run a command like this specifying our CSV file:
 ```
 New-AGMLibGCPInstanceMultiMount -instancelist recoverylist.csv
 ```
-This will load the contents of the file recoverylist.csv and use it to run multiple **New-AGMLibGCPInstance** jobs.  The jobs will run in parallel (up to the slot limit). In PowerShell 5 they are started in series, however beginning with PowerShell 7 they are started in parallel in groups of 5 (which you can change with -limit XX)
+This will load the contents of the file recoverylist.csv and use it to run multiple **New-AGMLibGCPInstance** jobs.  The jobs will run in parallel (up to the slot limit). In PowerShell 5 they are started in series, however in PowerShell 7 they are started in parallel in groups of 5 (which you can change with **-limit XX**)
  
 If you specify both appid and appname, then the appname column will be ignored.  However having appname is mandatory as it gives you the name of the source application.
 
