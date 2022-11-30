@@ -1878,23 +1878,17 @@ New-AGMLibGCEInstanceDiscovery -credentialid 706606 -applianceid 144091747698 -p
 
 1. How do I tag the VM?    
 
-You need to add a label where the name is *googlebackupplan* and the value is the name of a valid template, in this example it is *snap*
-```
-googlebackupplan : snap
-```
-2. What if I want to use my own own label?   
-
-You can do that and then specify it with **-usertag**.   So lets say you add a label to each relevant VM where the label name is *corporatepolicy* and the value is a valid template name, then when you run the command, add **-usertag "corporatepolicy"**
+You can do that by specifying  **-usertag**.   So lets say you add a label to each relevant VM where the label name is *corporatepolicy* and the value is a valid template name, then when you run the command, add **-usertag "corporatepolicy"**
 
 The whole command would look like:
 ```
 New-AGMLibGCEInstanceDiscovery -discoveryfile ./disco.csv -backup -usertag "corporatepolicy"
 ```
-3. How do I learn the names of the templates to use as values for the tags?    
+2. How do I learn the names of the templates to use as values for the tags?    
 
 You can either look at Templates in the SLA Architect in Web GUI or run: ```Get-AGMSLT```
 
-4. What if I don't want all instances to be added?   
+3. What if I don't want all instances to be added?   
 
 This function has to add them all to ensure each instance is examined.   If you add them then delete them, they won't be added back in a second run because an Actifio label with a value of **unmanaged** will be added to them.
 
