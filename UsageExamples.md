@@ -1976,6 +1976,7 @@ While you can mount any databases using PowerShell, there are also some automati
 * [SAP HANA](#sap-hana-multi-mount)
 * [SQL Server](#sql-server-multi-mount-and-migrate)
 
+[Back to top](#usage-examples)
 
 # Events
 
