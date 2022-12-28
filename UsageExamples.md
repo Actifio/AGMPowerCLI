@@ -1782,7 +1782,7 @@ New-AGMLibGCEConversion -projectname project1 -machinetype n1-standard-2 -instan
 
 If we are onboarding large numbers of Compute Engine Instances or we want to auto protect new instances using automation, we can use a function called: **New-AGMLibGCEInstanceDiscovery**
 
-### Using a CSV file to work with multiple zones 
+### Using a CSV file to work with multiple zones and or projects
 
 This function can use a CSV file as input to supply the following data to the function which you specify with:
 
