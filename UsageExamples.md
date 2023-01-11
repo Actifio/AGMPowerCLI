@@ -493,7 +493,7 @@ reservedondemandslots
 ---------------------
 3
 ```
-We can set the slots to larger values like this:
+We can set the slots to different values like this:
 ```
 Set-AGMLibApplianceParameter -applianceid 361153 -param reserveddataaccessslots -value 10
 Set-AGMLibApplianceParameter -applianceid 361153 -param maxdataaccessslots -value 15
@@ -519,7 +519,7 @@ Get-AGMLibApplianceParameter -applianceid 361153 -param reservedvaultslots
 Get-AGMLibApplianceParameter -applianceid 361153 -param maxvaultslots
 Get-AGMLibApplianceParameter -applianceid 361153 -param unreservedslots
 ```
-Set can the slots to larger values like this:
+We can set the slots to different values like this:
 ```
 Set-AGMLibApplianceParameter -applianceid 361153 -param reservedvaultslots -value 10
 Set-AGMLibApplianceParameter -applianceid 361153 -param maxvaultslots -value 15
@@ -537,7 +537,7 @@ Get-AGMLibApplianceParameter -applianceid 361153 -param reservedsnapslots
 Get-AGMLibApplianceParameter -applianceid 361153 -param maxsnapslots
 Get-AGMLibApplianceParameter -applianceid 361153 -param unreservedslots
 ```
-We set the slots to larger values like this:
+We set the slots to different values like this:
 ```
 Set-AGMLibApplianceParameter -applianceid 361153 -param reservedsnapslots -value 10
 Set-AGMLibApplianceParameter -applianceid 361153 -param maxsnapslots -value 15
