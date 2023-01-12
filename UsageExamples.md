@@ -48,7 +48,6 @@ This document contains usage examples that include both AGMPowerCLI and AGMPower
 **[Compute Engine Instance Multi Conversion from VMware VM](#compute-engine-instance-multi-conversion-from-vmware-vm)**</br>
 **[Compute Engine Instance Mount](#compute-engine-instance-mount)**<br>
 **[Compute Engine Instance Multi Mount Disaster Recovery](#compute-engine-instance-multi-mount-disaster-recovery)**<br>
-**[Compute Engine Instance Onboarding Automation](#compute-engine-instance-onboarding-automation)**<br>
 
 **[Consistency Groups](#consistency-groups)**<br>
 >**[Consistency Group Management](#consistency-group-management)**<br>
