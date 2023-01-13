@@ -2286,7 +2286,7 @@ Remove-AGMImage Image_2133445
 
 ## Image Expiration In Bulk
 
-You may have a requirement to expire large numbers of images at one time.   One way to approach this is to use the ```Remove-AGMImage``` command in a loop. However this may fail as shown in the example below.  The issue is that the first expiration job is still running while you attempt to execute the following jobs, which causes a collission:
+You may have a requirement to expire large numbers of images at one time.   One way to approach this is to use the ```Remove-AGMImage``` command in a loop. However this may fail as shown in the example below.  The issue is that the first expiration job is still running while you attempt to execute the following jobs, which causes a collision:
 ```
 $images = Get-AGMImage -filtervalue appid=35590 | select backupname
 $images
@@ -2360,6 +2360,21 @@ Image_0266247 2021-09-14 00:00:00
 Image_0265223 2021-09-14 00:00:00
 ```
 The images will expire over the next hour.
+
+#### Using a CSV file
+
+You can also use a CSV file for this by exporting the images to a CSV like this:
+```
+Get-AGMImage -filtervalue appid=35590 | select backupname,expiration | export-csv -path images.csv
+```
+Now edit the CSV and then import it:
+```
+$images = import-csv -path .\images.csv
+```
+Now change the expiration date for all images imported from the CSV:
+```
+foreach ($image in $images) { Set-AGMImage -imagename $image.backupname -expiration "2021-09-14" }
+```
 
 ## Image Expiration For a Deleted Cloud Storage Bucket
 
