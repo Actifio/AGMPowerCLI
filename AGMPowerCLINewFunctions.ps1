@@ -169,7 +169,7 @@ Function New-AGMCloudVM ([string]$zone,[string]$id,[string]$credentialid,[string
 
     if (($applianceid) -and ($clusterid))
     {
-        Get-AGMErrorMessage -messagetoprint "Do not specify both applianceid and clusterid. Only clusterid is neeeded."
+        Get-AGMErrorMessage -messagetoprint "Do not specify both applianceid and clusterid. Only clusterid is neeeed."
         return
     }
     if ($id) { $credentialid = $id }
@@ -262,7 +262,7 @@ Function New-AGMConsistencyGroup ([string]$clusterid,[string]$applianceid,[strin
     
     if (($applianceid) -and ($clusterid))
     {
-        Get-AGMErrorMessage -messagetoprint "Do not specify both applianceid and clusterid. Only clusterid is neeeded."
+        Get-AGMErrorMessage -messagetoprint "Do not specify both applianceid and clusterid. Only clusterid is needed."
         return
     }
 
@@ -334,7 +334,7 @@ Function New-AGMCredential ([string]$name,[string]$zone,[string]$clusterid,[stri
 
     if (($applianceid) -and ($clusterid))
     {
-        Get-AGMErrorMessage -messagetoprint "Do not specify both applianceid and clusterid. Only clusterid is neeeded."
+        Get-AGMErrorMessage -messagetoprint "Do not specify both applianceid and clusterid. Only clusterid is needed."
         return
     }
     if (!($name))
@@ -451,7 +451,7 @@ Function New-AGMHost ([string]$clusterid,[string]$applianceid,[string]$hostname,
     
     if (($applianceid) -and ($clusterid))
     {
-        Get-AGMErrorMessage -messagetoprint "Do not specify both applianceid and clusterid. Only clusterid is neeeded."
+        Get-AGMErrorMessage -messagetoprint "Do not specify both applianceid and clusterid. Only clusterid is needed."
         return
     }
 
