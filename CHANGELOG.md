@@ -1,6 +1,8 @@
 # Change log
 
-Started Change log file as per release 0.0.0.39
+## AGMPowerCLI 0.0.0.50
+* Improve reliability of New-AGMHost
+
 ## AGMPowerCLI 0.0.0.49
 * Handle issue with PowerShell 7.3 and Gcloud commands
 

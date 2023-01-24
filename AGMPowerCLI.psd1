@@ -26,7 +26,7 @@
 RootModule = 'AGMPowerCLI.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.0.0.49'
+ModuleVersion = '0.0.0.50'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -214,7 +214,7 @@ PrivateData = @{
     PSData = @{
 
         # Tags applied to this module. These help with module discovery in online galleries.
-        Tags = @("Actifio","AGM","Sky","CDS","CDX","VDP")
+        Tags = @("Actifio","AGM","Sky","VDP","GCBDR")
 
         # A URL to the license for this module.
         LicenseUri = 'https://github.com/Actifio/AGMPowerCLI/blob/main/LICENSE'
@@ -226,115 +226,7 @@ PrivateData = @{
         IconUri = 'https://i.imgur.com/QAaK5Po.jpg'
 
         # ReleaseNotes of this modulegte
-        ReleaseNotes = '
-        ## [0.0.0.39] 2022-07-22
-
-        ## [0.0.0.38] 2022-06-29
-        Added support for Org ID to new-Host and new-credential.   Added support for OnVault pool in new-credential while improving logic.  Added secretkey support to new-host, renamed Get-GBDRConsole to Get-GoogleCloudBackupDRConsole
-
-        ## [0.0.0.37] 2022-06-15
-        Add New-AGMHost, Set-AGMHostPort,  Remove-AGMHostPort, update license info
-        Teach Get-AGMHost to show extra info when ID is specified
-
-        ## [0.0.0.36] 2022-04-22
-        Add Import-AGMPDSnapshot,   allowed user to set timeout with -agmtimeout and set default to 60 seconds
-
-        ## [0.0.0.35] 2022-04-13
-        Option -o to show filterable fields did not work on PS 5.
-
-        ## [0.0.0.34] 2022-04-13
-        Add Appliance API commands:  Get-AGMAPIApplianceInfo, Get-AGMAPIApplianceReport, Set-AGMAPIApplianceTask
-
-        ## [0.0.0.33] 2022-03-30
-        Add Get-AGMImageSystemRecovery
-
-        ## [0.0.0.32] 2022-01-07
-        Handle empty packet return error line 544
-        Changed default timeout to 20 seconds
-
-        ## [0.0.0.31] 2021-10-11
-        Add Remove-AGMAppliance and New-AGMAppliance
-
-        ## [0.0.0.30] 2021-09-15
-        Taught Get-AGMCloudVM to use offset and limit correctly, it was only fetching 10 VMs before this and ignoring the limit
-
-        ## [0.0.0.29] 2021-09-13
-        Allow silent install
-        Teach Remove-AGMImage to use force=false 
-        Teach Set-AGMImage to change expiration
-        Teach Get-AGMImage and Set-AGMImage and Remove-AGMImage to work with both imagename and backupname
-
-        ## [0.0.0.28] 2021-09-12
-        Added Get-AGMApplicationCount
-        Told Get-AGMSLA to stop allowing -o, as this endpoint cannot be queried for filterable fields
-
-        ## [0.0.0.27] 2021-09-08
-        New-AGMCredential was missed from the PSD1 file.   Corrected this
-
-        ## [0.0.0.26] 2021-08-24
-        Added Remove-AGMCredential, New-AGMCredential, Set-AGMCredential, Get-AGMImageCount, New-AGMCloudVM, Get-AGMCloudVM
-        Updated Get-AGMCredential to allow individual credential to be selected
-        Updated Convert-FromUnixDate to handle empty fields 
-
-        ## [0.0.0.25] 2021-07-14
-        Teach Set-AGMSLA how to work with logical groups
-        Fix issue with Get-AGMLogicalGroupMember where groups with more than 1 member get no output
-        Teach the Get functions to allow both ID and say slaid for SLAs, or appid for apps.
-        Add Start-AGMReplicateLog 
-
-        ## [0.0.0.24] 2021-07-12  
-        Improve help text for Remove-AGMMount 
-        Add Set-AGMimage to allow user to set labels
-
-        ## [0.0.0.23] 2021-06-28    
-        Add Get-AGMCredential 
-
-        ## [0.0.0.22] 2021-06-28
-        Teach Remove-AGMMount about preservevm
-        Fix install bug on Linux OS on line 80 of Install-AGMPowerLib.ps1
-
-        ## [0.0.0.21] 2020-12-04
-        Teach Remove-AGMHost about clusterIDs
-
-        ## [0.0.0.20] 2020-12-03
-        Improve output of filter value options when shown with -o, they are now alpha sorted, format nicer and dont get JSON layer error if the list is too long
-
-        ## [0.0.0.19] 2020-10-29
-        Add New-AGMAppDiscovery
-
-        ## [0.0.0.18] 2020-10-28
-        Add Remove-AGMHost
-
-        ## [0.0.0.17] 2020-10-13
-        Add duration conversion routine to job, jobstatus and jobhistory
-
-        ## [0.0.0.16] 2020-09-20
-        Improved module description for PowerShell Gallery users
-        Added more help information
-
-        ## [0.0.0.13] 2020-09-18
-        Add Get-AGMAPILimit, fix issue with Set-AGMAPILimit in PS5
-
-        ## [0.0.0.12] 2020-09-18
-        Allow this module to be run by PS5
-
-        ## [0.0.0.11] 2020-09-07
-        Get-AGMApplicationWorkflowStatus was being truncated by item column
-
-        ## [0.0.0.10] 2020-09-5
-        Added Restore-AGMApplication
-        Changed most variables from int to string as their size can exceed int very easily
-
-        ## [0.0.0.9] 2020-08-24
-        Added Import-AGMOnVault   
-        Support not equals filter method
-
-        ## [0.0.0.8] 2020-08-21
-        Added New-AGMSLA, Remove-AGMSLA, Set-AGMSLA, Remove-AGMMigrate, Start-AGMMigrate, Get-AGMImageSystemStateOptions
-        Better handle case where -o does not fetch correctly formated filtervalues
-        
-        ## [0.0.0.7] 2020-07-20
-        Split modules so non-base functions are in AGMPowerLib'
+        ReleaseNotes = 'See CHANGELOG.md'
 
         # Prerelease string of this module
         # Prerelease = ''
