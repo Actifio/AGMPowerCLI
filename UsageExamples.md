@@ -2006,9 +2006,9 @@ New-AGMLibFSMount
 
 ## Adding a Host
 
-To add a host we need to use a command like this where we specify the desired hostname and IP address and supply of the Appliance where you want it created which you can learn with [Get-AGMAppliance](#appliances):
+To add a host we need to use a command like this where we specify the desired hostname and IP address and supply the clusterid of the Appliance where you want it created which you can learn with [Get-AGMAppliance](#appliances):
 ```
-New-AGMHost -applianceid 144292692833 -hostname "prodhost1" -ipaddress "10.0.0.1"
+New-AGMHost -clusterid 144292692833 -hostname "prodhost1" -ipaddress "10.0.0.1"
 ```
 
 ## Finding a Host ID by Host Name

@@ -156,7 +156,7 @@ Function New-AGMCloudVM ([string]$zone,[string]$id,[string]$credentialid,[string
     Adds new Cloud VMs
 
     .EXAMPLE
-    New-AGMCloudVM -credentialid 1234 -zone australia-southeast1-c -applianceid 144292692833 -instanceid 4240202854121875692
+    New-AGMCloudVM -credentialid 1234 -zone australia-southeast1-c -clusterid 144292692833 -instanceid 4240202854121875692
 
     Adds VM with ID 4240202854121875692 to specified appliance 
 
@@ -166,12 +166,18 @@ Function New-AGMCloudVM ([string]$zone,[string]$id,[string]$credentialid,[string
 
     #>
 
+
+    if (($applianceid) -and ($clusterid))
+    {
+        Get-AGMErrorMessage -messagetoprint "Do not specify both applianceid and clusterid. Only clusterid is neeeded."
+        return
+    }
     if ($id) { $credentialid = $id }
     if (!($credentialid))
     {
         [string]$credentialid = Read-Host "Credential ID"
     }
-    
+
     if ($applianceid) { [string]$clusterid = $applianceid}
 
     if (!($clusterid))
@@ -241,9 +247,9 @@ Function New-AGMConsistencyGroup ([string]$clusterid,[string]$applianceid,[strin
     Adds new Consistency Group (CG)
 
     .EXAMPLE
-    New-AGMConsistencyGroup -applianceid 144292692833 -groupname "prodhost1" -description "this is a CG" -hostid 12344
+    New-AGMConsistencyGroup -clusterid 144292692833 -groupname "prodhost1" -description "this is a CG" -hostid 12344
 
-    To learn applianceid, use this command:  Get-AGMAppliance and use the clusterid as applianceid. 
+    To learn applianceid, use this command:  Get-AGMAppliance and use the clusterid as clusterid. 
     To learn host ID, use this command:  Get-AGMHost
     
     Once you have created the Consistency Group you can add applications to it with Set-AGMConsistencyGroupMember 
@@ -254,6 +260,12 @@ Function New-AGMConsistencyGroup ([string]$clusterid,[string]$applianceid,[strin
 
     #>
     
+    if (($applianceid) -and ($clusterid))
+    {
+        Get-AGMErrorMessage -messagetoprint "Do not specify both applianceid and clusterid. Only clusterid is neeeded."
+        return
+    }
+
     if ($applianceid) { [string]$clusterid = $applianceid}
 
     if (!($clusterid))
@@ -301,10 +313,10 @@ Function New-AGMCredential ([string]$name,[string]$zone,[string]$clusterid,[stri
     Creates a cloud credential
 
     .EXAMPLE
-    New-AGMCredential -name cred1 -zone australia-southeast1-c -applianceid 144292692833 -filename keyfile.json
+    New-AGMCredential -name cred1 -zone australia-southeast1-c clusterid 144292692833 -filename keyfile.json
 
-    To learn the Appliance ID, use this command and use the clusterid value: Get-AGMAppliance | select clusterid,name
-    Comma separate the Appliance IDs if you have multiple appliances
+    To learn the Cluster ID, use this command and use the clusterid value: Get-AGMAppliance | select clusterid,name
+    Comma separate the Cluster IDs if you have multiple appliances
 
     You can add org IDs with -organizationid     To learn the Org IDs, use this command:   
     Get-AGMOrg | select-object id,name
@@ -320,6 +332,11 @@ Function New-AGMCredential ([string]$name,[string]$zone,[string]$clusterid,[stri
 
     #>
 
+    if (($applianceid) -and ($clusterid))
+    {
+        Get-AGMErrorMessage -messagetoprint "Do not specify both applianceid and clusterid. Only clusterid is neeeded."
+        return
+    }
     if (!($name))
     {
         [string]$name = Read-Host "Credential Name"
@@ -414,16 +431,16 @@ Function New-AGMHost ([string]$clusterid,[string]$applianceid,[string]$hostname,
     Adds new Hosts
 
     .EXAMPLE
-    New-AGMHost -applianceid 144292692833 -hostname "prodhost1" -ipaddress "10.0.0.1"
+    New-AGMHost -clusterid 144292692833 -hostname "prodhost1" -ipaddress "10.0.0.1"
 
     Adds Host with name prodhost1 and IP address 10.0.0.1 to specified appliance 
 
     .EXAMPLE
-    New-AGMHost -applianceid "143112195179,144488110379" -hostname "prodhost1" -ipaddress "10.0.0.1" -friendlyname "mainprod" -description "this is prod, be nice" -alternateip "20.0.0.1,30.0.0.1"
+    New-AGMHost -clusterid "143112195179,144488110379" -hostname "prodhost1" -ipaddress "10.0.0.1" -friendlyname "mainprod" -description "this is prod, be nice" -alternateip "20.0.0.1,30.0.0.1"
 
     Adds Host with name prodhost1 and IP address 10.0.0.1 to two specified appliances, with a friendlyname, text description and two alternate IPs.
 
-    To learn applianceid, use this command:  Get-AGMAppliance and use the clusterid as applianceid.  If you have multiple applianceIDs, comma separate them
+    To learn applianceid, use this command:  Get-AGMAppliance and use the clusterid as clusterid.  If you have multiple clusterids, comma separate them
     alternateip needs to be a comma separated list of IPs
 
 
@@ -432,12 +449,27 @@ Function New-AGMHost ([string]$clusterid,[string]$applianceid,[string]$hostname,
 
     #>
     
+    if (($applianceid) -and ($clusterid))
+    {
+        Get-AGMErrorMessage -messagetoprint "Do not specify both applianceid and clusterid. Only clusterid is neeeded."
+        return
+    }
+
     if ($applianceid) { [string]$clusterid = $applianceid}
+
 
     if (!($clusterid))
     {
         $clusterid = Read-Host "Cluster ID"
     }
+    $clustergrab = Get-AGMAppliance -filtervalue clusterid=$clusterid
+    if ($clustergrab.count -eq 0)
+    {
+        Get-AGMErrorMessage -messagetoprint "Clusterid $clusterid could not be found.  Validate clusterid with Get-AGMAppliance"
+        return
+    }
+
+
     if (!($hostname))
     {
         [string]$hostname = Read-Host "Host name"
@@ -456,16 +488,23 @@ Function New-AGMHost ([string]$clusterid,[string]$applianceid,[string]$hostname,
     {
         $sources += [ordered]@{ clusterid = $cluster }
     } 
-    $orglist = @()
-    foreach ($org in $organizationid.Split(","))
+    if ($organizationid)
     {
-        $orglist += [ordered]@{ id = $org }
-    } 
+        $orglist = @()
+        foreach ($org in $organizationid.Split(","))
+        {
+            $orglist += [ordered]@{ id = $org }
+        } 
+    }
     
-    # alternate IP needs to be like:    "alternateip":["10.20.0.1","10.30.0.1"],
+    # alternate IP format needs to be like:  "alternateip":["10.20.0.1","10.30.0.1"],
     if ($alternateip)
     {
         $alternateipaddresses = @( $($alternateip.Split(",")) )
+    }
+    else 
+    {
+        $alternateipaddresses = @()
     }
     $udsagent = [ordered]@{}
     if ($secret)
@@ -478,7 +517,10 @@ Function New-AGMHost ([string]$clusterid,[string]$applianceid,[string]$hostname,
     ipaddress = $ipaddress;
     alternateip = $alternateipaddresses;
     sources = $sources;
-    orglist = $orglist
+    }
+    if ($orglist)
+    { 
+        $body += @{ orglist = $orglist }
     }
     if ($description)
     { 
@@ -493,7 +535,7 @@ Function New-AGMHost ([string]$clusterid,[string]$applianceid,[string]$hostname,
         $body += @{ udsagent = $udsagent }
     }
 
-    $json = $body | ConvertTo-Json
+    $json = $body | ConvertTo-Json -compress
 
     Post-AGMAPIData  -endpoint /host -body $json 
 }
