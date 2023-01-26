@@ -1126,7 +1126,7 @@ Cloud Credentials point to stored credentials for the Service Account that is us
 
 Changes with release 11.0.2 and higher
 
-* If your Appliances were installed with version 11.0.2 of higher then you each appliance has an auto-created cloud credential that does not need JSON keys.   This means there is no need to ever run the ```New-AGMCredential``` function.   Simply use the default credential and add the relevant service account to the relevant projects with the ```Backup and DR Compure Engine Operator``` role.
+* If your Appliances were installed with version 11.0.2 of higher then you each appliance has an auto-created cloud credential that does not need JSON keys.   This means there is no need to ever run the ```New-AGMCredential``` function.   Simply use the default credential and add the relevant service account to the relevant projects with the ```Backup and DR Compure Engine Operator``` role.   If you still wish to manually add cloud credentials then the syntax needs to be modified.
 * If your Appliances were installed version 11.0.1 or lower and have been upgraded to 11.0.2 or higher, then follow the procedure [here](https://cloud.google.com/backup-disaster-recovery/docs/configuration/create-cloud-credentials#replace_a_json_key_cloud_credential_with_an_appliance_service_account_credential) to covert to a *JSON-less* cloud credential.
 
 ### Listing Cloud Credentials
@@ -1147,9 +1147,9 @@ projectid      : avwlab2
 serviceaccount : avwlabowner@avwlab2.iam.gserviceaccount.com
 ```
 
-### Creating new cloud credential:
+### Creating new cloud credential (11.0.1 or lower):
 
-
+When working with appliances on release 11.0.1 or lower, use syntax like this where you specify the file name of the JSON and comma separate the cluster IDs:
 ```
 New-AGMCredential -name test -filename ./glabco-4b72ba3d6a69.json -zone australia-southeast1-c -clusterid "144292692833,145759989824"
 ```
@@ -1182,6 +1182,37 @@ New-AGMCredential -name test -filename ./glabco-4b72ba3d6a69.json -zone australi
 err_code err_message
 -------- -----------
    10023 Create cloud credential failed on appliance avwlab2sky error code 10006 message Unique cloud credential name required: test,Create cloud credential failed on appliance londonsky.c.avwlab2.internal error code 10006 message U…
+```
+
+### Creating new cloud credential (11.0.2 or hihger):
+
+When working with appliances on release 11.0.2 or higher, use syntax like this where you specify the OnVault pool ID with udsuid.  Note that:
+
+* You do not need to specify the project ID
+* You can only specify one cloud credential ID
+* If you do not specify an OnVault Pool you will need to provide one using the udsuid which you can learn with this command:
+```Get-AGMDiskPool -filtervalue pooltype=vault | select-object name,udsuid,@{N='appliancename'; E={$_.cluster.name}},@{N='applianceid'; E={$_.cluster.clusterid}}```
+
+Here is an example of syntax:
+```
+New-AGMCredential -applianceid 145666187717 -zone "australia-southeast1-b" -udsuid "1196377951" -name test6
+```
+Output should look like this:
+```
+@type          : cloudCredentialRest
+id             : 1425434
+href           : https://agm-249843756318.backupdr.actifiogo.com/actifio/cloudcredential
+clusterid      : 145666187717
+sources        : {@{srcid=6627; clusterid=145666187717; appliance=; name=test6; cloudtype=GCP; region=australia-southeast1-b; projectid=avwarglab1;
+                 serviceaccount=melbourne-82270@avwarglab1.iam.gserviceaccount.com; vaultpool=; vault_udsuid=0}}
+name           : test6
+cloudtype      : GCP
+region         : australia-southeast1-b
+projectid      : avwarglab1
+serviceaccount : melbourne-82270@avwarglab1.iam.gserviceaccount.com
+vault_udsuid   : 1196377951
+usedefaultsa   : True
+immutable      : False
 ```
 
 ### Updating an existing cloud credential
