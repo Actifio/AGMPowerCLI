@@ -333,9 +333,7 @@ Multiple filtervalues can be used and will combine results.  Note also they need
 
 This is for Actifio only. Click [here](https://github.com/Actifio/AGMPowerCLI/blob/main/GCBDR.md "GCBDR") for Google Cloud Backup and DR
 
-The default timeout for initial logins is set to 60 seconds.   
-
-For all other functions (after initial login) you can change the timeout by adding ```-agmtimeout XX``` to the ```connect-agm``` command where **XX** is the desired value.
+For long running commands, there is a risk that the TCP session will timeout before the command completes.   The default value is 300 seconds.  You can change the timeout by adding ```-agmtimeout XX``` to the ```connect-agm``` command where **XX** is the desired value.   Note that logins are always limited to a 60 second timeout value.
 
 So to set a 10 second timeout for all functions after login:
 ```

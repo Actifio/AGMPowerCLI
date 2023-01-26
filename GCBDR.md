@@ -132,6 +132,19 @@ createdate      : 2022-03-25 04:33:00
 
 ## Timeouts 
 
+There are two timeout considerations:
+
+### TCP timeout
+
+For long running commands, there is a risk that the TCP session will timeout before the command completes.   The default value is 300 seconds.  You can change the timeout by adding ```-agmtimeout XX``` to the ```connect-agm``` command where **XX** is the desired value.   Note that logins are always limited to a 60 second timeout value.
+
+So to set a 10 second timeout for all functions after login:
+```
+Connect-AGM -agmip agm-666993295923.backupdr.actifiogo.com -agmuser iapaccess@avwservicelab1.iam.gserviceaccount.com -oauth2ClientId 486522031570-fimdb0rbeamc17l3akilvquok1dssn6t.apps.googleusercontent.com -agmtimeout 10
+```
+
+### Token timeout
+
 Backup and DR uses OpenID Connect (OIDC) ID tokens that are valid for 1 hour (3,600 seconds).  When they expire you will see a message like this:
 ```
 PS /> New-AGMLibSAPHANAMount

@@ -1122,7 +1122,12 @@ Compute Engine Instances and their backups are called different things depending
 
 ## Compute Engine Cloud Credentials
 
-Cloud Credentials point to stored credentials for the Service Account that is used to create Compute Engine instance backups and then use them.
+Cloud Credentials point to stored credentials for the Service Account that is used to create Compute Engine instance backups and then use them.   
+
+Changes with release 11.0.2 and higher
+
+* If your Appliances were installed with version 11.0.2 of higher then you each appliance has an auto-created cloud credential that does not need JSON keys.   This means there is no need to ever run the ```New-AGMCredential``` function.   Simply use the default credential and add the relevant service account to the relevant projects with the ```Backup and DR Compure Engine Operator``` role.
+* If your Appliances were installed version 11.0.1 or lower and have been upgraded to 11.0.2 or higher, then follow the procedure [here](https://cloud.google.com/backup-disaster-recovery/docs/configuration/create-cloud-credentials#replace_a_json_key_cloud_credential_with_an_appliance_service_account_credential) to covert to a *JSON-less* cloud credential.
 
 ### Listing Cloud Credentials
 
@@ -1428,7 +1433,7 @@ What is not supported right now:
 1)  Specifying more than one internal IP per subnet.
 2)  Specifying different disk types per disk
 
-If you get timeouts, then increase the timeout value with **-timeout 60** when running connect-agm
+If you get timeouts, then increase the timeout value with **-timeout 600** when running connect-agm
 
 
 ## Compute Engine Instance Multi Conversion from VMware VM
