@@ -2152,12 +2152,21 @@ This is a good example of a filter:
 ```
 Get-AGMApplication -filtervalue managed=true -sort appname:asc | select id,appname,apptype
 ```
+Here is an example of the output:
+```
+id      appname   apptype                                                                                                                                                                         --      -------   -------
+1425738 filepath1 LVM Volume
+```
 In this example we know the application ID so we request a new image.   A snapshot job will automatically run.   If a snapshot policy cannot be found, a direct to onvault job will be attempted.
 ```
-$appid = 425466
+$appid = 1425738
 New-AGMLibImage $appid
 ```
-We may want to start a particular policy so we can use the app ID to learn relevant policies:
+The output will look like this (note the job name is not returned, this is normal):
+```
+Running this command: New-AGMLibImage  -appid 1425738 -policyid 424958
+```
+If we want to start a particular policy so we can use the app ID to learn relevant policies:
 ```
 $appid = 425466
 Get-AGMLibPolicies -appid $appid
