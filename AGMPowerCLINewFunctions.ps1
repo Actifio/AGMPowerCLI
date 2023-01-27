@@ -314,11 +314,11 @@ Function New-AGMCredential ([string]$name,[string]$zone,[string]$clusterid,[stri
 
     .EXAMPLE
     This is an example for release 11.0.1
-    New-AGMCredential -name cred1 -zone australia-southeast1-c clusterid 144292692833 -filename keyfile.json
+    New-AGMCredential -name cred1 -zone australia-southeast1-c -clusterid 144292692833 -filename keyfile.json
 
     .EXAMPLE
     This is an example for release 11.0.2
-    New-AGMCredential -name cred1 -zone australia-southeast1-c clusterid 144292692833 -udsuid 1196377951
+    New-AGMCredential -name cred1 -zone australia-southeast1-c -clusterid 145666187717 -udsuid 1196377951
 
     To learn the Cluster ID, use this command and use the clusterid value: Get-AGMAppliance | select clusterid,name
     Comma separate the Cluster IDs if you have multiple appliances.  Note you cannot specify multiple appliances from release 11.0.2 or higher
@@ -445,7 +445,6 @@ Function New-AGMCredential ([string]$name,[string]$zone,[string]$clusterid,[stri
         $testcredential
         return
     }
-    $json
     Post-AGMAPIData  -endpoint /cloudcredential -body $json
     
     return
