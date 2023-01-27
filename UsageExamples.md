@@ -97,7 +97,7 @@ This document contains usage examples that include both AGMPowerCLI and AGMPower
 **[Listing members in a Logical Group](#listing-members-in-a-logical-group)**</br>
 
 **[LVM](#lvm)**</br>
-**[Create a new LVM mount](#create-a-new-lvm-mount)**</br>
+>**[Create a new LVM mount](#create-a-new-lvm-mount)**</br>
 
 **[Mount](#mount)**</br>
 >**[Active Mounts](#active-mounts)**</br>
@@ -2689,7 +2689,7 @@ Get-AGMLogicalGroupMember -id $groupid
 
 # LVM
 
-## Creating a new LVM mount
+## Create a new LVM mount
 
 To create a mount from an LVM image, you can build a command in guided mode by just running:
 ```
