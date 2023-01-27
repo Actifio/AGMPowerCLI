@@ -1124,9 +1124,9 @@ Compute Engine Instances and their backups are called different things depending
 
 Cloud Credentials point to stored credentials for the Service Account that is used to create Compute Engine instance backups and then use them.   
 
-Changes with release 11.0.2 and higher
+Changes with release 11.0.2 and higher:
 
-* If your Appliances were installed with version 11.0.2 of higher then you each appliance has an auto-created cloud credential that does not need JSON keys.   This means there is no need to ever run the ```New-AGMCredential``` function.   Simply use the default credential and add the relevant service account to the relevant projects with the ```Backup and DR Compure Engine Operator``` role.   If you still wish to manually add cloud credentials then the syntax needs to be modified.
+* If your Appliances were installed with version 11.0.2 oR higher then each appliance will have an auto-created cloud credential that does not need JSON keys.   This means there is no need to ever run the ```New-AGMCredential``` function.   Simply use the default credential and in Cloud IAM add add the relevant appliance service account to the relevant projects with the ```Backup and DR Compure Engine Operator``` role.   If you still wish to manually add cloud credentials then the syntax needs to be modified.
 * If your Appliances were installed version 11.0.1 or lower and have been upgraded to 11.0.2 or higher, then follow the procedure [here](https://cloud.google.com/backup-disaster-recovery/docs/configuration/create-cloud-credentials#replace_a_json_key_cloud_credential_with_an_appliance_service_account_credential) to covert to a *JSON-less* cloud credential.
 
 ### Listing Cloud Credentials
@@ -1186,14 +1186,14 @@ err_code err_message
 
 ### Creating new cloud credential (11.0.2 or higher):
 
-When working with appliances on release 11.0.2 or higher, use syntax like this where you specify the OnVault pool ID with udsuid.  Note that:
+When working with appliances on release 11.0.2 or higher, use syntax like this where you specify the OnVault pool ID with ```udsuid```  Note that:
 
 * You do not need to specify the project ID
-* You can only specify one cloud credential ID
+* You can only specify one appliance ID (each credential is unique to an appliance)
 * If you do not specify an OnVault Pool you will need to provide one using the udsuid which you can learn with this command:
 ```Get-AGMDiskPool -filtervalue pooltype=vault | select-object name,udsuid,@{N='appliancename'; E={$_.cluster.name}},@{N='applianceid'; E={$_.cluster.clusterid}}```
 
-Here is an example of syntax:
+Here is an example of working syntax:
 ```
 New-AGMCredential -applianceid 145666187717 -zone "australia-southeast1-b" -udsuid "1196377951" -name test6
 ```
