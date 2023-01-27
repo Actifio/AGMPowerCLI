@@ -1184,7 +1184,7 @@ err_code err_message
    10023 Create cloud credential failed on appliance avwlab2sky error code 10006 message Unique cloud credential name required: test,Create cloud credential failed on appliance londonsky.c.avwlab2.internal error code 10006 message U…
 ```
 
-### Creating new cloud credential (11.0.2 or hihger):
+### Creating new cloud credential (11.0.2 or higher):
 
 When working with appliances on release 11.0.2 or higher, use syntax like this where you specify the OnVault pool ID with udsuid.  Note that:
 
