@@ -1,5 +1,8 @@
 # Change log
 
+## AGMPowerCLI 0.0.0.51
+* Update New-AGMCredential for release 11.0.1/11.0.2
+
 ## AGMPowerCLI 0.0.0.50
 * Improve reliability of New-AGMHost
 

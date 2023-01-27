@@ -313,10 +313,15 @@ Function New-AGMCredential ([string]$name,[string]$zone,[string]$clusterid,[stri
     Creates a cloud credential
 
     .EXAMPLE
-    New-AGMCredential -name cred1 -zone australia-southeast1-c clusterid 144292692833 -filename keyfile.json
+    This is an example for release 11.0.1
+    New-AGMCredential -name cred1 -zone australia-southeast1-c -clusterid 144292692833 -filename keyfile.json
+
+    .EXAMPLE
+    This is an example for release 11.0.2
+    New-AGMCredential -name cred1 -zone australia-southeast1-c -clusterid 145666187717 -udsuid 1196377951
 
     To learn the Cluster ID, use this command and use the clusterid value: Get-AGMAppliance | select clusterid,name
-    Comma separate the Cluster IDs if you have multiple appliances
+    Comma separate the Cluster IDs if you have multiple appliances.  Note you cannot specify multiple appliances from release 11.0.2 or higher
 
     You can add org IDs with -organizationid     To learn the Org IDs, use this command:   
     Get-AGMOrg | select-object id,name
@@ -350,42 +355,53 @@ Function New-AGMCredential ([string]$name,[string]$zone,[string]$clusterid,[stri
     {
         [string]$clusterid = Read-Host "Cluster IDs (comma separated)"
     }
-    if (!($filename))
+
+    if ($filename)
     {
-        $filename = Read-Host "JSON key file"
+        if ( Test-Path $filename )
+        {
+            $jsonkey = Get-Content -Path $filename -raw
+            $jsonkey = $jsonkey.replace("\n","\\n")
+            $jsonkey = $jsonkey.replace("`n","\n ")
+            $jsonkey = $jsonkey.replace('"','\"')
+        }
+        else
+        {
+            Get-AGMErrorMessage -messagetoprint "The file named $filename could not be found."
+            return
+        }
+        if (!($projectid))
+        {
+            $jsongrab = Get-Content -Path $filename | ConvertFrom-Json
+            if (!($jsongrab.project_id))
+            {
+                Get-AGMErrorMessage -messagetoprint "The file named $filename does not contain a valid project ID."
+                return
+            } else {
+                $projectid = $jsongrab.project_id
+            }
+        }   
     }
-    if ( Test-Path $filename )
-    {
-        $jsonkey = Get-Content -Path $filename -raw
-        $jsonkey = $jsonkey.replace("\n","\\n")
-        $jsonkey = $jsonkey.replace("`n","\n ")
-        $jsonkey = $jsonkey.replace('"','\"')
-    }
+
+    # cluster needs to be like:  sources":[{"clusterid":"144488110379"},{"clusterid":"143112195179"}] or "appliance":{"clusterid":"145666187717"}
+    
+   if ($filename) 
+   {
+        $sources = @()
+        foreach ($cluster in $clusterid.Split(","))
+        {
+            $sources += [ordered]@{ clusterid = $cluster }
+        }
+    } 
     else
     {
-        Get-AGMErrorMessage -messagetoprint "The file named $filename could not be found."
-        return
-    }
-
-    if (!($projectid))
-    {
-        $jsongrab = Get-Content -Path $filename | ConvertFrom-Json
-        if (!($jsongrab.project_id))
+        if ($clusterid.Split(",").count -gt 1)
         {
-            Get-AGMErrorMessage -messagetoprint "The file named $filename does not contain a valid project ID."
+            Get-AGMErrorMessage -messagetoprint "From release 11.0.2 and higher please specify only one appliance at a time"
             return
-        } else {
-            $projectid = $jsongrab.project_id
         }
-    }   
-
-    
-    # cluster needs to be like:  sources":[{"clusterid":"144488110379"},{"clusterid":"143112195179"}]
-    $sources = @()
-    foreach ($cluster in $clusterid.Split(","))
-    {
-        $sources += [ordered]@{ clusterid = $cluster }
-    } 
+        $clusterdetails += [ordered]@{ clusterid = $clusterid }
+    }
     $orglist = @()
     if ($organizationid)
     {
@@ -397,11 +413,18 @@ Function New-AGMCredential ([string]$name,[string]$zone,[string]$clusterid,[stri
     $body = [ordered]@{}
     $body += [ordered]@{ name = $name;
     cloudtype = "GCP";
-    projectid = $projectid;
     region  = $zone;
     endpoint = "";
-    sources = $sources;
     orglist = $orglist
+    }
+    if ($sources)
+    {
+        $body += [ordered]@{ $projectid = $projectid }
+        $body += [ordered]@{ sources = $sources }
+    }
+    if ($clusterdetails)
+    {
+        $body += [ordered]@{ appliance = $clusterdetails }
     }
     if ($udsuid)
     {
@@ -410,8 +433,11 @@ Function New-AGMCredential ([string]$name,[string]$zone,[string]$clusterid,[stri
 
     $json = $body | ConvertTo-Json -compress
     # this section is post editing the JSON to add in the credential.  Ideally we should do this using a PS Object rather than an edit like this.
-    $json = $json.Substring(0,$json.Length-1)
-    $json = $json + ',"credential":"' + $jsonkey +'"}'
+   if ($jsonkey)
+    {
+        $json = $json.Substring(0,$json.Length-1)
+        $json = $json + ',"credential":"' + $jsonkey +'"}'
+    }
     # first we test it
     $testcredential = Post-AGMAPIData  -endpoint /cloudcredential/testconnection -body $json
     if ($testcredential.errors)
