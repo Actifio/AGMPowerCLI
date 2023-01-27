@@ -96,6 +96,9 @@ This document contains usage examples that include both AGMPowerCLI and AGMPower
 >**[Listing Your Logical Groups](#listing-your-logical-groups)**<br>
 **[Listing members in a Logical Group](#listing-members-in-a-logical-group)**</br>
 
+**[LVM](#lvm)**</br>
+**[Create a new LVM mount](#create-a-new-lvm-mount)**</br>
+
 **[Mount](#mount)**</br>
 >**[Active Mounts](#active-mounts)**</br>
 **[Create a new mount](#create-a-new-mount)**</br>
@@ -2682,6 +2685,35 @@ If we know the logical group ID, we can learn about its members like this:
 $groupid = 460452
 Get-AGMLogicalGroupMember -id $groupid
 ```
+[Back to top](#usage-examples)
+
+# LVM
+
+## Creating a new LVM mount
+
+To create a mount from an LVM image, you can build a command in guided mode by just running:
+```
+ New-AGMLibLVMMount
+```
+A typical example of a mount would be a command like this one.  Which mounts the latest snapshot of appid 1425738 to host ID 1425591 on appliance ID (clusterid) 145666187717 using the mount point /testme
+```
+New-AGMLibLVMMount -appid 1425738 -targethostid 1425591 -mountapplianceid 145666187717 -mountaction specifymountlocation -mountlocation "/testme"
+```
+ Image selection can be done three ways:
+
+1. Run this command in guided mode to learn the available images and select one
+1. Learn the imagename and specify that as part of the command with -imagename
+1. Learn the Appid and Cluster ID for the appliance that will mount the image and then use -appid and -mountapplianceid .  This will use the latest snapshot, StreamSnap or OnVault image on that appliance
+
+The mount action field is used to determine which mount action to take:
+* ```-mountaction agentmanaged```             Will mount using the mount points selected by the agent (this is the default behaviour)
+* ```-mountaction  specifymountlocation ```   Will mount using the source paths using a specified mount point that is supplied with ```-mountlocation```
+* ```-mountaction nomap ```                   Will mount without mapping the drives
+
+
+Currently this function does not offer the option to use the source location or limit which LVs get mounted.
+
+
 [Back to top](#usage-examples)
 # Mount
 
