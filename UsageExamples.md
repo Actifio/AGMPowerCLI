@@ -1126,15 +1126,16 @@ Cloud Credentials point to stored credentials for the Service Account that is us
 
 Changes with release 11.0.2 and higher:
 
-* If your Appliances were installed with version 11.0.2 oR higher then each appliance will have an auto-created cloud credential that does not need JSON keys.   This means there is no need to ever run the ```New-AGMCredential``` function.   Simply use the default credential and in Cloud IAM add add the relevant appliance service account to the relevant projects with the ```Backup and DR Compure Engine Operator``` role.   If you still wish to manually add cloud credentials then the syntax needs to be modified.
+* If your Appliances were installed with version 11.0.2 or higher then each appliance will have an auto-created cloud credential that does not need JSON keys.   This means there is no need to ever run the ```New-AGMCredential``` function.   Simply use the default credential and in Cloud IAM add add the relevant appliance service account to the relevant projects with the ```Backup and DR Compure Engine Operator``` role.   If you still wish to manually add cloud credentials then the syntax needs to be modified.
 * If your Appliances were installed version 11.0.1 or lower and have been upgraded to 11.0.2 or higher, then follow the procedure [here](https://cloud.google.com/backup-disaster-recovery/docs/configuration/create-cloud-credentials#replace_a_json_key_cloud_credential_with_an_appliance_service_account_credential) to covert to a *JSON-less* cloud credential.
 
 ### Listing Cloud Credentials
 
+Use the following command:
 ```
 Get-AGMCredential
 ```
-Output should look like this:
+Output should look like this in release 11.0.1 and below:
 ```
 @type          : cloudCredentialRest
 id             : 218150
@@ -1145,6 +1146,24 @@ cloudtype      : GCP
 region         : europe-west2-b
 projectid      : avwlab2
 serviceaccount : avwlabowner@avwlab2.iam.gserviceaccount.com
+```
+Output should look like this in release 11.0.2 and above.  The cket difference is the ```usedefaultsa``` field will tell you if this is a *json-less* credential.
+```
+@type          : cloudCredentialRest
+id             : 1430329
+href           : https://agm-249843756318.backupdr.actifiogo.com/actifio/cloudcredential
+clusterid      : 145666187717
+sources        : {@{srcid=8960; clusterid=145666187717; appliance=; name=cred1; cloudtype=GCP;
+                 region=australia-southeast1-c; projectid=avwarglab1;
+                 serviceaccount=melbourne-82270@avwarglab1.iam.gserviceaccount.com; vaultpool=; vault_udsuid=0}}
+name           : cred1
+cloudtype      : GCP
+region         : australia-southeast1-c
+projectid      : avwarglab1
+serviceaccount : melbourne-82270@avwarglab1.iam.gserviceaccount.com
+vault_udsuid   : 1196377951
+usedefaultsa   : True
+immutable      : False
 ```
 
 ### Creating new cloud credential (11.0.1 or lower):
