@@ -2695,7 +2695,7 @@ To create a mount from an LVM image, you can build a command in guided mode by j
 ```
  New-AGMLibLVMMount
 ```
-A typical example of a mount would be a command like this one.  Which mounts the latest snapshot of appid 1425738 to host ID 1425591 on appliance ID (clusterid) 145666187717 using the mount point /testme
+A typical example of a mount would be a command like this one.  Which mounts the latest snapshot of appid 1425738 to host ID 1425591 on appliance ID (clusterid) 145666187717 using the mount point ```/testme```
 ```
 New-AGMLibLVMMount -appid 1425738 -targethostid 1425591 -mountapplianceid 145666187717 -mountaction specifymountlocation -mountlocation "/testme"
 ```
