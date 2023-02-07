@@ -2767,6 +2767,7 @@ For many application types there are application specific mount functions such a
 * [Compute Engine Instance Mount](#compute-engine-instance-mount)
 * [DB2](#creating-a-db2-mount)
 * [FileSystem](#creating-a-filesystem-mount)
+* [LVM](#create-a-new-lvmmount)
 * [My SQL](#creating-a-mysql-mount)
 * [Oracle](#creating-a-oracle-mount)
 * [PostgreSQL](#creating-a-postgresql-mount)
