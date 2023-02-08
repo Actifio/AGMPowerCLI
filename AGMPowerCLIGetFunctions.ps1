@@ -731,7 +731,25 @@ function Get-AGMCredential ([string]$id,[string]$credentialid)
     if ($credentialid) { $id = $credentialid}
     if ($id)
     {
-        Get-AGMAPIData -endpoint /cloudcredential/$id
+        $credentialgrab = Get-AGMAPIData -endpoint /cloudcredential/$id
+        if (!($credentialgrab.id))
+        {
+            if ($credentialgrab.errormessage)
+            {
+                $credentialgrab
+            }
+            else 
+            {
+                Get-AGMErrorMessage -messagetoprint "The credential ID $credentialid could not be found"
+            }
+            return
+        } 
+        else
+        {
+            $credentialgrab
+        }
+
+
     } else {
         Get-AGMAPIData -endpoint /cloudcredential  
     }      
