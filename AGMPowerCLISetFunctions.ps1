@@ -190,7 +190,14 @@ Function Set-AGMCredential ([string]$name,[string]$zone,[string]$id,[string]$cre
     $credentialgrab = Get-AGMCredential -credentialid $credentialid
     if (!($credentialgrab.id))
     {
-        Get-AGMErrorMessage -messagetoprint "The credential ID $credentialid could not be found."
+        if ($credentialgrab.errormessage)
+        {
+            $credentialgrab
+        }
+        else 
+        {
+            Get-AGMErrorMessage -messagetoprint "The credential ID $credentialid could not be found using Get-AGMCredential"
+        }
         return
     } else {
         if (!($name))

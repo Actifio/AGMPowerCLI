@@ -1,4 +1,6 @@
 # Change log
+## AGMPowerCLI 0.0.0.52
+* If an error occurs validating a cloud credential and the actual error occurs, print that instead of a generic error
 
 ## AGMPowerCLI 0.0.0.51
 * Update New-AGMCredential for release 11.0.1/11.0.2
