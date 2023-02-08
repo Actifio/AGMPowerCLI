@@ -199,7 +199,7 @@ Function New-AGMCloudVM ([string]$zone,[string]$id,[string]$credentialid,[string
         }
         else 
         {
-            Get-AGMErrorMessage -messagetoprint "The credential ID $credentialid could not be found."
+            Get-AGMErrorMessage -messagetoprint "The credential ID $credentialid could not be found using Get-AGMCredential"
         }
         return
     } else {
