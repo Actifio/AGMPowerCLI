@@ -578,7 +578,14 @@ Function Get-AGMCloudVM ([string]$zone,[string]$id,[string]$credentialid,[string
     $credentialgrab = Get-AGMCredential -credentialid $credentialid
     if (!($credentialgrab.id))
     {
-        Get-AGMErrorMessage -messagetoprint "The credential ID $credentialid could not be found."
+        if ($credentialgrab.errormessage)
+        {
+            $credentialgrab
+        }
+        else 
+        {
+            Get-AGMErrorMessage -messagetoprint "The credential ID $credentialid could not be found."
+        }
         return
     } else {
         if ($zone -eq "")
