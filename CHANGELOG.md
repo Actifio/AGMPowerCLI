@@ -1,5 +1,8 @@
 # Change log
 ## AGMPowerCLI 0.0.0.52
+* reject https agmip
+
+## AGMPowerCLI 0.0.0.52
 * If an error occurs validating a cloud credential and the actual error occurs, print that instead of a generic error
 
 ## AGMPowerCLI 0.0.0.51

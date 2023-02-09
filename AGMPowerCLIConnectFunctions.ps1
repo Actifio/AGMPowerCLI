@@ -100,7 +100,12 @@ function Connect-AGM
     {
     $agmip = Read-Host "IP or Name of AGM"
     }
-
+    if ($agmip | select-string "/")
+    {
+        Get-AGMErrorMessage -messagetoprint "AGMIP $agmip is possibly a URL as it contains backslahes.  Please only use the FQDN portion of the URL. So instead of https//ab.cd.de.com/actifio just use ab.cd.de.com"
+        return
+    }
+    
     if (!($agmuser))
     {
     $agmuser = Read-Host "AGM user"
