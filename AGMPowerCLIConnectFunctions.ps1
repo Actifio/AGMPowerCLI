@@ -106,8 +106,7 @@ function Connect-AGM
     }
     if ($agmip | select-string "/")
     {
-        Get-AGMErrorMessage -messagetoprint "AGMIP is possibly a URL.  Please only use the FQDN portion of the URL. So instead of https//ab.cd.de.com/actifio just use ab.cd.de.com"
-        return
+        Get-AGMErrorMessage -messagetoprint "AGMIP is possibly a URL.  Use the FQDN portion of the URL without either https:// or /actifio"
     }
     
     if (!($agmuser))
