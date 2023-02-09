@@ -107,6 +107,7 @@ function Connect-AGM
     if ($agmip | select-string "/")
     {
         Get-AGMErrorMessage -messagetoprint "AGMIP is possibly a URL.  Use the FQDN portion of the URL without either https:// or /actifio"
+        return
     }
     
     if (!($agmuser))
