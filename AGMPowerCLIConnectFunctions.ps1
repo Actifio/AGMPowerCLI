@@ -64,25 +64,29 @@ function Connect-AGM
     Written by Anthony Vandewerdt
 
     .EXAMPLE
+    Google Cloud Backup and DR only:
+    Connect-AGM -agmip agm-12345678.backupdr.actifiogo.com -agmuser apiuser@project1.iam.gserviceaccount.com -oauth2ClientId 123456789-fimdb0rbeamc17l3akilabcdefgh.apps.googleusercontent.com
+
+    Connects to a Google Cloud Backup and DR Management Console.  The key difference is that rather than a password, an oauth2ClientId is specified instead
+
+    .EXAMPLE
+    Actifio only:
     Connect-AGM -agmip 172.24.1.117 -agmuser admin
     This will connect to AGM with a username of "admin" to the IP address 172.24.1.117.
     The prompt will request a secure password.
 
     .EXAMPLE
+    Actifio only:
     Connect-AGM -agmip 172.24.1.117 -agmuser admin -i
     This will connect to AGM with a username of "admin" to the IP address 172.24.1.117.
     The prompt will securely request a password.
     Because -i is specified certificate validation of the AGM is ignored
 
     .EXAMPLE
+    Actifio only:
     Connect-AGM -agmip 172.24.1.117 -agmuser admin -passwordfile av.key
     This will connect to AGM with a username of "admin" to the IP address 172.24.1.117.
     The password will be provided by using a previously created password file using Save-AGMPassword
-
-    .EXAMPLE
-    Connect-AGM -agmip agm-12345678.backupdr.actifiogo.com -agmuser apiuser@project1.iam.gserviceaccount.com -oauth2ClientId 123456789-fimdb0rbeamc17l3akilabcdefgh.apps.googleusercontent.com
-
-    Connects to a Google Cloud Backup and DR Management Console.  The key difference is that rather than a password, an oauth2ClientId is specified instead
 
     #>
 
@@ -102,7 +106,7 @@ function Connect-AGM
     }
     if ($agmip | select-string "/")
     {
-        Get-AGMErrorMessage -messagetoprint "AGMIP $agmip is possibly a URL as it contains backslahes.  Please only use the FQDN portion of the URL. So instead of https//ab.cd.de.com/actifio just use ab.cd.de.com"
+        Get-AGMErrorMessage -messagetoprint "AGMIP is possibly a URL.  Please only use the FQDN portion of the URL. So instead of https//ab.cd.de.com/actifio just use ab.cd.de.com"
         return
     }
     
