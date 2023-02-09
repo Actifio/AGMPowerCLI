@@ -68,6 +68,7 @@ function Connect-AGM
     Connect-AGM -agmip agm-12345678.backupdr.actifiogo.com -agmuser apiuser@project1.iam.gserviceaccount.com -oauth2ClientId 123456789-fimdb0rbeamc17l3akilabcdefgh.apps.googleusercontent.com
 
     Connects to a Google Cloud Backup and DR Management Console.  The key difference is that rather than a password, an oauth2ClientId is specified instead
+    Note the AGMIP is not a URL.  It is the host name portion of the endpoint without either https:// at the start or /actifio at the end
 
     .EXAMPLE
     Actifio only:
