@@ -43,6 +43,13 @@ It was written and tested for Windows PowerShell 5 and PowerShell V7 with Linux,
 
 ### 1) Install or Upgrade AGMPowerCLI
 
+There are two ways to install AGMPowerCLI:
+
+* PowerShell Gallery
+* Github
+
+#### Install using PowerShell Gallery
+
 Install from PowerShell Gallery is the simplest approach.
 
 If running PowerShell 5 on Windows first run this (some older Windows versions are set to use downlevel TLS which will result in confusing error messages):
@@ -84,6 +91,7 @@ To uninstall all older versions run this command:
 ```
 $Latest = Get-InstalledModule AGMPowerCLI; Get-InstalledModule AGMPowerCLI -AllVersions | ? {$_.Version -ne $Latest.Version} | Uninstall-Module
 ```
+
 #### Install or upgrade using a clone of the GIT repo
 
 1.  Using a GIT client on your Windows or Linux or Mac OS host, clone the AGMPowerCLI GIT repo.   A sample command is shared below.
