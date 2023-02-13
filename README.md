@@ -62,15 +62,14 @@ Install-Module -Name AGMPowerCLI
 ```
 If the install worked, you can now move to Step 2.  
 
-Many corporate servers will not allow downloads from PowerShell gallery or even access to GitHub from Production Servers, so for these use one of the Git download methods detailed below.
-
 If you see this error make sure your TLS version has been set:
 
 ```
 WARNING: Unable to resolve package source 'https://www.powershellgallery.com/api/v2'.
 ```
+Many corporate servers will not allow downloads from PowerShell gallery or even access to GitHub from Production Servers, so for these use one of the Git download methods detailed below.
 
-##### Upgrades using PowerShell Gallery
+#### Upgrades using PowerShell Gallery
 
 Note if you run 'Install-Module' to update an installed module, it will complain.  You need to run 'Update-module' instead.
 
