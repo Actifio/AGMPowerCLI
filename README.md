@@ -3,6 +3,7 @@ A Powershell module to issue API calls to an Actifio Global Manager or a Google 
 
 ### Table of Contents
 **[What does this module do?](#what-does-this-module-do)**<br>
+**[Proxy support](#proxy-support)**<br>
 **[Usage](#usage)**<br>
 **[What else do I need to know?](#what-else-do-i-need-to-know)**<br>
 **[Usage Examples](#usage-examples)**<br>
@@ -525,6 +526,13 @@ The following examples were all moved from the Readme to the Usage Examples page
 #### [User Story: Running appliance info and report commands](UsageExamples.md#appliance-info-and-report-commands)
 #### [User Story: Setting Appliance timezone](UsageExamples.md#appliance-timezone)
 #### [User Story: Setting Appliance discovery schedule](UsageExamples.md#appliance-discovery-schedule)
+
+## Proxy support
+
+AGMPowerCLI does not contain any options to allow it to work with a web proxy.  However your PowerShell session can itself be configured to use system configuration setttings to allow connections to web servers through a proxy.    The complexities of this setup are outside this readme but there are many good sources of information available to help you with this.   We do not guarantee or endorse the information you will find on the following links (or commit that these links will always work), but these are some suggested sites that may assist you:
+* [Using PowerShell Behind a Proxy Server](https://woshub.com/using-powershell-behind-a-proxy/)
+* [Use a Powerhell module bheind a proxy](https://learn.microsoft.com/en-us/powershell/azure/az-powershell-proxy)
+* [How to set a proxy for CMD/Powershell/Terminal/Git](https://theodorecooper.github.io/other/2022-cmd-proxy/)
 
 ## Contributing
 Have a patch that will benefit this project? Awesome! Follow these steps to have
