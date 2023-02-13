@@ -527,7 +527,7 @@ function Get-AGMAudit ([string]$filtervalue,[switch][alias("o")]$options,[string
     }
 }
 
-Function Get-AGMCloudVM ([string]$zone,[string]$id,[string]$credentialid,[string]$clusterid,[string]$applianceid,[string]$projectid,[string]$limit,[string]$offset,[string]$filter) 
+Function Get-AGMCloudVM ([string]$zone,[string]$id,[string]$credentialid,[string]$clusterid,[string]$applianceid,[string]$projectid,[string]$limit,[string]$offset,[string]$filter,[switch]$jsonprint) 
 {
     <#
     .SYNOPSIS
@@ -632,6 +632,10 @@ Function Get-AGMCloudVM ([string]$zone,[string]$id,[string]$credentialid,[string
         }
     }
     $json = $body | ConvertTo-Json
+    if ($jsonprint)
+    {
+        $body | ConvertTo-Json -compress
+    }
     Post-AGMAPIData  -endpoint /cloudcredential/$credentialid/discovervm/vm -body $json 
 }
 

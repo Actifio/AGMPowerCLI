@@ -49,6 +49,9 @@ This document contains usage examples that include both AGMPowerCLI and AGMPower
 **[Compute Engine Instance Mount](#compute-engine-instance-mount)**<br>
 **[Compute Engine Instance Multi Mount Disaster Recovery](#compute-engine-instance-multi-mount-disaster-recovery)**<br>
 
+**[Connecting or Logging in](#connecting-or-logging-in)**<br>
+>**[Connect-AGM](#connect-agm)**</br>
+
 **[Consistency Groups](#consistency-groups)**<br>
 >**[Consistency Group Management](#consistency-group-management)**<br>
 
@@ -85,6 +88,8 @@ This document contains usage examples that include both AGMPowerCLI and AGMPower
 **[Image Restore](#image-restore)**<br>
 **[Setting an Image Label](#setting-an-image-label)**</br>
 **[Setting an Image Label in Bulk](#setting-an-image-label-in-bulk)**</br>
+
+**[Installation](#installation)**<br>
 
 **[Jobs](#jobs)**<br>
 >**[Display Job History](#displaying-job-history)**</br>
@@ -1956,6 +1961,21 @@ This function has to add them all to ensure each instance is examined.   If you 
 
 [Back to top](#usage-examples)
 
+# Connecting or Logging in
+
+To login to a Management Console (or AGM) we use the **Connect-AGM** command.
+
+## Connect-AGM
+
+The Syntax to use Connect-AGM is documented here:
+
+| Product | Device | Instructions
+| ---- | ---- | --------
+| Actifio | AGM  | [Login to your AGM](https://github.com/Actifio/AGMPowerCLI#4-login-to-your-agm)             
+| Google Cloud Backup and DR | Management Console |  [GCBDR](https://github.com/Actifio/AGMPowerCLI/blob/main/GCBDR.md)
+
+[Back to top](#usage-examples)
+
 # Consistency Groups
 
 ## Consistency Group Management
@@ -2598,6 +2618,19 @@ This function is used to label a large number of images in a single command.  Th
 * An imagename.   You could learn this in the Web GUI.   Then use:  ```Set-AGMLibImage -imagename <imagename> -label <newlabel>"```
 
 [Back to top](#usage-examples)
+
+# Installation
+
+Installation on how to install AGMPowerCLI and [AGMPowerLib](https://github.com/Actifio/AGMPowerLib) can be found here:
+
+| Module |  Instructions
+| ---- | --------
+| AGMPowerCLI|  [Install or Upgrade AGMPowerCLI](https://github.com/Actifio/AGMPowerCLI#1-install-or-upgrade-agmpowercli)             
+| AGMPowerLib |  [Install or upgrade AGMPowerLib](https://github.com/Actifio/AGMPowerLib#install-or-upgrade-agmpowerlib)
+
+
+[Back to top](#usage-examples)
+
 # Jobs
 
 ## Displaying Job History
