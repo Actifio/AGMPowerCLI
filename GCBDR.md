@@ -6,7 +6,9 @@ To perform Backup and DR PowerShell operations, you need the following:
 
 1. A Service Account with the correct roles needs to be selected or created in the relevant project  (that's the project that has access to the Management Console)
 1. A host to run that service account, either:
-    1. A Linux or Windows Compute Engine Instance with an attached service account which has GCloud CLI and PowerShell installed.
+    1. A Linux or Windows Compute Engine Instance with an attached service account which has GCloud CLI and PowerShell installed.  Note that this Compute Engine Instance needs one of the following (as the Management Console cannot be accessed via internal IP or Private Google Access):
+        1. An external IP
+        2. A Cloud NAT gateway.  Note that you may need to change advanced settings, see the section below.
     1. A Linux, Mac or Windows host which has GCloud CLI and PowerShell installed and which has a downloaded JSON key for the relevant service account.  
 
 
@@ -202,6 +204,15 @@ To prevent unauthorized access, be sure to secure access to the automation host,
 
 
 ## FAQ
+
+### I am seeing the occasional slow or timed out API especially on larger scripts
+
+If you are running PowerShell from a Compute Engine Instance with access via Cloud VPN, then you may encounter port limits.   This is documented [here](https://cloud.google.com/nat/docs/ports-and-addresses#ports-reuse-tcp).  The solutions are to:
+
+* Increase port count per VM from the default of 64.  Consider 300-1000 ports
+* Decrease the TCP Wait time from the degault of 120 seconds.  Consider 10-60 seconds
+* Add an external IP to the Compute Engine instance.
+
 ### I can connect but don't seem to stay connected
 
 You may see a pattern like this, where **connect-agm** works, but most commands say you are not logged in.
