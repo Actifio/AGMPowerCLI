@@ -157,7 +157,7 @@ OpenID Connect token expired: JWT has expired
 ```
 You will need to run Connect-AGM to generate a new one hour token.
 
-### Cloud NAT port exhaustian
+### Cloud NAT port exhaustion
 
 If you are running PowerShell from a Compute Engine Instance with access via Cloud VPN, then you may encounter port limits which could lead to slow responses or time-outs.   This is documented [here](https://cloud.google.com/nat/docs/ports-and-addresses#ports-reuse-tcp).  The solution is to do one of the following:
 
