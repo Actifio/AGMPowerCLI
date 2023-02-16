@@ -162,7 +162,7 @@ You will need to run Connect-AGM to generate a new one hour token.
 If you are running PowerShell from a Compute Engine Instance with access via Cloud VPN, then you may encounter port limits which could lead to slow responses or time-outs.   This is documented [here](https://cloud.google.com/nat/docs/ports-and-addresses#ports-reuse-tcp).  The solution is to do one of the following:
 
 * Increase port count per VM from the default of 64.  Consider 300-1000 ports
-* Decrease the TCP Wait time from the degault of 120 seconds.  Consider 10-60 seconds
+* Decrease the TCP Wait time from the default of 120 seconds.  Consider 10-60 seconds
 * Add an external IP to the Compute Engine instance.
 
 
