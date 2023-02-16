@@ -8,7 +8,7 @@ To perform Backup and DR PowerShell operations, you need the following:
 1. A host to run that service account, either:
     1. A Linux or Windows Compute Engine Instance with an attached service account which has GCloud CLI and PowerShell installed.  Note that this Compute Engine Instance needs one of the following (as the Management Console cannot be accessed via internal IP or Private Google Access):
         1. An external IP
-        2. A Cloud NAT gateway.  Note that you may need to change advanced settings to avoid slow or timed out APIs, see the section [below](#cloud-nat-port-exhaustion).
+        2. A Cloud NAT gateway.  Note that you may need to change the advanced settings of the Cloud NAT to avoid slow or timed out APIs, see the section [below](#cloud-nat-port-exhaustion).
     1. A Linux, Mac or Windows host which has GCloud CLI and PowerShell installed and which has a downloaded JSON key for the relevant service account.  
 
 
