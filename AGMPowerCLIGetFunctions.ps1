@@ -92,6 +92,227 @@ function Get-AGMAppliance ([string]$id,[string]$filtervalue,[switch][alias("o")]
 }
 
 # Application
+Function Get-AGMApplianceParameter ([string]$id,[String]$applianceid,[string]$clusterid,[string]$parameter)
+{
+    <#  
+    .SYNOPSIS
+    Fetch specified parameter from specified Appliance using clusterid
+
+    .EXAMPLE
+    Get-AGMApplianceParameter -applianceid 142700167048 -parameter maxsnapslots
+
+    To display the maxsnapslots parameter for the appliance with clusterid 142700167048
+    Note that clusterid and applianceid are treated as the same value here.   Do not use the id of the appliance, use the clusterid.
+    Note that you will need to know the specific parameter.  You cannot query all parameters.
+    If you query a non-existent parameter you will not get an error, but you will not get a paramvalue
+
+    .NOTES
+    Written by Anthony Vandewerdt
+    
+    #>
+
+    if ( (!($AGMSESSIONID)) -or (!($AGMIP)) )
+    {
+        Get-AGMErrorMessage -messagetoprint "Not logged in or session expired. Please login using Connect-AGM"
+        return
+    }
+    if ($clusterid) { $applianceid = $clusterid }
+    if ($applianceid)
+    {
+        $appliancegrab = Get-AGMAppliance -filtervalue clusterid=$applianceid
+        if (!($appliancegrab.clusterid))
+        {
+            Get-AGMErrorMessage -messagetoprint "Failed to find specified appliance.   Run Get-AGMAppliance and then specify the value listed as id with the -id parameter"
+            return
+        }
+        else {
+            $id = $appliancegrab.id
+        }
+    }
+    if (!($id))
+    {
+        $id = Read-Host "ID (for the Appliance)"
+    }
+    if (!($clusterid))
+    {
+        $appliancegrab = Get-AGMAppliance -filtervalue id=$id
+        if (!($appliancegrab.clusterid))
+        {
+            Get-AGMErrorMessage -messagetoprint "Failed to find specified appliance.   Run Get-AGMAppliance and then specify the value listed as id with the -id parameter"
+            return
+        }
+        else
+        {
+            $clusterid = $appliancegrab.clusterid
+        }
+
+    }
+    if (!($parameter))
+    {
+        $parameter = Read-Host "Parameter name"
+    }
+    Get-AGMAPIData -endpoint /cluster/$clusterid/parameter/$parameter
+}
+
+Function Get-AGMApplianceSchedule ([String]$id,[String]$applianceid,[string]$clusterid,[string]$schedulename)
+{
+    <#  
+    .SYNOPSIS
+    Fetch specified schedule from specified Appliance using id
+
+    .EXAMPLE
+    Get-AGMApplianceSchedule -id 1234 -schedulename autodiscovery
+
+    To display the autodiscovery schedule for the appliance with id 1234
+    Use the ID of the appliance, use the clusterid.
+    Note that you will need to know the specific schedule.  You cannot query all schedule.
+    Also note that if a schedule has not been set, then you may get empty output.
+
+    .NOTES
+    Written by Anthony Vandewerdt
+    
+    #>
+
+    if ( (!($AGMSESSIONID)) -or (!($AGMIP)) )
+    {
+        Get-AGMErrorMessage -messagetoprint "Not logged in or session expired. Please login using Connect-AGM"
+        return
+    }
+    if ($clusterid) { $applianceid = $clusterid }
+    if ($applianceid)
+    {
+        $appliancegrab = Get-AGMAppliance -filtervalue clusterid=$applianceid
+        if (!($appliancegrab.clusterid))
+        {
+            Get-AGMErrorMessage -messagetoprint "Failed to find specified appliance.   Run Get-AGMAppliance and then specify the value listed as id with the -id parameter"
+            return
+        }
+        else
+        {
+            $id = $appliancegrab.id
+        }
+    }
+    if (!($id))
+    {
+        $id = Read-Host "ID (for the Appliance)"
+    }
+    if (!($schedulename))
+    {
+        [string]$schedulename = Read-Host "Schedule name"
+    }
+    Get-AGMAPIData -endpoint /cluster/$id/schedule/$schedulename
+}
+
+Function Get-AGMApplianceParameter ([string]$id,[String]$applianceid,[string]$clusterid,[string]$parameter)
+{
+    <#  
+    .SYNOPSIS
+    Fetch specified parameter from specified Appliance using clusterid
+
+    .EXAMPLE
+    Get-AGMApplianceParameter -applianceid 142700167048 -parameter maxsnapslots
+
+    To display the maxsnapslots parameter for the appliance with clusterid 142700167048
+    Note that clusterid and applianceid are treated as the same value here.   Do not use the id of the appliance, use the clusterid.
+    Note that you will need to know the specific parameter.  You cannot query all parameters.
+    If you query a non-existent parameter you will not get an error, but you will not get a paramvalue
+
+    .NOTES
+    Written by Anthony Vandewerdt
+    
+    #>
+
+    if ( (!($AGMSESSIONID)) -or (!($AGMIP)) )
+    {
+        Get-AGMErrorMessage -messagetoprint "Not logged in or session expired. Please login using Connect-AGM"
+        return
+    }
+    if ($clusterid) { $applianceid = $clusterid }
+    if ($applianceid)
+    {
+        $appliancegrab = Get-AGMAppliance -filtervalue clusterid=$applianceid
+        if (!($appliancegrab.clusterid))
+        {
+            Get-AGMErrorMessage -messagetoprint "Failed to find specified appliance.   Run Get-AGMAppliance and then specify the value listed as id with the -id parameter"
+            return
+        }
+        else {
+            $id = $appliancegrab.id
+        }
+    }
+    if (!($id))
+    {
+        $id = Read-Host "ID (for the Appliance)"
+    }
+    if (!($clusterid))
+    {
+        $appliancegrab = Get-AGMAppliance -filtervalue id=$id
+        if (!($appliancegrab.clusterid))
+        {
+            Get-AGMErrorMessage -messagetoprint "Failed to find specified appliance.   Run Get-AGMAppliance and then specify the value listed as id with the -id parameter"
+            return
+        }
+        else
+        {
+            $clusterid = $appliancegrab.clusterid
+        }
+
+    }
+    if (!($parameter))
+    {
+        $parameter = Read-Host "Parameter name"
+    }
+    Get-AGMAPIData -endpoint /cluster/$clusterid/parameter/$parameter
+}
+
+Function Get-AGMApplianceSchedule ([String]$id,[String]$applianceid,[string]$clusterid,[string]$schedulename)
+{
+    <#  
+    .SYNOPSIS
+    Fetch specified schedule from specified Appliance using id
+
+    .EXAMPLE
+    Get-AGMApplianceSchedule -id 1234 -schedulename autodiscovery
+
+    To display the autodiscovery schedule for the appliance with id 1234
+    Use the ID of the appliance, use the clusterid.
+    Note that you will need to know the specific schedule.  You cannot query all schedule.
+    Also note that if a schedule has not been set, then you may get empty output.
+
+    .NOTES
+    Written by Anthony Vandewerdt
+    
+    #>
+
+    if ( (!($AGMSESSIONID)) -or (!($AGMIP)) )
+    {
+        Get-AGMErrorMessage -messagetoprint "Not logged in or session expired. Please login using Connect-AGM"
+        return
+    }
+    if ($clusterid) { $applianceid = $clusterid }
+    if ($applianceid)
+    {
+        $appliancegrab = Get-AGMAppliance -filtervalue clusterid=$applianceid
+        if (!($appliancegrab.clusterid))
+        {
+            Get-AGMErrorMessage -messagetoprint "Failed to find specified appliance.   Run Get-AGMAppliance and then specify the value listed as id with the -id parameter"
+            return
+        }
+        else
+        {
+            $id = $appliancegrab.id
+        }
+    }
+    if (!($id))
+    {
+        $id = Read-Host "ID (for the Appliance)"
+    }
+    if (!($schedulename))
+    {
+        [string]$schedulename = Read-Host "Schedule name"
+    }
+    Get-AGMAPIData -endpoint /cluster/$id/schedule/$schedulename
+}
 
 function Get-AGMApplication ([string]$id,[string]$appid,[string]$filtervalue,[string]$keyword,[switch][alias("o")]$options,[int]$limit,[string]$sort)
 {
