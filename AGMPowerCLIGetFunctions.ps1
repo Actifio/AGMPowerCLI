@@ -2041,8 +2041,34 @@ function Get-AGMSession  ([String]$sessionid)
     }
 }
 
-#sla
+function Get-AGMPermissions  
+{
+    <#
+    .SYNOPSIS
+    Displays the current Permissions
 
+    .EXAMPLE
+    Get-AGMPermissions
+    Will display the permisisons for the current session
+
+    .DESCRIPTION
+    A function to display the permissions
+    
+    #>
+
+    $permissiongrab = Get-AGMAPIData -endpoint /session/permissions
+    if ($permissiongrab.permissions)
+    {
+        $permissiongrab.permissions.entry
+    }
+    else
+    {
+        Get-AGMErrorMessage -messagetoprint "No Permissions were found."
+    }
+
+}
+
+#sla
 function Get-AGMSLA ([string]$id,[string]$slaid,[string]$filtervalue,[int]$limit,[string]$sort)
 {
  <#

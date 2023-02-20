@@ -45,7 +45,7 @@ Copyright = '(c) 2022 Google, Inc. All rights reserved'
 
 ##################################################################################################################
 # Description of the functionality provided by this module
-Description = 'This is a community generated PowerShell Module for Actifio Global Manager (AGM).  
+Description = 'This is a community generated PowerShell Module for Management Console.
 It provides a method to issue commands to AGM API endpoints, like "Application" and "Host".
 This lets you create automation with AGM, or generate your own composite functions.
 More information can be found here:  https://github.com/Actifio/AGMPowerCLI'
@@ -102,6 +102,8 @@ FunctionsToExport = @(
     'Test-AGMJSON',
     'Get-AGMAPILimit',
     'Get-AGMAppliance',
+    'Get-AGMApplianceParameter',
+    'Get-AGMApplianceSchedule', 
     'Get-AGMApplication',
     'Get-AGMApplicationCount',
     'Get-AGMApplicationActiveImage',
@@ -130,6 +132,7 @@ FunctionsToExport = @(
     'Get-AGMLogicalGroup',
     'Get-AGMLogicalGroupMember',
     'Get-AGMOrg',
+    'Get-AGMPermissions',
     'Get-AGMRight',
     'Get-AGMRole',
     'Get-AGMSession',
@@ -155,6 +158,8 @@ FunctionsToExport = @(
     'New-AGMRole',
     'New-AGMSLA',
     'New-AGMUser',
+    'Set-AGMApplianceParameter',
+    'Set-AGMApplianceSchedule',
     'Set-AGMAPIApplianceTask',
     'Save-AGMPassword',
     'Set-AGMCredential',
