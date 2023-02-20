@@ -451,8 +451,18 @@ Function Test-AGMJSON()
         if ($validJson -eq $false) 
         {
             $cleanedmessage = $args -replace "`n",","
-            Get-AGMErrorMessage  -messagetoprint $cleanedmessage 
-            return
+            # this is for 11.0.5 and beyond sniff for expired tokens because we no longer get a clean message
+            $expiretokensniff = $cleanedmessage | Select-String -Pattern "Error 401 (Unauthorized)" -SimpleMatch
+            if ($expiretokensniff)
+            {
+                Get-AGMErrorMessage  -messagetoprint "Error 401 (Unauthorized).  Token may have expired.  Run Connect-AGM"
+                return
+            }
+            else
+            {
+                Get-AGMErrorMessage  -messagetoprint $cleanedmessage 
+                return
+            }
         }
         # if we got here we have valid JSON.  a 10011 is returned from AGM without a message, so we make one
         if ($jsonmessage.err_code -eq 10011)
