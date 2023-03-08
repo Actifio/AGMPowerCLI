@@ -48,6 +48,7 @@ This document contains usage examples that include both AGMPowerCLI and AGMPower
 **[Compute Engine Instance Multi Conversion from VMware VM](#compute-engine-instance-multi-conversion-from-vmware-vm)**</br>
 **[Compute Engine Instance Mount](#compute-engine-instance-mount)**<br>
 **[Compute Engine Instance Multi Mount Disaster Recovery](#compute-engine-instance-multi-mount-disaster-recovery)**<br>
+**[Compute Engine Instance Image Audit](#compute-engine-instance-image-audit)**<br>
 
 **[Connecting or Logging in](#connecting-or-logging-in)**<br>
 >**[Connect-AGM](#connect-agm)**</br>
@@ -1958,6 +1959,84 @@ You can either look at Templates in the SLA Architect in Web GUI or run: ```Get-
 3. What if I don't want all instances to be added?   
 
 This function has to add them all to ensure each instance is examined.   If you add them then delete them, they won't be added back in a second run because an Actifio label with a value of **unmanaged** will be added to them.
+
+## Compute Engine Instance Image Audit
+
+When a Compute Engine instance backup is created it is effectiely back-ended by persistent disk snapshots.   You may have two scenarios:
+
+1.  You want to validate that the images shown by Backup and DR have matching persistent disk snapshots.    For this we use **Confirm-AGMLibComputeEngineImage**
+1.  You want to validate that persistent disk snapshots have matching images in Backup and DR. For this we use **Confirm-AGMLibComputeEngineProject**
+
+### Confirm-AGMLibComputeEngineImage
+
+This command confirms that the Compute Engine Snapshot created by a backup image still exists.  It does this using the GoogleCloud PowerShell module
+
+Lets take an example where we have several compute engine instances we want to validate.  We learn their application IDs like this:
+```
+Get-AGMApplication -filtervalue apptype=GCPInstance | select id,appname,apptype,managed,{$_.cluster.name} | ft
+
+id      appname   apptype     managed $_.cluster.name
+--      -------   -------     ------- ---------------
+1524465 bastion   GCPInstance    True melbourne-82270
+1524463 windows   GCPInstance    True melbourne-82270
+1457056 centos1   GCPInstance    True melbourne-82270
+```
+We now learn the images for an instance like this:
+```
+Get-AGMImage -filtervalue appid=1524465 | Select-Object id,backupname,consistencydate
+
+id      backupname    consistencydate
+--      ----------    ---------------
+1845601 Image_0217092 2023-03-08 04:25:31
+1842663 Image_0215044 2023-03-07 00:20:31
+1832795 Image_0209117 2023-03-05 19:00:12
+1826087 Image_0200560 2023-03-04 19:00:12
+1813283 Image_0192007 2023-03-03 19:00:12
+1796177 Image_0183418 2023-03-02 19:00:12
+1791809 Image_0176133 2023-03-01 23:40:55
+1745128 Image_0173061 2023-02-23 22:16:47
+```
+Now that we have the image IDs we can validate them one at a time like this.   There are two things we want to do, which confirm there is a matching snapshotname and that the status is READY.
+```
+Confirm-AGMLibComputeEngineImage 1845601
+
+id           : 1845601
+project      : avwarglab1
+appliance    : 145666187717
+imagename    : Image_0217092
+snapshotname : snap-bastion-aed5f6c4-d31c-4789-ad20-0e5f18e06f8b
+status       : READY
+```
+We could validate all the images by doing this:
+```
+$images = Get-AGMImage -filtervalue appid=1524465 | Select-Object id,backupname,consistencydate
+foreach ($image in $images) { Confirm-AGMLibComputeEngineImage $image.id }
+```
+Note that if the GoogleCloud PowerShell module is not installed this function cannot run.
+
+### Confirm-AGMLibComputeEngineProject
+
+This function matches snapshots in compute engine to snapshots in Backup and DR using the GoogleCloud PowerShell module.   This function reads in all Compute Engine snapshots found in the nominated Google Cloud project and then matches them to those reported by Backup and DR.   If an image does not have a reported ID then no matching image was found by Backup and DR.  This means either the image is not being tracked by Backup and DR or is being tracked by a different instance of Backup and DR (a different Management Console and Backup Appliance) 
+
+You run the function like this (change $project to suit your project).  You will get a report on every persistent disk snapshot found in that project.
+
+```
+$project = "avwarglab1"
+Confirm-AGMLibComputeEngineProject -projectid $project
+
+id           : 1745128
+project      : avwarglab1
+appliance    : 145666187717
+imagename    : image_0173061
+snapshotname : snap-bastion-08864128-bbee-4e4b-b45e-5c651b54f043
+status       : READY
+```
+There are theree scenarios:
+1.  All fields are populated, then a matching snapshot to image is found
+1.  The ID field is not populated but the appliance and imagename fields are, then the image was made by a different instance of backup/dr (different Management Console and backup/recovery appliance)
+1.  The ID, appliance and imagename fields are not populated meaning this snapshot was created by compute engine schedule or manually (not by backup/dr).
+
+Note that if the GoogleCloud PowerShell module is not installed this function cannot run.
 
 [Back to top](#usage-examples)
 
