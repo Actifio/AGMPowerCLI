@@ -1,6 +1,6 @@
 # Change log
 ## AGMPowerCLI 0.0.0.54
-* support more modern ways to get bearer token
+* support more modern ways to get bearer token.  Support for API changes coming in future releases.
 
 ## AGMPowerCLI 0.0.0.53
 * add printjson option to get-AGMcloudVM
