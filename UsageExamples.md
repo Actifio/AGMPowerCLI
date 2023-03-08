@@ -6,7 +6,7 @@ This document contains usage examples that include both AGMPowerCLI and AGMPower
 >**[AGM Version](#agm-version)**<br>
 
 **[Appliances](#appliances)**<br>
->**[Appliance Add And Remove (Actifio only)](#appliance-add-and-remove-(actifio-only))**<br>
+>**[Appliance Add And Remove (Actifio only)](#appliance-add-and-remove-actifio-only)**<br>
 **[Appliance Discovery Schedule](#appliance-discovery-schedule)**<br>
 **[Appliance Info And Report Commands](#appliance-info-and-report-commands)**<br>
 **[Appliance Logs](#appliance-logs)**<br>
