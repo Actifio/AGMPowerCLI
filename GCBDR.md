@@ -22,7 +22,7 @@ In this example (yours will be different!):
     * You only need the end point part of the URL:  ```agm-666993295923.backupdr.actifiogo.com```
 * OAuth 2.0 client ID:     ```123456-fimdb0rbeamc17l3akilvquok1dssn6t.apps.googleusercontent.com```
 
-> **Note**: If your management console URL starts with **bmc-** rather than **agm-** then you will not longer need to supply an OAUth 2.0 client ID.
+> **Note**: If your management console URL starts with **bmc-** rather than **agm-** then you will no longer need to supply an OAUth 2.0 client ID.
 
 ## Creating your Service Account
 
@@ -105,7 +105,7 @@ These modules can be used with both an Actifio GO AGM and Backup and DR Manageme
 
 To login use syntax like this:
 
-> **Note**: If your management console URL starts with **bmc-** rather than **agm-** then you will not longer need to supply an OAUth 2.0 client ID.
+> **Note**: If your management console URL starts with **bmc-** rather than **agm-** then you will no longer need to supply an OAUth 2.0 client ID.
 
 ```
 connect-agm -agmip agm-666993295923.backupdr.actifiogo.com -agmuser powershell@avwservicelab1.iam.gserviceaccount.com -oauth2ClientId 486522031570-fimdb0rbeamc17l3akilvquok1dssn6t.apps.googleusercontent.com
