@@ -7,11 +7,11 @@ This document contains usage examples that include both AGMPowerCLI and AGMPower
 
 **[Appliances](#appliances)**<br>
 >**[Appliance Add And Remove (Actifio only)](#appliance-add-and-remove-actifio-only)**<br>
-**[Appliance Discovery Schedule](#appliance-discovery-schedule)**<br>
-**[Appliance Info And Report Commands](#appliance-info-and-report-commands)**<br>
-**[Appliance Logs](#appliance-logs)**<br>
-**[Appliance Parameter and Slot Management](#appliance-parameter-and-slot-management)**</br>
-**[Appliance Timezone](#appliance-timezone)**<br>
+**[Appliance Discovery Schedule (10.0.4 to 11.0.4)](#appliance-discovery-schedule-10.0.4-to-11.0.4)**<br>
+**[Appliance Info And Report Commands (10.0.4 to 11.0.4)](#appliance-info-and-report-commands-10.0.4-to-11.0.4))**<br>
+**[Appliance Logs (10.0.4 to 11.0.4)](#appliance-logs-10.0.4-to-11.0.4))**<br>
+**[Appliance Parameter and Slot Management (10.0.4 to 11.0.4)](#appliance-parameter-and-slot-management-10.0.4-to-11.0.4))**</br>
+**[Appliance Timezone (10.0.4 to 11.0.4)](#appliance-timezone-10.0.4-to-11.0.4))**<br>
 
 **[Applications](#applications)**<br>
 >**[Application IDs](#application-ids)**<br>
@@ -244,7 +244,7 @@ id    name       ipaddress
 45582 backdrsky2 10.194.0.38
 7286  backupsky1 10.194.0.20
 ```
-## Appliance Discovery Schedule
+## Appliance Discovery Schedule (10.0.4 to 11.0.4)
 
 To set the start time when auto discovery runs (instead of the default 2am), first learn the appliance ID:
 ```
@@ -290,7 +290,7 @@ time  frequency
 09:00 daily
 ```
 
-## Appliance Info And Report Commands
+## Appliance Info And Report Commands (10.0.4 to 11.0.4)
 
 > **Note**:   If you want to manage appliance parameters such as slots, use the **Get-AGMLibApplianceParameter** and **Set-AGMLibApplianceParameter** commands documented [here](#appliance-parameter-and-slot-management).
 
@@ -378,7 +378,7 @@ If you need to send multiple arguments separate them with an **&**, for example,
 Get-AGMAPIApplianceReport -applianceid 406219 -command reportimages -arguments "-a 0&-s" |  Export-Csv disks.csv
 ```
 
-## Appliance Logs
+## Appliance Logs (10.0.4 to 11.0.4)
 
 We can fetch logs from an Appliance with the following command:
 ```
@@ -392,7 +392,7 @@ A zip file will download in the folder you ran the command in.
 * You can also use ```-startdate``` and ```-enddate``` for instance ```-startdate "2022-10-01" -enddate "2022-10-04"```
 
 
-## Appliance Parameter and Slot Management
+## Appliance Parameter and Slot Management (10.0.4 to 11.0.4)
 
 Each appliance has a set of parameters that are used to:
 
@@ -551,7 +551,7 @@ Set-AGMLibApplianceParameter -applianceid 361153 -param reservedsnapslots -value
 Set-AGMLibApplianceParameter -applianceid 361153 -param maxsnapslots -value 15
 Set-AGMLibApplianceParameter -applianceid 361153 -param unreservedslots -value 15
 ```
-## Appliance timezone
+## Appliance timezone (10.0.4 to 11.0.4)
 To display Appliance timezone, learn the appliance ID and then query the relevant appliance:
 ```
 Get-AGMAppliance | select id,name
