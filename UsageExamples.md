@@ -1962,7 +1962,7 @@ This function has to add them all to ensure each instance is examined.   If you 
 
 ## Compute Engine Instance Image Audit
 
-When a Compute Engine instance backup is created it is effectiely back-ended by persistent disk snapshots.   You may have two scenarios:
+When a Compute Engine instance backup is created it is effectively back-ended by persistent disk snapshots.   You may have two scenarios:
 
 1.  You want to validate that the images shown by Backup and DR have matching persistent disk snapshots.    For this we use **Confirm-AGMLibComputeEngineImage**
 1.  You want to validate that persistent disk snapshots have matching images in Backup and DR. For this we use **Confirm-AGMLibComputeEngineProject**
@@ -1983,7 +1983,8 @@ id      appname   apptype     managed $_.cluster.name
 ```
 We now learn the images for an instance like this:
 ```
-Get-AGMImage -filtervalue appid=1524465 | Select-Object id,backupname,consistencydate
+$appid = 1524465
+Get-AGMImage -filtervalue appid=$appid | Select-Object id,backupname,consistencydate
 
 id      backupname    consistencydate
 --      ----------    ---------------
@@ -1996,9 +1997,10 @@ id      backupname    consistencydate
 1791809 Image_0176133 2023-03-01 23:40:55
 1745128 Image_0173061 2023-02-23 22:16:47
 ```
-Now that we have the image IDs we can validate them one at a time like this.   There are two things we want to do, which confirm there is a matching snapshotname and that the status is READY.
+Now that we have the image IDs we can validate them one at a time like this.   There are two things we want to find, which is to confirm there is a matching snapshotname and that the status is READY.
 ```
-Confirm-AGMLibComputeEngineImage 1845601
+$image = 1845601
+Confirm-AGMLibComputeEngineImage $image
 
 id           : 1845601
 project      : avwarglab1
@@ -2007,9 +2009,10 @@ imagename    : Image_0217092
 snapshotname : snap-bastion-aed5f6c4-d31c-4789-ad20-0e5f18e06f8b
 status       : READY
 ```
-We could validate all the images by doing this:
+We could validate all the images for one application by doing this:
 ```
-$images = Get-AGMImage -filtervalue appid=1524465 | Select-Object id,backupname,consistencydate
+$appid = 1524465
+$images = Get-AGMImage -filtervalue appid=$appid | Select-Object id,backupname,consistencydate
 foreach ($image in $images) { Confirm-AGMLibComputeEngineImage $image.id }
 ```
 Note that if the GoogleCloud PowerShell module is not installed this function cannot run.
