@@ -12,7 +12,7 @@ This document contains usage examples that include both AGMPowerCLI and AGMPower
 **[Appliance Logs (10.0.4 to 11.0.4)](#appliance-logs-1004-to-1104)**<br>
 **[Appliance Parameter and Slot Management (10.0.4 to 11.0.4)](#appliance-parameter-and-slot-management-1004-to-1104)**</br>
 **[Appliance Parameter and Slot Management (11.0.5 onwards)](#appliance-parameter-and-slot-management-1105-onwards)**</br>
-**[Appliance Schedule Management (11.0.5 onwards)](#appliance-schedule--management-1105-onwards)**</br>
+**[Appliance Schedule Management (11.0.5 onwards)](#appliance-schedule-management-1105-onwards)**</br>
 **[Appliance Timezone (10.0.4 to 11.0.4)](#appliance-timezone-1004-to-1104)**<br>
 
 **[Applications](#applications)**<br>
@@ -555,7 +555,7 @@ Set-AGMLibApplianceParameter -applianceid 361153 -param unreservedslots -value 1
 ```
 ## Appliance Parameter and Slot Management (11.0.5 onwards)
 
-First learn the ID and Appliance ID of the relevant appliance (yes there are two different IDs):
+First learn the ID and Appliance ID of the relevant appliance (you will need both IDs, where the appliance ID is also referred to as the cluster ID):
 ```
 Get-AGMAppliance | select id,name,@{N='applianceid'; E={$_.clusterid}}
 
@@ -564,7 +564,7 @@ id   name              applianceid
 7188 appliance-1-83040 142700167048
 ```
 You can learn the current setting for a parameter with this command (showing typical output using the ID of the Appliance):
-``
+```
 Get-AGMApplianceParameter -id 7188 -parameter maxsnapslots
 
 @type      : parameterRest
@@ -572,10 +572,10 @@ id         : maxsnapslots
 href       : http://bmc-804817621514-dot-us-central1.backupdr.googleusercontent.com/actifio/cluster/142700167048/parameter/maxsnapslots
 cluster    : @{id=7188; href=http://bmc-804817621514-dot-us-central1.backupdr.googleusercontent.com/actifio/cluster/7188; clusterid=142700167048; ipaddress=10.68.0.3}
 paramvalue : 8
-
+```
 We can change the value and confirm.  Note the GET command uses ID of the Appliance while the SET command uses the applianceid, so here we use the applianceID:
 ```
-Set-AGMApplianceParameter -clusterid 142700167048 -parameter maxsnapslots -value 10
+Set-AGMApplianceParameter -applianceid 142700167048 -parameter maxsnapslots -value 10
 Get-AGMApplianceParameter -id 7188 -parameter maxsnapslots
 
 @type      : parameterRest
