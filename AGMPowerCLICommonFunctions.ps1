@@ -451,13 +451,30 @@ Function Test-AGMJSON()
         if ($validJson -eq $false) 
         {
             $cleanedmessage = $args -replace "`n",","
-            Get-AGMErrorMessage  -messagetoprint $cleanedmessage 
-            return
+            # this is for 11.0.5 and beyond sniff for expired tokens because we no longer get a clean message
+            $expiretokensniff = $cleanedmessage | Select-String -Pattern "Error 401 (Unauthorized)" -SimpleMatch
+            if ($expiretokensniff)
+            {
+                Get-AGMErrorMessage  -messagetoprint "Error 401 (Unauthorized).  Token may have expired.  Run Connect-AGM"
+                return
+            }
+            else
+            {
+                Get-AGMErrorMessage  -messagetoprint $cleanedmessage 
+                return
+            }
         }
         # if we got here we have valid JSON.  a 10011 is returned from AGM without a message, so we make one
         if ($jsonmessage.err_code -eq 10011)
         {
-            Get-AGMErrorMessage -messagetoprint "Users current assigned role does not have permission to perform this action." 
+            if ($jsonmessage.err_message)
+            {
+                Get-AGMErrorMessage -messagetoprint $jsonmessage.err_message
+            }
+            else
+            {
+                Get-AGMErrorMessage -messagetoprint "Users current assigned role does not have permission to perform this action." 
+            }
         }
         # for regular errors from AGM we will catch them here, again with all the data on one line
         elseif ($jsonmessage.err_message)
@@ -498,7 +515,7 @@ function Get-AGMErrorMessage ([string]$messagetoprint,[int]$errcode)
 }
 
 
-Function Post-AGMAPIData ([int]$timeout,[string]$endpoint,[string]$body,[string]$method,[string]$datefields)
+Function Post-AGMAPIData ([int]$timeout,[string]$endpoint,[string]$body,[string]$method,[string]$datefields,[switch]$zerolength,[string]$extrarequests)
 {
     <#  
     .SYNOPSIS
@@ -561,6 +578,10 @@ Function Post-AGMAPIData ([int]$timeout,[string]$endpoint,[string]$body,[string]
     Try
     {
         $url = "https://$AGMIP/actifio" + "$endpoint"  
+        if ($extrarequests)
+        {
+            $url = $url + "?" + $extrarequests
+        }
         # write-host "we are going to use this method: $method     with this url: $url"
         if ($IGNOREAGMCERTS)
         {
@@ -570,8 +591,14 @@ Function Post-AGMAPIData ([int]$timeout,[string]$endpoint,[string]$body,[string]
         {
             if ($AGMToken) 
             {
-                $resp = Invoke-RestMethod -Method $method -Headers @{ Authorization = "Bearer $AGMToken"; "backupdr-management-session" = "Actifio $AGMSESSIONID" ; accept = "application/json" } -body $body -ContentType "application/json" -Uri "$url" -TimeoutSec $timeout 
-                
+                if ($zerolength)
+                {
+                    $resp = Invoke-RestMethod -Method $method -Headers @{ Authorization = "Bearer $AGMToken"; "backupdr-management-session" = "Actifio $AGMSESSIONID" ; length = 0 } -Uri "$url" -TimeoutSec $timeout 
+                }
+                else
+                {
+                    $resp = Invoke-RestMethod -Method $method -Headers @{ Authorization = "Bearer $AGMToken"; "backupdr-management-session" = "Actifio $AGMSESSIONID" ; accept = "application/json" } -body $body -ContentType "application/json" -Uri "$url" -TimeoutSec $timeout 
+                }                       
             }
             else 
             {

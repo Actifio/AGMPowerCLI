@@ -12,7 +12,126 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+Function Set-AGMApplianceParameter ([string]$id,[String]$applianceid,[string]$clusterid,[string]$parameter,[string]$value)
+{
+    <#  
+    .SYNOPSIS
+    Set parameter on an Appliance
 
+    .EXAMPLE
+    Set-AGMApplianceParameter -id 7188 -parameter maxsnapslots -value 8
+    Sets the value of maxsnapslots to 8 on the appliance with ID 7188
+    Note that no value gets returned.   To validate you would need to then run:
+    Get-AGMApplianceParameter -id 7188 -parameter maxsnapslots
+
+    .NOTES
+    Written by Anthony Vandewerdt
+    
+    #>
+
+    if ( (!($AGMSESSIONID)) -or (!($AGMIP)) )
+    {
+        Get-AGMErrorMessage -messagetoprint "Not logged in or session expired. Please login using Connect-AGM"
+        return
+    }
+
+    if ($clusterid) { $applianceid = $clusterid }
+    if ($applianceid)
+    {
+        $appliancegrab = Get-AGMAppliance -filtervalue clusterid=$applianceid
+    }
+    if ($id)
+    {
+        $appliancegrab = Get-AGMAppliance -filtervalue id=$id
+    }
+    if (!($appliancegrab.clusterid))
+    {
+        Get-AGMErrorMessage -messagetoprint "Failed to find specified appliance.   Run Get-AGMAppliance and then specify the value listed as id with the -id parameter"
+        return
+    }
+    else
+    {
+        $id = $appliancegrab.id
+    }
+    if (!($id))
+    {
+        $id = Read-Host "ID (for the Appliance)"
+    }
+    if (!($parameter))
+    {
+        [string]$parameter = Read-Host "Parameter name"
+    }
+    if (!($value))
+    {
+        [string]$value = Read-Host "Parameter value"
+    }
+
+    Post-AGMAPIData -endpoint /cluster/$id/parameter -extrarequests "param=$parameter&value=$value" -zerolength
+}
+
+Function Set-AGMApplianceSchedule ([string]$id,[String]$applianceid,[string]$clusterid,[string]$schedulename,[string]$day,[string]$frequency,[string]$op,[string]$repeatinterval,[string]$time)
+{
+    <#  
+    .SYNOPSIS
+    Set schedule on an Appliance using the ID of the Appliance
+
+    .EXAMPLE
+    Set-AGMApplianceSchedule -id 7188 -schedulename "autodiscovery" -frequency "daily"  -time "12:00"
+
+    Set the autodiscovery schedule to run daily at 12:00 UTC
+    Note that no data is returned, so to validate, you should then run:
+    Get-AGMApplianceSchedule -id 7188 -schedulename "autodiscovery"
+
+    .NOTES
+    Written by Anthony Vandewerdt
+    
+    #>
+
+    if ( (!($AGMSESSIONID)) -or (!($AGMIP)) )
+    {
+        Get-AGMErrorMessage -messagetoprint "Not logged in or session expired. Please login using Connect-AGM"
+        return
+    }
+
+    if ($clusterid) { $applianceid = $clusterid }
+    if ($applianceid)
+    {
+        $appliancegrab = Get-AGMAppliance -filtervalue clusterid=$applianceid
+    }
+    if ($id)
+    {
+        $appliancegrab = Get-AGMAppliance -filtervalue id=$id
+    }
+    if (!($appliancegrab.clusterid))
+    {
+        Get-AGMErrorMessage -messagetoprint "Failed to find specified appliance.   Run Get-AGMAppliance and then specify the value listed as id with the -id parameter"
+        return
+    }
+    else
+    {
+        $id = $appliancegrab.id
+    }
+    if (!($id))
+    {
+        $id = Read-Host "ID (for the Appliance)"
+    }
+
+    if (!($schedulename))
+    {
+        [string]$schedulename = Read-Host "Schedule name"
+    }
+    if (!($repeatinterval)) { $repeatinterval = 1 }
+    $body = [ordered]@{}
+    $body += [ordered]@{ name = $schedulename }
+    if ($day) { $body += [ordered]@{ day = $day } }
+    if ($frequency) { $body += [ordered]@{ frequency = $frequency } }
+    if ($op) { $body += [ordered]@{ op = $op } }
+    if ($repeatinterval) { $body += [ordered]@{ repeat_interval = $repeatinterval } }
+    if ($time) { $body += [ordered]@{ time = $time } }
+    $json = $body | ConvertTo-Json
+
+    Post-AGMAPIData -endpoint /cluster/$id/schedule -body $json 
+}
 
 Function Set-AGMConsistencyGroup ([string]$clusterid,[string]$applianceid,[string]$groupid,[string]$groupname,[string]$description) 
 {

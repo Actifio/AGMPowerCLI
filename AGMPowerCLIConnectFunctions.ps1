@@ -121,10 +121,15 @@ function Connect-AGM
         [int]$agmtimeout = 300
     }
 
-
-    if ((!($agmpassword)) -and (!($passwordfile)) -and (!($oauth2ClientId)))
+    $agmipsniff = $agmip.Substring(0,4)
+    if ($agmipsniff = "bmc-")
     {
-        if ($agmip | select-string "backupdr")
+        $accesstoken = $true
+    }
+
+    if ((!($agmpassword)) -and (!($passwordfile)) -and (!($oauth2ClientId)) -and (!($accesstoken)))
+    {
+        if ($agmipsniff = "agm-")
         {
             $oauth2ClientId = Read-Host "oauth2ClientId"
         }
@@ -146,15 +151,23 @@ function Connect-AGM
     }
 
     # OATH handling
-    if ($oauth2ClientId)
+    if (($oauth2ClientId) -or ($accesstoken))
     {
         if (((get-host).Version.Major -eq 7) -and ((get-host).Version.Minor -eq 3))
         {
             $PSNativeCommandArgumentPassing = "Legacy"
         }
         # first we get a token
-        $Url = "https://iamcredentials.googleapis.com/v1/projects/-/serviceAccounts/$agmuser" +":generateIdToken"
-        $body = '{"audience": "' +$oauth2ClientId +'", "includeEmail":"true"}'
+        if ($oauth2ClientId)
+        {
+             $Url = "https://iamcredentials.googleapis.com/v1/projects/-/serviceAccounts/$agmuser" +":generateIdToken"
+             $body = '{"audience": "' +$oauth2ClientId +'", "includeEmail":"true"}'
+        }
+        else
+        {
+             $Url = "https://iamcredentials.googleapis.com/v1/projects/-/serviceAccounts/$agmuser" +":generateAccessToken"
+             $body = '{"scope":["https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/userinfo.email"],"lifetime":"3600s"}'
+        }
         $RestError = $null
         Try
         {
@@ -173,6 +186,10 @@ function Connect-AGM
         elseif ($resp.token)
         {
             $token = $resp.token
+        }
+        elseif ($resp.accessToken)
+        {
+            $token = $resp.accessToken
         }
         else 
         {
