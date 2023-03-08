@@ -11,8 +11,8 @@ This document contains usage examples that include both AGMPowerCLI and AGMPower
 **[Appliance Info And Report Commands (10.0.4 to 11.0.4)](#appliance-info-and-report-commands-1004-to-1104)**<br>
 **[Appliance Logs (10.0.4 to 11.0.4)](#appliance-logs-1004-to-1104)**<br>
 **[Appliance Parameter and Slot Management (10.0.4 to 11.0.4)](#appliance-parameter-and-slot-management-1004-to-1104)**</br>
-**[Appliance Parameter and Slot Management (11.0.5 onwards)](#appliance-parameter-and-slot-management-1104-onwards)**</br>
-**[Appliance Schedule Management (11.0.5 onwards)](#appliance-schedule--management-1104-onwards)**</br>
+**[Appliance Parameter and Slot Management (11.0.5 onwards)](#appliance-parameter-and-slot-management-1105-onwards)**</br>
+**[Appliance Schedule Management (11.0.5 onwards)](#appliance-schedule--management-1105-onwards)**</br>
 **[Appliance Timezone (10.0.4 to 11.0.4)](#appliance-timezone-1004-to-1104)**<br>
 
 **[Applications](#applications)**<br>
@@ -554,6 +554,7 @@ Set-AGMLibApplianceParameter -applianceid 361153 -param maxsnapslots -value 15
 Set-AGMLibApplianceParameter -applianceid 361153 -param unreservedslots -value 15
 ```
 ## Appliance Parameter and Slot Management (11.0.5 onwards)
+
 First learn the ID and Appliance ID of the relevant appliance (yes there are two different IDs):
 ```
 Get-AGMAppliance | select id,name,@{N='applianceid'; E={$_.clusterid}}
