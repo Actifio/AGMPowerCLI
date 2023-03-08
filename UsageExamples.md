@@ -8,10 +8,10 @@ This document contains usage examples that include both AGMPowerCLI and AGMPower
 **[Appliances](#appliances)**<br>
 >**[Appliance Add And Remove (Actifio only)](#appliance-add-and-remove-actifio-only)**<br>
 **[Appliance Discovery Schedule (10.0.4 to 11.0.4)](#appliance-discovery-schedule-10.0.4-to-11.0.4)**<br>
-**[Appliance Info And Report Commands (10.0.4 to 11.0.4)](#appliance-info-and-report-commands-10.0.4-to-11.0.4))**<br>
-**[Appliance Logs (10.0.4 to 11.0.4)](#appliance-logs-10.0.4-to-11.0.4))**<br>
-**[Appliance Parameter and Slot Management (10.0.4 to 11.0.4)](#appliance-parameter-and-slot-management-10.0.4-to-11.0.4))**</br>
-**[Appliance Timezone (10.0.4 to 11.0.4)](#appliance-timezone-10.0.4-to-11.0.4))**<br>
+**[Appliance Info And Report Commands (10.0.4 to 11.0.4)](#appliance-info-and-report-commands-10.0.4-to-11.0.4)**<br>
+**[Appliance Logs (10.0.4 to 11.0.4)](#appliance-logs-10.0.4-to-11.0.4)**<br>
+**[Appliance Parameter and Slot Management (10.0.4 to 11.0.4)](#appliance-parameter-and-slot-management-10.0.4-to-11.0.4)**</br>
+**[Appliance Timezone (10.0.4 to 11.0.4)](#appliance-timezone-10.0.4-to-11.0.4)**<br>
 
 **[Applications](#applications)**<br>
 >**[Application IDs](#application-ids)**<br>
