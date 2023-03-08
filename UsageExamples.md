@@ -6,7 +6,7 @@ This document contains usage examples that include both AGMPowerCLI and AGMPower
 >**[AGM Version](#agm-version)**<br>
 
 **[Appliances](#appliances)**<br>
->**[Appliance Add And Remove](#appliance-add-and-remove)**<br>
+>**[Appliance Add And Remove (Actifio only)](#appliance-add-and-remove-(actifio-only))**<br>
 **[Appliance Discovery Schedule](#appliance-discovery-schedule)**<br>
 **[Appliance Info And Report Commands](#appliance-info-and-report-commands)**<br>
 **[Appliance Logs](#appliance-logs)**<br>
@@ -184,7 +184,7 @@ An Appliance does the work of creating backups.  There are two kinds of Applianc
 | Actifio | Sky
 | Google Cloud Backup and DR | Backup/recovery appliance 
 
-## Appliance add and remove
+## Appliance add and remove (Actifio only)
 
 > **Note**:   You cannot perform appliance add and remove in Google Cloud Backup and DR.  This is for Actifio only.
 
