@@ -8,10 +8,12 @@ This document contains usage examples that include both AGMPowerCLI and AGMPower
 **[Appliances](#appliances)**<br>
 >**[Appliance Add And Remove (Actifio only)](#appliance-add-and-remove-actifio-only)**<br>
 **[Appliance Discovery Schedule (10.0.4 to 11.0.4)](#appliance-discovery-schedule-1004-to-1104)**<br>
-**[Appliance Info And Report Commands (10.0.4 to 11.0.4)](#appliance-info-and-report-commands-10.0.4-to-11.0.4)**<br>
-**[Appliance Logs (10.0.4 to 11.0.4)](#appliance-logs-10.0.4-to-11.0.4)**<br>
-**[Appliance Parameter and Slot Management (10.0.4 to 11.0.4)](#appliance-parameter-and-slot-management-10.0.4-to-11.0.4)**</br>
-**[Appliance Timezone (10.0.4 to 11.0.4)](#appliance-timezone-10.0.4-to-11.0.4)**<br>
+**[Appliance Info And Report Commands (10.0.4 to 11.0.4)](#appliance-info-and-report-commands-1004-to-1104)**<br>
+**[Appliance Logs (10.0.4 to 11.0.4)](#appliance-logs-1004-to-1104)**<br>
+**[Appliance Parameter and Slot Management (10.0.4 to 11.0.4)](#appliance-parameter-and-slot-management-1004-to-1104)**</br>
+**[Appliance Parameter and Slot Management (11.0.5 onwards)](#appliance-parameter-and-slot-management-1104-onwards)**</br>
+**[Appliance Schedule Management (11.0.5 onwards)](#appliance-schedule--management-1104-onwards)**</br>
+**[Appliance Timezone (10.0.4 to 11.0.4)](#appliance-timezone-1004-to-1104)**<br>
 
 **[Applications](#applications)**<br>
 >**[Application IDs](#application-ids)**<br>
@@ -551,6 +553,66 @@ Set-AGMLibApplianceParameter -applianceid 361153 -param reservedsnapslots -value
 Set-AGMLibApplianceParameter -applianceid 361153 -param maxsnapslots -value 15
 Set-AGMLibApplianceParameter -applianceid 361153 -param unreservedslots -value 15
 ```
+## Appliance Parameter and Slot Management (11.0.5 onwards)
+First learn the ID and Appliance ID of the relevant appliance (yes there are two different IDs):
+```
+Get-AGMAppliance | select id,name,@{N='applianceid'; E={$_.clusterid}}
+
+id   name              applianceid
+--   ----              -----------
+7188 appliance-1-83040 142700167048
+```
+You can learn the current setting for a parameter with this command (showing typical output using the ID of the Appliance):
+``
+Get-AGMApplianceParameter -id 7188 -parameter maxsnapslots
+
+@type      : parameterRest
+id         : maxsnapslots
+href       : http://bmc-804817621514-dot-us-central1.backupdr.googleusercontent.com/actifio/cluster/142700167048/parameter/maxsnapslots
+cluster    : @{id=7188; href=http://bmc-804817621514-dot-us-central1.backupdr.googleusercontent.com/actifio/cluster/7188; clusterid=142700167048; ipaddress=10.68.0.3}
+paramvalue : 8
+
+We can change the value and confirm.  Note the GET command uses ID of the Appliance while the SET command uses the applianceid, so here we use the applianceID:
+```
+Set-AGMApplianceParameter -clusterid 142700167048 -parameter maxsnapslots -value 10
+Get-AGMApplianceParameter -id 7188 -parameter maxsnapslots
+
+@type      : parameterRest
+id         : maxsnapslots
+href       : http://bmc-804817621514-dot-us-central1.backupdr.googleusercontent.com/actifio/cluster/142700167048/parameter/maxsnapslots
+cluster    : @{id=7188; href=http://bmc-804817621514-dot-us-central1.backupdr.googleusercontent.com/actifio/cluster/7188; clusterid=142700167048; ipaddress=10.68.0.3}
+paramvalue : 10
+
+```
+## Appliance Schedule Management (11.0.5 onwards)
+
+First learn the ID of the Appliance you want to set the schedule on.
+```
+Get-AGMAppliance | select id,name
+
+id   name
+--   ----
+7188 appliance-1-83040
+```
+Now use that ID to query the current schedule.  You may not get a schedule if none has been set:
+```
+Get-AGMApplianceSchedule -id 7188 -schedulename "autodiscovery"
+
+time  repeatinterval frequency
+----  -------------- ---------
+16:00 1              daily
+```
+You can set or change the schedule with syntax like this:
+```
+Set-AGMApplianceSchedule -id 7188 -schedulename "autodiscovery" -frequency "daily" -time "20:00"
+Get-AGMApplianceSchedule -id 7188 -schedulename "autodiscovery"
+
+time  repeatinterval frequency
+----  -------------- ---------
+20:00 1              daily
+```
+
+
 ## Appliance timezone (10.0.4 to 11.0.4)
 To display Appliance timezone, learn the appliance ID and then query the relevant appliance:
 ```
