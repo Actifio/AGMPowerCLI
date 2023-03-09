@@ -296,7 +296,7 @@ time  frequency
 
 ## Appliance Info And Report Commands (10.0.4 to 11.0.3)
 
-> **Warning**:   This method will be deprecated in a future release and replaced with [Appliance Schedule Management](UsageExamples.md/#appliance-schedule-management) and [UsageExamples.md/#Appliance Parameter and Slot Management](appliance-parameter-and-slot-management). 
+> **Warning**:   This method will be deprecated in a future release and replaced with [Appliance Schedule Management](UsageExamples.md/#appliance-schedule-management) and [Appliance Parameter and Slot Management](UsageExamples.md/#appliance-parameter-and-slot-management). 
 > 
 > **Note**:   If you want to manage appliance parameters such as slots, use the **Get-AGMLibApplianceParameter** and **Set-AGMLibApplianceParameter** commands documented [here](#appliance-parameter-and-slot-management).
 
@@ -487,6 +487,7 @@ id     name
 Now depending on which job type, we modify different slots.
 
 #### Slot limits for mount jobs
+
 We need to learn the current value of the params that relate to **dataaccess** slots. This is because a mount job is an data access job, meaning each mount job uses one data access slot while it is running.  There are three relevant slots:
 * **reserveddataaccessslots** This is the guaranteed number of data access jobs that can run at any time.  
 * **maxdataaccessslots** This controls the maximum number of data access jobs that can run at any time.  
@@ -560,7 +561,7 @@ Set-AGMLibApplianceParameter -applianceid 361153 -param unreservedslots -value 1
 ```
 ## Appliance Parameter and Slot Management
 
-> **Warning**:   This method will be enabled in a future release.
+> **Note**:   This method will be enabled in a future release.
 
 First learn the ID and Appliance ID of the relevant appliance (you will need both IDs, where the appliance ID is also referred to as the cluster ID):
 ```
@@ -594,7 +595,7 @@ paramvalue : 10
 ```
 ## Appliance Schedule Management 
 
-> **Warning**:   This method will be enabled in a future release.
+> **Note**:   This method will be enabled in a future release.
 
 First learn the ID of the Appliance you want to set the schedule on.
 ```
