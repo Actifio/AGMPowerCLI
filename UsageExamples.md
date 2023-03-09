@@ -296,7 +296,7 @@ time  frequency
 
 ## Appliance Info And Report Commands (10.0.4 to 11.0.3)
 
-> **Warning**:   This method will be deprecated in a future release and replaced with [Appliance Schedule Management](appliance-schedule-management) and [Appliance Parameter and Slot Management](appliance-parameter-and-slot-management). 
+> **Warning**:   This method will be deprecated in a future release and replaced with [Appliance Schedule Management](UsageExamples.md/#appliance-schedule-management) and [UsageExamples.md/#Appliance Parameter and Slot Management](appliance-parameter-and-slot-management). 
 > 
 > **Note**:   If you want to manage appliance parameters such as slots, use the **Get-AGMLibApplianceParameter** and **Set-AGMLibApplianceParameter** commands documented [here](#appliance-parameter-and-slot-management).
 
