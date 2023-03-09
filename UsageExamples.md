@@ -7,13 +7,13 @@ This document contains usage examples that include both AGMPowerCLI and AGMPower
 
 **[Appliances](#appliances)**<br>
 >**[Appliance Add And Remove (Actifio only)](#appliance-add-and-remove-actifio-only)**<br>
-**[Appliance Discovery Schedule (10.0.4 to 11.0.4)](#appliance-discovery-schedule-1004-to-1104)**<br>
-**[Appliance Info And Report Commands (10.0.4 to 11.0.4)](#appliance-info-and-report-commands-1004-to-1104)**<br>
-**[Appliance Logs (10.0.4 to 11.0.4)](#appliance-logs-1004-to-1104)**<br>
-**[Appliance Parameter and Slot Management (10.0.4 to 11.0.4)](#appliance-parameter-and-slot-management-1004-to-1104)**</br>
-**[Appliance Parameter and Slot Management (11.0.5 onwards)](#appliance-parameter-and-slot-management-1105-onwards)**</br>
-**[Appliance Schedule Management (11.0.5 onwards)](#appliance-schedule-management-1105-onwards)**</br>
-**[Appliance Timezone (10.0.4 to 11.0.4)](#appliance-timezone-1004-to-1104)**<br>
+**[Appliance Discovery Schedule (10.0.4 to 11.0.3)](#appliance-discovery-schedule-1004-to-1103)**<br>
+**[Appliance Info And Report Commands (10.0.4 to 11.0.3)](#appliance-info-and-report-commands-1004-to-1103)**<br>
+**[Appliance Logs (10.0.4 to 11.0.3)](#appliance-logs-1004-to-1103)**<br>
+**[Appliance Parameter and Slot Management (10.0.4 to 11.0.3)](#appliance-parameter-and-slot-management-1004-to-1103)**</br>
+**[Appliance Parameter and Slot Management](#appliance-parameter-and-slot-management)**</br>
+**[Appliance Schedule Management](#appliance-schedule-management)**</br>
+**[Appliance Timezone (10.0.4 to 11.0.3)](#appliance-timezone-1004-to-1104)**<br>
 
 **[Applications](#applications)**<br>
 >**[Application IDs](#application-ids)**<br>
@@ -246,7 +246,9 @@ id    name       ipaddress
 45582 backdrsky2 10.194.0.38
 7286  backupsky1 10.194.0.20
 ```
-## Appliance Discovery Schedule (10.0.4 to 11.0.4)
+## Appliance Discovery Schedule (10.0.4 to 11.0.3)
+
+> **Warning**:   This method will be deprecated in a future release and replaced with [Appliance Schedule Management](appliance-schedule-management)
 
 To set the start time when auto discovery runs (instead of the default 2am), first learn the appliance ID:
 ```
@@ -292,8 +294,10 @@ time  frequency
 09:00 daily
 ```
 
-## Appliance Info And Report Commands (10.0.4 to 11.0.4)
+## Appliance Info And Report Commands (10.0.4 to 11.0.3)
 
+> **Warning**:   This method will be deprecated in a future release and replaced with [Appliance Schedule Management](appliance-schedule-management) and [Appliance Parameter and Slot Management](appliance-parameter-and-slot-management). 
+> 
 > **Note**:   If you want to manage appliance parameters such as slots, use the **Get-AGMLibApplianceParameter** and **Set-AGMLibApplianceParameter** commands documented [here](#appliance-parameter-and-slot-management).
 
 You can run info and report commands on an appliance using AGMPowerCLI.  To do this we need to tell the Management Console which appliance to run the command on. So first learn your appliance ID with ```Get-AGMAppliance```.  In this example the appliance we want to work with is ID 70194.
@@ -380,7 +384,7 @@ If you need to send multiple arguments separate them with an **&**, for example,
 Get-AGMAPIApplianceReport -applianceid 406219 -command reportimages -arguments "-a 0&-s" |  Export-Csv disks.csv
 ```
 
-## Appliance Logs (10.0.4 to 11.0.4)
+## Appliance Logs (10.0.4 to 11.0.3)
 
 We can fetch logs from an Appliance with the following command:
 ```
@@ -394,7 +398,7 @@ A zip file will download in the folder you ran the command in.
 * You can also use ```-startdate``` and ```-enddate``` for instance ```-startdate "2022-10-01" -enddate "2022-10-04"```
 
 
-## Appliance Parameter and Slot Management (10.0.4 to 11.0.4)
+## Appliance Parameter and Slot Management (10.0.4 to 11.0.3)
 
 Each appliance has a set of parameters that are used to:
 
@@ -403,6 +407,8 @@ Each appliance has a set of parameters that are used to:
 * Set values such as timeouts
 
 ### Displaying and setting parameters
+
+> **Warning**:   This method will be deprecated in a future release and replaced with [Appliance Schedule Management](appliance-schedule-management) and [Appliance Parameter and Slot Management](appliance-parameter-and-slot-management). 
 
 If you have a single appliance then you can run this command to display all available parameters:
 ```
@@ -461,7 +467,6 @@ Set-AGMLibApplianceParameter -param maxconcurrentmountsperhost -value 2
 Note this is a system wide parameter. There is no way to set this on a per host basis.
 
 ### Changing maximum mount and backup jobs per appliance using slots (appliance level - affects all hosts)
-
 
 Each backup appliance uses a pacing mechanism known as *slots* to manage the number of jobs that can run simultaneously on that appliance.   This means that if has a policy has more applications attempting to start a backup job than there are available slots, that the appliance running your jobs may hit a slot limit, resulting in the excess jobs over the slot limit going into *queued* status, waiting for free slots, rather than starting immediately.    There is nothing inherently wrong this, its simply a form of *pacing*.
 
@@ -553,7 +558,9 @@ Set-AGMLibApplianceParameter -applianceid 361153 -param reservedsnapslots -value
 Set-AGMLibApplianceParameter -applianceid 361153 -param maxsnapslots -value 15
 Set-AGMLibApplianceParameter -applianceid 361153 -param unreservedslots -value 15
 ```
-## Appliance Parameter and Slot Management (11.0.5 onwards)
+## Appliance Parameter and Slot Management
+
+> **Warning**:   This method will be enabled in a future release.
 
 First learn the ID and Appliance ID of the relevant appliance (you will need both IDs, where the appliance ID is also referred to as the cluster ID):
 ```
@@ -585,7 +592,9 @@ cluster    : @{id=7188; href=http://bmc-804817621514-dot-us-central1.backupdr.go
 paramvalue : 10
 
 ```
-## Appliance Schedule Management (11.0.5 onwards)
+## Appliance Schedule Management 
+
+> **Warning**:   This method will be enabled in a future release.
 
 First learn the ID of the Appliance you want to set the schedule on.
 ```
@@ -613,8 +622,7 @@ time  repeatinterval frequency
 20:00 1              daily
 ```
 
-
-## Appliance timezone (10.0.4 to 11.0.4)
+## Appliance timezone (10.0.4 to 11.0.3)
 To display Appliance timezone, learn the appliance ID and then query the relevant appliance:
 ```
 Get-AGMAppliance | select id,name
