@@ -400,7 +400,7 @@ A zip file will download in the folder you ran the command in.
 
 ## Appliance Parameter and Slot Management (10.0.4 to 11.0.3)
 
-> **Warning**:   This method will be deprecated in a future release and replaced with [Appliance Schedule Management](UsageExamples.md/#appliance-schedule-management) and [UsageExamples.md/#Appliance Parameter and Slot Management](appliance-parameter-and-slot-management). 
+> **Warning**:   This method will be deprecated in a future release and replaced with [Appliance Schedule Management](#appliance-schedule-management) and [Appliance Parameter and Slot Management](#appliance-parameter-and-slot-management). 
 
 Each appliance has a set of parameters that are used to:
 
