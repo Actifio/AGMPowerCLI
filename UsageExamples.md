@@ -248,7 +248,7 @@ id    name       ipaddress
 ```
 ## Appliance Discovery Schedule (10.0.4 to 11.0.3)
 
-> **Warning**:   This method will be deprecated in a future release and replaced with [Appliance Schedule Management](appliance-schedule-management)
+> **Warning**:   This method will be deprecated in a future release and replaced with [Appliance Schedule Management](UsageExamples.md/#appliance-schedule-management)
 
 To set the start time when auto discovery runs (instead of the default 2am), first learn the appliance ID:
 ```
@@ -400,6 +400,8 @@ A zip file will download in the folder you ran the command in.
 
 ## Appliance Parameter and Slot Management (10.0.4 to 11.0.3)
 
+> **Warning**:   This method will be deprecated in a future release and replaced with [Appliance Schedule Management](UsageExamples.md/#appliance-schedule-management) and [UsageExamples.md/#Appliance Parameter and Slot Management](appliance-parameter-and-slot-management). 
+
 Each appliance has a set of parameters that are used to:
 
 * Enable and disable functions.  These parameters are usually: 0 (off) or 1 (on)
@@ -407,8 +409,6 @@ Each appliance has a set of parameters that are used to:
 * Set values such as timeouts
 
 ### Displaying and setting parameters
-
-> **Warning**:   This method will be deprecated in a future release and replaced with [Appliance Schedule Management](appliance-schedule-management) and [Appliance Parameter and Slot Management](appliance-parameter-and-slot-management). 
 
 If you have a single appliance then you can run this command to display all available parameters:
 ```
