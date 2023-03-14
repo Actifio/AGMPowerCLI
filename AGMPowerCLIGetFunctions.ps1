@@ -937,6 +937,32 @@ function Get-AGMConsistencyGroup ([string]$id,[string]$filtervalue,[switch][alia
     }
 }
 
+
+function Get-AGMConsistencyGroupMember ([string]$id)
+{
+  <#
+    .SYNOPSIS
+    Gets a list of Consistency Groups Members
+
+    .EXAMPLE
+    Get-AGMConsistencyGroupMember -id 1234
+    Will display all members in consistency group ID 1234  
+
+
+    .DESCRIPTION
+    A function to display members in a consistency group
+    
+    #>
+
+    if (!($id))
+    {
+        $id = Read-Host "Consistency Group ID"
+    }
+
+    Get-AGMAPIData -endpoint /consistencygroup/$id/member
+    
+}
+
 # cloud credentials
 function Get-AGMCredential ([string]$id,[string]$credentialid)
 {
