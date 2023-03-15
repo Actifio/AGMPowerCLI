@@ -26,7 +26,7 @@
 RootModule = 'AGMPowerCLI.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.0.0.54'
+ModuleVersion = '0.0.0.55'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -116,6 +116,7 @@ FunctionsToExport = @(
     'Get-AGMAudit',
     'Get-AGMCloudVM',
     'Get-AGMConsistencyGroup',
+    'Get-AGMConsistencyGroupMember',
     'Get-AGMCredential',
     'Get-AGMDiskPool',
     'Get-AGMEvent',
