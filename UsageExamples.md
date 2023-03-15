@@ -2180,7 +2180,9 @@ New-AGMConsistencyGroup -groupname $groupname -description $description -applian
 Learn the consistencygroup ID with:
 ```
 Get-AGMConsistencyGroup | Select-Object id,groupname
-
+```
+Typical output should look like this:
+```
 id      groupname
 --      ---------
 1892114 ProdGroup
@@ -2200,7 +2202,9 @@ Learn member APP IDs with with a filter like this:
 ```
 $targethost = 1436920
 Get-AGMApplication -filtervalue hostid=$targethost | select id,appname,apptype,managed,@{N="ConsistencyGroupID";E={$_.consistencygroup.id}},@{N="ConsistencyGroupName";E={$_.consistencygroup.appname}} | Format-Table
-
+```
+Typical output should look like this:
+```
 id      appname            apptype         managed ConsistencyGroupID ConsistencyGroupName
 --      -------            -------         ------- ------------------ --------------------
 1892114 ProdGroupMain      ConsistGrp        False
@@ -2233,7 +2237,9 @@ We can display members with this command:
 ```
 $groupid = 1892114
 Get-AGMConsistencyGroupMember $groupid | Select-Object id,appname,apptype
-
+```
+Typical output should look like this:
+```
 id      appname apptype
 --      ------- -------
 1891636 DB1     SqlServerWriter
