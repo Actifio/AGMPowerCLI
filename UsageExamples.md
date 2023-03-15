@@ -56,7 +56,10 @@ This document contains usage examples that include both AGMPowerCLI and AGMPower
 >**[Connect-AGM](#connect-agm)**</br>
 
 **[Consistency Groups](#consistency-groups)**<br>
->**[Consistency Group Management](#consistency-group-management)**<br>
+>**[Create a Consistency Group ](#create-a-consistency-group)**<br>
+**[Adding Consistency Group members](#adding-consistency-group-members)**<br>
+**[Removing Consistency Group members](#removing-consistency-group-members)**<br>
+**[Removing a Consistency Group](#removing-a-consistency-group)**<br>
 
 **[DB2](#db2)**</br>
 >**[Creating a DB2 mount](#creating-a-db2-mount)**</br>
@@ -2132,8 +2135,6 @@ The Syntax to use Connect-AGM is documented here:
 
 # Consistency Groups
 
-## Consistency Group Management
-
 There are the commands that you can use to manage consistency groups:
 
 * Get-AGMConsistencyGroup
@@ -2143,7 +2144,7 @@ There are the commands that you can use to manage consistency groups:
 * Set-AGMConsistencyGroupMember
 * Remove-AGMConsistencyGroup
 
-#### Create a Consistency Group 
+### Create a Consistency Group 
 
 To create a consistency group we need to learn the ID of Appliance we want to create it on and the ID of the Host that it will use applications from:
 ```
@@ -2198,7 +2199,7 @@ $description = "Main Prod group"
 Set-AGMConsistencyGroup -groupname $groupname -description $description -applianceid $applianceid -groupid $groupid
 ```
 
-#### Adding Consistency Group members
+### Adding Consistency Group members
 
 Now we need to add applications to the group.   We need to know the application IDs
 Learn member APP IDs with with a filter like this:
