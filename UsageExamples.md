@@ -2139,17 +2139,18 @@ There are the commands that you can use to manage consistency groups:
 * Get-AGMConsistencyGroup
 * Get-AGMConsistencyGroupMember
 * New-AGMConsistencyGroup
-* Remove-AGMConsistencyGroup
 * Set-AGMConsistencyGroup
 * Set-AGMConsistencyGroupMember
-
+* Remove-AGMConsistencyGroup
 
 #### Create a Consistency Group 
 
 To create a consistency group we need to learn the ID of Appliance we want to create it on and the ID of the Host that it will use applications from:
 ```
 Get-AGMAppliance | Select-Object id,name
-
+```
+Typical output should look like this:
+```
 id      name
 --      ----
 1418114 melbourne-82270
@@ -2162,7 +2163,9 @@ If there are too many hosts but you know the host name use syntax like this:
 ```
 $hostname = "windows"
 Get-AGMHost -filtervalue hostname=$hostname | Select-Object id,name,ostype,vmtype
-
+```
+Typical output should look like this:
+```
 id      name    ostype vmtype
 --      ----    ------ ------
 1436920 windows Win32  GCP
