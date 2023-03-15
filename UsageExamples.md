@@ -2200,8 +2200,7 @@ Set-AGMConsistencyGroup -groupname $groupname -description $description -applian
 ```
 ### Adding Consistency Group members
 
-Now we need to add applications to the group.   We need to know the application IDs
-Learn member APP IDs with with a filter like this:
+Now we need to add applications to the group.  Learn potential member application IDs with with a filter like this:
 ```
 $targethost = 1436920
 Get-AGMApplication -filtervalue hostid=$targethost | select id,appname,apptype,managed,@{N="ConsistencyGroupID";E={$_.consistencygroup.id}},@{N="ConsistencyGroupName";E={$_.consistencygroup.appname}} | Format-Table
