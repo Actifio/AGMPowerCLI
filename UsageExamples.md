@@ -77,7 +77,7 @@ This document contains usage examples that include both AGMPowerCLI and AGMPower
 
 **[Hosts](#hosts)**<br>
 >**[Adding a Host](#adding-a-host)**<br>
-**[Counting your hosts](#counting-your-hosts)**<br>
+**[Counting Your Hosts](#counting-your-hosts)**<br>
 **[Finding a Host ID by Host Name](#finding-a-host-id-by-host-name)**<br>
 **[Finding a Host ID by Operating System Type](#finding-a-host-id-by-operating-system-type)**<br>
 **[Listing Your Hosts](#listing-your-hosts)**<br>
@@ -2341,11 +2341,8 @@ New-AGMHost -clusterid 144292692833 -hostname "prodhost1" -ipaddress "10.0.0.1"
 ```
 ## Counting Your Hosts
 A very simple way to count the total number of hosts is with a command like this, which will return a number.
-
-In this example we have 99 hosts:
 ```
 Get-AGMHostCount
-99  
 ```
 We now add filters, first to see how many are Compute Engine VMs :
 ```
