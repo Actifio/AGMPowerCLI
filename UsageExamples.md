@@ -56,7 +56,7 @@ This document contains usage examples that include both AGMPowerCLI and AGMPower
 >**[Connect-AGM](#connect-agm)**</br>
 
 **[Consistency Groups](#consistency-groups)**<br>
->**[Create and editing Consistency Group ](#create-and-editing-a-consistency-group)**<br>
+>**[Creating and editing Consistency Group ](#creating-and-editing-a-consistency-group)**<br>
 **[Adding Consistency Group members](#adding-consistency-group-members)**<br>
 **[Listing Consistency Group members](#listing-consistency-group-members)**<br>
 **[Removing Consistency Group members](#removing-consistency-group-members)**<br>
@@ -2145,7 +2145,7 @@ There are the commands that you can use to manage consistency groups:
 * Set-AGMConsistencyGroupMember
 * Remove-AGMConsistencyGroup
 
-### Create and editing a Consistency Group 
+### Creating and editing a Consistency Group 
 
 To create a consistency group we need to learn the ID of Appliance we want to create it on and the ID of the Host that it will use applications from:
 ```
@@ -2172,7 +2172,6 @@ id      name    ostype vmtype
 --      ----    ------ ------
 1436920 windows Win32  GCP
 ```
-
 We can then use a command like this to create our consistency group. Note this group has no members in it:
 ```
 $applianceid = 1418114
@@ -2199,7 +2198,6 @@ $groupname = "ProdGroupMain"
 $description = "Main Prod group"
 Set-AGMConsistencyGroup -groupname $groupname -description $description -applianceid $applianceid -groupid $groupid
 ```
-
 ### Adding Consistency Group members
 
 Now we need to add applications to the group.   We need to know the application IDs
@@ -2262,7 +2260,6 @@ Or we can filter on group ID:
 $groupid = 1892114
 Get-AGMApplication -filtervalue inconsistencygroupof=$groupid | Select-Object id,appname,apptype
 ```
-
 ### Removing Consistency Group members
 
 We can remove them from the group with syntax like this:
@@ -2271,9 +2268,8 @@ $groupid = 1891626
 $applicationid = 1891628
 Set-AGMConsistencyGroupMember -groupid $groupid -applicationid $applicationid -remove
 ```
-
 ### Removing a Consistency Group 
-We can delete  the group with syntax like this: 
+We can delete the group with syntax like this:
 ```
 $groupid = 1892114
 Remove-AGMConsistencyGroup $groupid
