@@ -495,11 +495,11 @@ function Get-AGMApplicationCount ([string]$filtervalue,[string]$keyword)
     Gets a count of Applications.  
 
     .EXAMPLE
-    Get-AGMImageCount
+    Get-AGMApplicationCount 
     Will count all Applications.  
 
     .EXAMPLE
-    et-AGMApplicationCount -filtervalue "apptype=VMbackup"
+    Get-AGMApplicationCount -filtervalue "apptype=VMbackup"
     Count all applications that are type VMBackup 
 
 
