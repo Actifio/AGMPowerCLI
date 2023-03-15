@@ -56,8 +56,9 @@ This document contains usage examples that include both AGMPowerCLI and AGMPower
 >**[Connect-AGM](#connect-agm)**</br>
 
 **[Consistency Groups](#consistency-groups)**<br>
->**[Create a Consistency Group ](#create-a-consistency-group)**<br>
+>**[Create and editing Consistency Group ](#create-and-editing-a-consistency-group)**<br>
 **[Adding Consistency Group members](#adding-consistency-group-members)**<br>
+**[Listing Consistency Group members](#listing-consistency-group-members)**<br>
 **[Removing Consistency Group members](#removing-consistency-group-members)**<br>
 **[Removing a Consistency Group](#removing-a-consistency-group)**<br>
 
@@ -2144,7 +2145,7 @@ There are the commands that you can use to manage consistency groups:
 * Set-AGMConsistencyGroupMember
 * Remove-AGMConsistencyGroup
 
-### Create a Consistency Group 
+### Create and editing a Consistency Group 
 
 To create a consistency group we need to learn the ID of Appliance we want to create it on and the ID of the Host that it will use applications from:
 ```
@@ -2237,6 +2238,7 @@ We can add multiple apps like this with comma separated list:
 $applicationid = "1891636,1891626"
 Set-AGMConsistencyGroupMember -groupid $groupid -applicationid $applicationid -add
 ```
+### Listing Consistency Group members
 We can display members with this command:
 ```
 $groupid = 1892114
@@ -2261,7 +2263,7 @@ $groupid = 1892114
 Get-AGMApplication -filtervalue inconsistencygroupof=$groupid | Select-Object id,appname,apptype
 ```
 
-#### Removing Consistency Group members
+### Removing Consistency Group members
 
 We can remove them from the group with syntax like this:
 ```
@@ -2270,7 +2272,7 @@ $applicationid = 1891628
 Set-AGMConsistencyGroupMember -groupid $groupid -applicationid $applicationid -remove
 ```
 
-#### Removing a Consistency Group 
+### Removing a Consistency Group 
 We can delete  the group with syntax like this: 
 ```
 $groupid = 1892114
