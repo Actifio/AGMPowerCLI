@@ -2134,48 +2134,137 @@ The Syntax to use Connect-AGM is documented here:
 
 ## Consistency Group Management
 
-There are five commands that you can use to manage consistency groups
+There are the commands that you can use to manage consistency groups:
 
 * Get-AGMConsistencyGroup
+* Get-AGMConsistencyGroupMember
 * New-AGMConsistencyGroup
 * Remove-AGMConsistencyGroup
 * Set-AGMConsistencyGroup
 * Set-AGMConsistencyGroupMember
 
+
+#### Create a Consistency Group 
+
 To create a consistency group we need to learn the ID of Appliance we want to create it on and the ID of the Host that it will use applications from:
-
-* Get-AGMAppliance
-* Get-AGMHost
-
-We can then use a command like this to create it. Note this group has no members in it:
 ```
-New-AGMConsistencyGroup -groupname "ProdGroup" -description "This is the prod group" -applianceid 70194 -hostid  70631
+Get-AGMAppliance | Select-Object id,name
+
+id      name
+--      ----
+1418114 melbourne-82270
+```
+Now learn the host ID:
+```
+Get-AGMHost | Select-Object id,name,ostype,vmtype
+```
+If there are too many hosts but you know the host name use syntax like this:
+```
+$hostname = "windows"
+Get-AGMHost -filtervalue hostname=$hostname | Select-Object id,name,ostype,vmtype
+
+id      name    ostype vmtype
+--      ----    ------ ------
+1436920 windows Win32  GCP
+```
+
+We can then use a command like this to create our consistency group. Note this group has no members in it:
+```
+$applianceid = 1418114
+$hostid = 1436920
+$groupname = "ProdGroup" 
+$description = "Prod DB server main group"
+$groupname = "ProdGroup" 
+New-AGMConsistencyGroup -groupname $groupname -description $description -applianceid $applianceid -hostid $hostid
 ```
 Learn the consistencygroup ID with:
+```
+Get-AGMConsistencyGroup | Select-Object id,groupname
 
-* Get-AGMConsistencyGroup
-
+id      groupname
+--      ---------
+1892114 ProdGroup
+```
 You can edit the name or description with the following syntax (changing group ID to suit):
 ```
-Set-AGMConsistencyGroup -groupname "bettername" -description "Even better description" -applianceid 70194 -groupid 353953
+$groupid = 1892114
+$groupname = "ProdGroupMain"
+$description = "Main Prod group"
+Set-AGMConsistencyGroup -groupname $groupname -description $description -applianceid $applianceid -groupid $groupid
 ```
+
+#### Adding Consistency Group members
+
 Now we need to add applications to the group.   We need to know the application IDs
 Learn member APP IDs with with a filter like this:
 ```
-$targethost = 70631
-Get-AGMApplication -filtervalue hostid=$targethost | select id,appname
+$targethost = 1436920
+Get-AGMApplication -filtervalue hostid=$targethost | select id,appname,apptype,managed,@{N="ConsistencyGroupID";E={$_.consistencygroup.id}},@{N="ConsistencyGroupName";E={$_.consistencygroup.appname}} | Format-Table
+
+id      appname            apptype         managed ConsistencyGroupID ConsistencyGroupName
+--      -------            -------         ------- ------------------ --------------------
+1892114 ProdGroupMain      ConsistGrp        False
+1891644 master             SqlServerWriter    True
+1891642 model              SqlServerWriter    True
+1891640 msdb               SqlServerWriter    True
+1891638 CRM                SqlServerWriter    True
+1891636 DB1                SqlServerWriter   False
+1891634 DB2                SqlServerWriter    True
+1891632 DB3                SqlServerWriter    True
+1891630 dummydb            SqlServerWriter    True
+1891628 C:\                FileSystem        False
+1891626 D:\                FileSystem        False
+1524463 windows            GCPInstance        True
+1437429 ProdDB             SqlServerWriter    True
+1437417 WINDOWS\SQLEXPRESS SqlInstance        True
 ```
-We can then add selected applications to the group with syntax like this.   Comma separate multiple IDs:
+We can then add selected applications to the group with syntax like this.   Only add unmanaged applications:
 ```
-Set-AGMConsistencyGroupMember -groupid 353953 -applicationid "210647,210645" -add
+$groupid = 1892114
+$applicationid=1891628
+Set-AGMConsistencyGroupMember -groupid $groupid -applicationid $applicationid -add
 ```
+We can add multiple apps like this with comma separated list:
+```
+$applicationid = "1891636,1891626"
+Set-AGMConsistencyGroupMember -groupid $groupid -applicationid $applicationid -add
+```
+We can display members with this command:
+```
+$groupid = 1892114
+Get-AGMConsistencyGroupMember $groupid | Select-Object id,appname,apptype
+
+id      appname apptype
+--      ------- -------
+1891636 DB1     SqlServerWriter
+1891628 C:\     FileSystem
+1891626 D:\     FileSystem
+```
+Note there are two other ways to get consistency group members.  We can filter on hostid and get all applications on the host:
+```
+$targethost = 1436920
+Get-AGMApplication -filtervalue hostid=$targethost | select id,appname,apptype,managed,@{N="ConsistencyGroupID";E={$_.consistencygroup.id}},@{N="ConsistencyGroupName";E={$_.consistencygroup.appname}} | Format-Table
+```
+Or we can filter on group ID:
+```
+$groupid = 1892114
+Get-AGMApplication -filtervalue inconsistencygroupof=$groupid | Select-Object id,appname,apptype
+```
+
+#### Removing Consistency Group members
+
 We can remove them from the group with syntax like this:
 ```
-Set-AGMConsistencyGroupMember -groupid 353953 -applicationid "210647,210645" -remove
+$groupid = 1891626
+$applicationid = 1891628
+Set-AGMConsistencyGroupMember -groupid $groupid -applicationid $applicationid -remove
 ```
+
+#### Removing a Consistency Group 
 We can delete  the group with syntax like this: 
 ```
-Remove-AGMConsistencyGroup 353953
+$groupid = 1892114
+Remove-AGMConsistencyGroup $groupid
 ```
 [Back to top](#usage-examples)
 # DB2
