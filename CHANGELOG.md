@@ -1,4 +1,7 @@
 # Change log
+## AGMPowerCLI 0.0.0.56
+* Add Get-AGMHostCount
+
 ## AGMPowerCLI 0.0.0.55
 * Add Get-AGMConsistencyGroupMember
 
