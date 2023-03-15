@@ -1237,6 +1237,46 @@ function Get-AGMHost ([string]$id,[string]$hostid,[string]$filtervalue,[string]$
         Get-AGMAPIData -endpoint /host -datefields $datefields -limit $limit -sort $sort
     }
 }
+function Get-AGMHostCount ([string]$filtervalue,[string]$keyword)
+{
+<#
+    .SYNOPSIS
+    Gets a count of hosts.  
+
+    .EXAMPLE
+    Get-AGMHostCount
+    Will count all Hosts.  
+
+    .EXAMPLE
+    Get-AGMHostCount -filtervalue vmtype="GCP"
+    Count all hosts that are VM type GCP (Compute Engine instances) 
+
+
+    .DESCRIPTION
+    A function to count all hosts
+    Multiple filtervalues need to be encased in double quotes and separated by the & symbol
+    Jobclasses are case sensitive, so please use correct syntax:   snapshot, OnVault
+    Filtervalues can be =, <, >, ~ (fuzzy) or ! (not)
+    
+    #>
+
+    if ($filtervalue)
+    {
+        $count = Get-AGMAPIData -endpoint /host -filtervalue $filtervalue -head
+    }
+    elseif ($keyword)
+    { 
+        $count = Get-AGMAPIData -endpoint /host -keyword $keyword -head
+    } 
+    else
+    {
+        $count = Get-AGMAPIData -endpoint /host -head
+    }
+    if ($count.headers."Actifio-Count")
+    {
+        $count.headers."Actifio-Count"
+    }
+}
 
 #Image (backup) 
 

@@ -121,6 +121,7 @@ FunctionsToExport = @(
     'Get-AGMDiskPool',
     'Get-AGMEvent',
     'Get-AGMHost',
+    'Get-AGMHostCount',
     'Get-AGMImage',
     'Get-AGMImageCount',
     'Get-AGMImageSystemRecovery',
