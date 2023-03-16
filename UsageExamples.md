@@ -2131,11 +2131,13 @@ This function has to add them all to ensure each instance is examined.   If you 
         --count=20
     ```
     c. Validate your new instances have been created.
+
     d. Build and run your discovery command:
     ```
     New-AGMLibGCEInstanceDiscovery -credentialid 1418122 -applianceid 145666187717 -project avwarglab1 -zone australia-southeast1-b -backupplanlabel backupplan -backup
     ```
     e.  Validate in Management Console that everything worked
+    
     f.  Now remove all your apps with name pattern:
     ```
     $appgrab = Get-AGMApplication -filtervalue "apptype=GCPInstance&appname~gcpdemo&managed=$true" 
