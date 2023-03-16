@@ -48,6 +48,7 @@ This document contains usage examples that include both AGMPowerCLI and AGMPower
 **[Compute Engine Instance Management](#compute-engine-instance-management)**<br>
 **[Compute Engine Instance Conversion from VMware VM](#compute-engine-instance-conversion-from-vmware-vm)**</br>
 **[Compute Engine Instance Multi Conversion from VMware VM](#compute-engine-instance-multi-conversion-from-vmware-vm)**</br>
+**[Compute Engine Instance Mount to Existing](#compute-engine-instance-mount-to-existing)**<br>
 **[Compute Engine Instance Mount](#compute-engine-instance-mount)**<br>
 **[Compute Engine Instance Multi Mount Disaster Recovery](#compute-engine-instance-multi-mount-disaster-recovery)**<br>
 **[Compute Engine Instance Image Audit](#compute-engine-instance-image-audit)**<br>
