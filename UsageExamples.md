@@ -1718,11 +1718,11 @@ We have two choices on how to handle this image:
 To mount a Compute Engine Instance backup to an existing Compute Engine Instance we use the **New-AGMLibGCEMountExisting** function.
 To run this function we need three pieces of data:
 
-* srcid:   The srcid is a number that indicates which appliance should perform the mount as well as which credential on that appliance will be used to authenticate the APIs needed for the mount. To learn srcid use:  
+* srcid. The srcid is a number that indicates which appliance should perform the mount as well as which credential on that appliance will be used to authenticate the APIs needed for the mount. To learn srcid use:  
     ```
     Get-AGMLibCredentialSrcID
     ```
-* instanceid or hostname or hostid.  This is the either the unique instance ID of he target compute engine instance (that we are mounting to) or we can instead supply the hostname of that instance (provided it is unique on that management console).  We can also instead use the host ID.  Note there are three ways to specify the host, you only need to use one of them!  To learn the relevant values use this command:  
+* instanceid or hostname or hostid. This is the either the unique instance ID of he target compute engine instance (that we are mounting to) or we can instead supply the hostname of that instance (provided it is unique on that management console).  We can also instead use the host ID.  Note there are three ways to specify the host, you only need to use one of them!  To learn the relevant values use this command:  
     ```
     Get-AGMHost -filtervalue vmtype=GCP -sort hostname:asc | select id,hostname,@{N='instanceid'; E={$_.uniquename}}
     ```
@@ -1736,7 +1736,7 @@ To run this function we need three pieces of data:
     * pd-extreme
     * pd-ssd
     * pd-standard
-    * hyperdisk-extreme
+    * hyperdisk-extreme (provided the instance and region can support this)
 
 So in this example we learn the srcid:
 ```
@@ -1768,7 +1768,7 @@ id      consistencydate     hostid
 1891437 2023-03-15 06:00:14 1436920
 ```
 
-Once we have assembled the three mandatory pieces of information we can assemble our command.   This is the same command using three different ways to specify the target host.  You only need to use one of them!
+Once we have assembled the three mandatory pieces of information we can assemble our command.   Below we use the same command using three different ways to specify the target host.  You only need to use one of these commands!
 ```
 New-AGMLibGCEMountExisting -srcid 4368 -imageid 1905435 -hostname windows
 New-AGMLibGCEMountExisting -srcid 4368 -imageid 1905435 -hostid 1436920 
@@ -1990,7 +1990,9 @@ New-AGMLibGCEConversion -projectname project1 -machinetype n1-standard-2 -instan
 
 ## Compute Engine Instance Onboarding Automation
 
-If we are onboarding large numbers of Compute Engine Instances or we want to auto protect new instances using automation, we can use a function called: **New-AGMLibGCEInstanceDiscovery**
+If we are onboarding large numbers of Compute Engine Instances or we want to auto protect new instances using automation, we can use a function called: **New-AGMLibGCEInstanceDiscovery**  
+
+We can run this command against each project/zone combination where we have instances we want to onboard (so if you have 40 projects all using the same zone, then you need to run this command 40 times) or we can put all project/zones in a CSV file so we can run this command just once.
 
 ### Using a CSV file to work with multiple zones and or projects
 
@@ -2062,7 +2064,7 @@ Instead of using a discovery file we can specify the four variables needed by th
 * ```-projectid avwservicelab1``` The Project we will examine for new Compute Engine Instances
 * ```-zone australia-southeast1-b``` The Zone we will examine for new Compute Engine Instances
 
-We then specify additional options to control how backups are run:
+We then specify additional options to control whether the discovered instances are managed with a backup plan:
 
 * ```-backup``` To specify that all discovered Compute Engine Instances should have a backup plan applied
 * ```-bootonly``` To specify that all discovered Compute Engine Instances should only have their boot drives protected by any backup plan
@@ -2070,8 +2072,8 @@ We then specify additional options to control how backups are run:
 * ```-nobackup``` To specify that all discovered Compute Engine Instances should **not** have a backup plan applied
 * ```-sltid xxx``` To apply the specified Service Template ID for the backup plan
 * ```-sltname xxx``` To apply the specified Service Template Name for the backup plan
-* ``` -usertag backupplan``` To look for a user specified label on each VM to determine which SLT to use. In this example the key would be **backupplan**  and the value of the key should be a valid SLT name
-* ```-diskbackuplabel diskbackup ``` To look for a user specified lavel on each VM to determine which disks to backup. In this example the key would be **diskbackup**  and the value should be **bootonly**.  If any other value is specified then all disks will be backed up.
+* ```-usertag backupplan``` To look for a user specified label on each VM to determine which SLT to use. In this example the key would be **backupplan**  and the value of the key should be a valid SLT name
+* ```-diskbackuplabel diskbackup``` To look for a user specified lavel on each VM to determine which disks to backup. In this example the key would be **diskbackup**  and the value should be **bootonly**.  If any other value is specified then all disks will be backed up.
 
 So an example command would look like this.  In this example we backup all instances using the sltname found in the **backupplan** label on each instance.
 ```
