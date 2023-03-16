@@ -2007,7 +2007,7 @@ The CSV needs the following columns:
 * **project**  this is the project where we are going to look for new Compute Engine Instances
 * **zone** this is the zone where we are going to look for new Compute Engine Instances
 
-So if you have two projects, then ensure the credential you have added as a Cloud Credential has been added to both projects as a service account in IAM (with the **Backup and DR Compute Engine Operator** role) and then add a line in the CSV for each zone in that project where you want to search.  This does mean if you add new zones to your project you will need to update the CSV to search in those zones.
+So if you have two projects, then ensure the credential you have added as a Cloud Credential has been added to both projects as a service account in IAM (with the **Backup and DR Compute Engine Operator** role) and then add a line in the CSV for each zone in that project where you want to search.  This does mean if you start adding new instances to different zones in your project you will need to update the CSV to search in those zones.
 
 An example CSV file is as follows:
 ```
@@ -2019,11 +2019,11 @@ credentialid,applianceid,project,zone
 When you run  ```New-AGMLibGCEInstanceDiscovery``` you have to specify one of these two choices:
 * ```-nobackup```  This will add all new Compute Engine Instances it finds without protecting them
 * ```-backup```  This will add all new Compute Engine Instances it finds and for each Instance it will apply a backup plan based on two possible settings: 
-    * you specify an instance label with ```-usertag```  If the value for that label is the name of an existing policy template, it will automatically protect that instance using that template.  In addition we can specify ````diskbackuplabel``` to specify a label which can determine if only the boot drive of this instance shiould be protected
+    * you specify an instance label with ```-usertag```  If the value for that label is the name of an existing policy template, it will automatically protect that instance using that template. 
     * you specify a template ID with ```-sltid``` or template name with ```-sltname```
-    * you can also specify ```-bootonly``` to only protect the bootdisk of all appliances that are managed with a backup plan
+    * you can also specify ```-bootonly``` to only protect the bootdisk of all appliances that are managed with a backup plan.   In addition we can specify ````diskbackuplabel``` to specify a label which can determine if only the boot drive of this instance shiould be protected
 
-An example run is as follows.  In the first zone, no new instances were found.  In the second zone, 3 were found and two protected.   A second run is made on each zone where more than 50 instances need to be processed (since we process 50 at a time).  The third zone had no new VMs.   
+An example run is as follows.  In the first zone, no new instances were found.  In the second zone, 3 were found and two protected.   A second run is made on each zone where more than 5 instances need to be processed (since we process 5 at a time).  The third zone had no new VMs.   
 ```
 New-AGMLibGCEInstanceDiscovery -discoveryfile ./disco.csv -backup -sltid 12345
 ```
@@ -2113,6 +2113,58 @@ You can either look at Templates in the SLA Architect in Web GUI or run: ```Get-
 3. What if I don't want all instances to be added?   
 
 This function has to add them all to ensure each instance is examined.   If you add them then delete them, they won't be added back in a second run because an Actifio label with a value of **unmanaged** will be added to them.
+
+4. If I want to test this function how can I do this easily?
+
+    1.  Create a new template with a single snapshot policy that never runs.  You do this by clicking on *Except* and setting it to *everyday* so it snaps *everyday* except *everyday*    In the example below we call this template *testtemplate*
+    1.  Create a large number of VMs with this GCLOUD command:
+    ```
+    gcloud compute instances bulk create \
+        --name-pattern=gcpdemo-### \
+        --zone=australia-southeast1-b \
+        --machine-type=n1-standard-1 \
+        --network=arglab1network \
+        --subnet=sydney \
+        --image=projects/debian-cloud/global/images/debian-11-bullseye-v20220719 \
+        --no-address \
+        --labels=backupplan=testtemplate \
+        --count=20
+    ```
+    1. Validate your new instances have been created.
+    1. Build and run your discovery command:
+    ```
+    New-AGMLibGCEInstanceDiscovery -credentialid 1418122 -applianceid 145666187717 -project avwarglab1 -zone australia-southeast1-b -backupplanlabel backupplan -backup
+    ```
+    1.  Validate in Management Console that everything worked
+
+    1.  Now remove all your apps with name pattern:
+    ```
+    $appgrab = Get-AGMApplication -filtervalue "apptype=GCPInstance&appname~gcpdemo&managed=$true" 
+    $appgrab | Foreach -parallel {
+        $agmip = $using:agmip 
+        $AGMToken = $using:AGMToken
+        $AGMSESSIONID = $using:AGMSESSIONID
+        $slaid = $_.sla.id
+        $appid = $_.id
+        Remove-AGMSLA -slaid $slaid
+        Remove-AGMApplication -appid $appid
+    } -throttlelimit 5
+    ```
+    1. Now remove the hosts:
+    ```
+    $hostgrab = Get-AGMHost -filtervalue "hostname~gcpdemo" 
+    $hostgrab | Foreach -parallel {
+        $agmip = $using:agmip 
+        $AGMToken = $using:AGMToken
+        $AGMSESSIONID = $using:AGMSESSIONID
+        $hostid = $_.id
+        $applianceid = $_.appliance.clusterid
+        Remove-AGMhost -id $hostid -applianceid $applianceid
+        Start-sleep -seconds 5
+    } -throttlelimit 5
+    ```
+    6. On GCP side, delete all the new GCE Instances.
+
 
 ## Compute Engine Instance Image Audit
 
