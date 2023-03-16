@@ -1713,24 +1713,24 @@ We have two choices on how to handle this image:
 ```
 ## Compute Engine Instance Mount to Existing
 
-> **Note**:  If the mount fails with errors regarding the use of hyperdisk-extreme, ensure you manually specify a disktype that can be used with your target instance such as ```-disktype pd-balanced```
+> **Note**:  If the mount fails with errors regarding the use of **hyperdisk-extreme**, ensure you manually specify a disktype that can be used with your target instance such as ```-disktype pd-balanced```
 
 To mount a Compute Engine Instance backup to an existing Compute Engine Instance we use the **New-AGMLibGCEMountExisting** function.
 To run this function we need three pieces of data:
 
-* srcid:   The srcid is a number that iundicates which appliance should perform the mount and which credential on that appliance will be used to authenticate the APIs needed for the mount. To learn srcid use:  
-```
-Get-AGMLibCredentialSrcID
-```
+* srcid:   The srcid is a number that indicates which appliance should perform the mount as well as which credential on that appliance will be used to authenticate the APIs needed for the mount. To learn srcid use:  
+    ```
+    Get-AGMLibCredentialSrcID
+    ```
 * instanceid or hostname or hostid.  This is the either the unique instance ID of he target compute engine instance (that we are mounting to) or we can instead supply the hostname of that instance (provided it is unique on that management console).  We can also instead use the host ID.  Note there are three ways to specify the host, you only need to use one of them!  To learn the relevant values use this command:  
-```
-Get-AGMHost -filtervalue vmtype=GCP -sort hostname:asc | select id,hostname,@{N='instanceid'; E={$_.uniquename}}
-```
+    ```
+    Get-AGMHost -filtervalue vmtype=GCP -sort hostname:asc | select id,hostname,@{N='instanceid'; E={$_.uniquename}}
+    ```
 * imageid:  We need the ID of the image we are mounting. To learn imageid if hostname is called centos, use this:
-```
-$hostname = "windows"
-Get-AGMImage -filtervalue "apptype=GCPInstance&hostname=$hostname" | select id,consistencydate,@{N='hostid' ; E={$_.host.id}}
-```
+    ```
+    $hostname = "windows"
+    Get-AGMImage -filtervalue "apptype=GCPInstance&hostname=$hostname" | select id,consistencydate,@{N='hostid' ; E={$_.host.id}}
+    ```
 * disktype:   This is not a mandatory field but may need to be specified.   Valid values are:
     * pd-balanced
     * pd-extreme
@@ -1780,7 +1780,7 @@ New-AGMLibGCEMountExisting -srcid 5230 -instanceid 3259136228063997846 -imageid 
 ```
 ## Compute Engine Instance Mount
 
-> **Note**:  If the mount fails with errors regarding the use of hyperdisk-extreme, ensure you manually specify a disktype that can be used to create your target instance, such as ```-disktype pd-balanced```
+> **Note**:  If the mount fails with errors regarding the use of **hyperdisk-extreme**, ensure you manually specify a disktype that can be used to create your target instance, such as ```-disktype pd-balanced```
 
 In this user story we are going to use Persistent Disk Snapshots to create a new Compute Engine Instance.  This will be done by using the following command:   **New-AGMLibGCPInstance**
 
