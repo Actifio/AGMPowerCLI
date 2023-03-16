@@ -2007,7 +2007,7 @@ The CSV needs the following columns:
 * **project**  this is the project where we are going to look for new Compute Engine Instances
 * **zone** this is the zone where we are going to look for new Compute Engine Instances
 
-So if you have two projects, then ensure the credential you have added as a Cloud Credential has been added to both projects as a service account in IAM and then add a line in the CSV for each zone in that project where you want to search.  This does mean if you add new zones to your project you will need to update the CSV to search in those zones.
+So if you have two projects, then ensure the credential you have added as a Cloud Credential has been added to both projects as a service account in IAM (with the **Backup and DR Compute Engine Operator** role) and then add a line in the CSV for each zone in that project where you want to search.  This does mean if you add new zones to your project you will need to update the CSV to search in those zones.
 
 An example CSV file is as follows:
 ```
@@ -2018,11 +2018,14 @@ credentialid,applianceid,project,zone
 ```
 When you run  ```New-AGMLibGCEInstanceDiscovery``` you have to specify one of these two choices:
 * ```-nobackup```  This will add all new Compute Engine Instances it finds without protecting them
-* ```-backup```  This will add  all new Compute Engine Instances it finds and for each Instance it will look for a label you specify with ```-usertag```  If the value for that label is the name of an existing policy template, it will automatically protect that instance using that template
+* ```-backup```  This will add all new Compute Engine Instances it finds and for each Instance it will apply a backup plan based on two possible settings: 
+    * you specify an instance label with ```-usertag```  If the value for that label is the name of an existing policy template, it will automatically protect that instance using that template.  In addition we can specify ````diskbackuplabel``` to specify a label which can determine if only the boot drive of this instance shiould be protected
+    * you specify a template ID with ```-sltid``` or template name with ```-sltname```
+    * you can also specify ```-bootonly``` to only protect the bootdisk of all appliances that are managed with a backup plan
 
 An example run is as follows.  In the first zone, no new instances were found.  In the second zone, 3 were found and two protected.   A second run is made on each zone where more than 50 instances need to be processed (since we process 50 at a time).  The third zone had no new VMs.   
 ```
-New-AGMLibGCEInstanceDiscovery -discoveryfile ./disco.csv -backup
+New-AGMLibGCEInstanceDiscovery -discoveryfile ./disco.csv -backup -sltid 12345
 ```
 Output should look like this:
 ```
@@ -2064,7 +2067,9 @@ Instead of using a discovery file we can specify the four variables needed by th
 * ```-projectid avwservicelab1``` The Project we will examine for new Compute Engine Instances
 * ```-zone australia-southeast1-b``` The Zone we will examine for new Compute Engine Instances
 
-We then specify additional options to control whether the discovered instances are managed with a backup plan:
+### Additional parameters we can specify
+
+We can specify additional options to control whether the discovered instances are managed with a backup plan:
 
 * ```-backup``` To specify that all discovered Compute Engine Instances should have a backup plan applied
 * ```-bootonly``` To specify that all discovered Compute Engine Instances should only have their boot drives protected by any backup plan
@@ -2073,7 +2078,7 @@ We then specify additional options to control whether the discovered instances a
 * ```-sltid xxx``` To apply the specified Service Template ID for the backup plan
 * ```-sltname xxx``` To apply the specified Service Template Name for the backup plan
 * ```-usertag backupplan``` To look for a user specified label on each VM to determine which SLT to use. In this example the key would be **backupplan**  and the value of the key should be a valid SLT name
-* ```-diskbackuplabel diskbackup``` To look for a user specified lavel on each VM to determine which disks to backup. In this example the key would be **diskbackup**  and the value should be **bootonly**.  If any other value is specified then all disks will be backed up.
+* ```-diskbackuplabel diskbackup``` To look for a user specified label on each VM to determine which disks to backup. In this example the key would be **diskbackup**  and the value should be **bootonly**.  If any other value is specified then all disks will be backed up.
 
 So an example command would look like this.  In this example we backup all instances using the sltname found in the **backupplan** label on each instance.
 ```
