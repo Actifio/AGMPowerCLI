@@ -2116,8 +2116,8 @@ This function has to add them all to ensure each instance is examined.   If you 
 
 4. If I want to test this function how can I do this easily?
 
-    1.  Create a new template with a single snapshot policy that never runs.  You do this by clicking on *Except* and setting it to *everyday* so it snaps *everyday* except *everyday*    In the example below we call this template *testtemplate*
-    1.  Create a large number of VMs with this GCLOUD command:
+    a.  Create a new template with a single snapshot policy that never runs.  You do this by clicking on *Except* and setting it to *everyday* so it snaps *everyday* except *everyday*    In the example below we call this template *testtemplate*
+    b.  Create a large number of VMs with this GCLOUD command (edit to mtach your project):
     ```
     gcloud compute instances bulk create \
         --name-pattern=gcpdemo-### \
@@ -2130,14 +2130,13 @@ This function has to add them all to ensure each instance is examined.   If you 
         --labels=backupplan=testtemplate \
         --count=20
     ```
-    1. Validate your new instances have been created.
-    1. Build and run your discovery command:
+    c. Validate your new instances have been created.
+    d. Build and run your discovery command:
     ```
     New-AGMLibGCEInstanceDiscovery -credentialid 1418122 -applianceid 145666187717 -project avwarglab1 -zone australia-southeast1-b -backupplanlabel backupplan -backup
     ```
-    1.  Validate in Management Console that everything worked
-
-    1.  Now remove all your apps with name pattern:
+    e.  Validate in Management Console that everything worked
+    f.  Now remove all your apps with name pattern:
     ```
     $appgrab = Get-AGMApplication -filtervalue "apptype=GCPInstance&appname~gcpdemo&managed=$true" 
     $appgrab | Foreach -parallel {
@@ -2150,7 +2149,7 @@ This function has to add them all to ensure each instance is examined.   If you 
         Remove-AGMApplication -appid $appid
     } -throttlelimit 5
     ```
-    1. Now remove the hosts:
+    g. Now remove the hosts:
     ```
     $hostgrab = Get-AGMHost -filtervalue "hostname~gcpdemo" 
     $hostgrab | Foreach -parallel {
@@ -2163,7 +2162,7 @@ This function has to add them all to ensure each instance is examined.   If you 
         Start-sleep -seconds 5
     } -throttlelimit 5
     ```
-    6. On GCP side, delete all the new GCE Instances.
+    h. On GCP side, delete all the new GCE Instances.
 
 
 ## Compute Engine Instance Image Audit
