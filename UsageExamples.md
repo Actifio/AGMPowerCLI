@@ -2117,6 +2117,7 @@ This function has to add them all to ensure each instance is examined.   If you 
 4. If I want to test this function how can I do this easily?
 
     a.  Create a new template with a single snapshot policy that never runs.  You do this by clicking on *Except* and setting it to *everyday* so it snaps *everyday* except *everyday*    In the example below we call this template *testtemplate*
+    
     b.  Create a large number of VMs with this GCLOUD command (edit to mtach your project):
     ```
     gcloud compute instances bulk create \
