@@ -2019,9 +2019,9 @@ credentialid,applianceid,project,zone
 When you run  ```New-AGMLibGCEInstanceDiscovery``` you have to specify one of these two choices:
 * ```-nobackup```  This will add all new Compute Engine Instances it finds without protecting them
 * ```-backup```  This will add all new Compute Engine Instances it finds and for each Instance it will apply a backup plan based on two possible settings: 
-    * you specify an instance label with ```-usertag```  If the value for that label is the name of an existing policy template, it will automatically protect that instance using that template. 
+    * you specify an instance label with ```-backupplanlabel```  If the value for that label is the name of an existing policy template, it will automatically protect that instance using that template. 
     * you specify a template ID with ```-sltid``` or template name with ```-sltname```
-    * you can also specify ```-bootonly``` to only protect the bootdisk of all appliances that are managed with a backup plan.   In addition we can specify ````diskbackuplabel``` to specify a label which can determine if only the boot drive of this instance shiould be protected
+    * you can also specify ```-bootonly``` to only protect the bootdisk of all appliances that are managed with a backup plan.   In addition we can specify ```diskbackuplabel``` to specify a label which can determine if only the boot drive of this instance shiould be protected
 
 An example run is as follows.  In the first zone, no new instances were found.  In the second zone, 3 were found and two protected.   A second run is made on each zone where more than 5 instances need to be processed (since we process 5 at a time).  The third zone had no new VMs.   
 ```
@@ -2077,7 +2077,7 @@ We can specify additional options to control whether the discovered instances ar
 * ```-nobackup``` To specify that all discovered Compute Engine Instances should **not** have a backup plan applied
 * ```-sltid xxx``` To apply the specified Service Template ID for the backup plan
 * ```-sltname xxx``` To apply the specified Service Template Name for the backup plan
-* ```-usertag backupplan``` To look for a user specified label on each VM to determine which SLT to use. In this example the key would be **backupplan**  and the value of the key should be a valid SLT name
+* ```-backupplanlabel backupplan``` To look for a user specified label on each VM to determine which SLT to use. In this example the key would be **backupplan**  and the value of the key should be a valid SLT name
 * ```-diskbackuplabel diskbackup``` To look for a user specified label on each VM to determine which disks to backup. In this example the key would be **diskbackup**  and the value should be **bootonly**.  If any other value is specified then all disks will be backed up.
 
 So an example command would look like this.  In this example we backup all instances using the sltname found in the **backupplan** label on each instance.
@@ -2100,11 +2100,11 @@ New-AGMLibGCEInstanceDiscovery -credentialid 706606 -applianceid 144091747698 -p
 
 1. How do I tag the VM?    
 
-You can do that by specifying  **-usertag**.   So lets say you add a label to each relevant VM where the label name is *corporatepolicy* and the value is a valid template name, then when you run the command, add **-usertag "corporatepolicy"**
+You can do that by specifying  **-backupplanlabel**.   So lets say you add a label to each relevant VM where the label name is *corporatepolicy* and the value is a valid template name, then when you run the command, add **-backupplanlabel "corporatepolicy"**
 
 The whole command would look like:
 ```
-New-AGMLibGCEInstanceDiscovery -discoveryfile ./disco.csv -backup -usertag "corporatepolicy"
+New-AGMLibGCEInstanceDiscovery -discoveryfile ./disco.csv -backup -backupplanlabel "corporatepolicy"
 ```
 2. How do I learn the names of the templates to use as values for the tags?    
 
