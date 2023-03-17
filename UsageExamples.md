@@ -2098,15 +2098,15 @@ New-AGMLibGCEInstanceDiscovery -credentialid 706606 -applianceid 144091747698 -p
 ```
 ### FAQ
 
-1. How do I tag the VM?    
+1. How do I use a label assigned to the compute engine instance?    
 
-You can do that by specifying  **-backupplanlabel**.   So lets say you add a label to each relevant VM where the label name is *corporatepolicy* and the value is a valid template name, then when you run the command, add **-backupplanlabel "corporatepolicy"**
+You can do that by specifying  **-backupplanlabel**.   So lets say you add a label to each relevant instance where the label name is *corporatepolicy* and the value is a valid template name, then when you run the command, add **-backupplanlabel "corporatepolicy"**
 
 The whole command would look like:
 ```
 New-AGMLibGCEInstanceDiscovery -discoveryfile ./disco.csv -backup -backupplanlabel "corporatepolicy"
 ```
-2. How do I learn the names of the templates to use as values for the tags?    
+2. How do I learn the names of the templates to use as values for the labels?    
 
 You can either look at Templates in the SLA Architect in Web GUI or run: ```Get-AGMSLT```
 
