@@ -1722,7 +1722,7 @@ To run this function we need three pieces of data:
     ```
     Get-AGMLibCredentialSrcID
     ```
-* instanceid or hostname or hostid. This is the either the unique instance ID of he target compute engine instance (that we are mounting to) or we can instead supply the hostname of that instance (provided it is unique on that management console).  We can also instead use the host ID.  Note there are three ways to specify the host, you only need to use one of them!  To learn the relevant values use this command:  
+* instanceid or hostname or hostid. This is the either the unique instance ID of the target compute engine instance (that we are mounting to) or we can instead supply the hostname of that instance (provided it is unique on that management console).  We can also instead use the host ID.  Note there are three ways to specify the host, you only need to use one of them!  To learn the relevant values use this command:  
     ```
     Get-AGMHost -filtervalue vmtype=GCP -sort hostname:asc | select id,hostname,@{N='instanceid'; E={$_.uniquename}}
     ```
