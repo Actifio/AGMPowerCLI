@@ -1,4 +1,7 @@
 # Change log
+## AGMPowerCLI 0.0.0.57
+* Add Get-AGMJobCount
+
 ## AGMPowerCLI 0.0.0.56
 * Add Get-AGMHostCount
 
