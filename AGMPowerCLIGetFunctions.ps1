@@ -1524,7 +1524,7 @@ function Get-AGMJob ([string]$id,[string]$filtervalue,[string]$keyword,[switch][
     
     #>
 
-    $datefields = "queuedate,expirationdate,startdate"
+    $datefields = "consistencydate,queuedate,expirationdate,startdate"
     # if user doesn't ask for a limit, send 0 so we know to ignore it
     if (!($limit))
     { 
@@ -1553,6 +1553,48 @@ function Get-AGMJob ([string]$id,[string]$filtervalue,[string]$keyword,[switch][
     else
     {
         Get-AGMAPIData -endpoint /job -datefields $datefields -limit $limit -sort $sort -duration
+    }
+}
+
+
+#job count
+function Get-AGMJobCount ([string]$filtervalue,[string]$keyword)
+{
+<#
+    .SYNOPSIS
+    Gets a count of jobs
+    .EXAMPLE
+    Get-AGMJobCount 
+    Will count all jobs
+    .EXAMPLE
+    Get-AGMJobCount -filtervalue "apptype=VMbackup"
+    Count all jobs that are type VMBackup 
+    .DESCRIPTION
+    A function to count all Jobs known to AGM.  
+    Multiple filtervalues need to be encased in double quotes and separated by the & symbol
+    Jobclasses are case sensitive, so please use correct syntax:   snapshot, OnVault
+    Filtervalues can be =, <, >, ~ (fuzzy) or ! (not)
+    
+    #>
+
+    if ($filtervalue -and $keyword)
+    {
+        $count = Get-AGMAPIData -endpoint /job -filtervalue $filtervalue -keyword $keyword -head
+    }
+    elseif ($keyword)
+    { 
+        $count = Get-AGMAPIData -endpoint /job -keyword $keyword -head
+    } 
+    elseif($filtervalue ){
+    $count = Get-AGMAPIData -endpoint /job -filtervalue $filtervalue -head
+    }
+    else
+    {
+        $count = Get-AGMAPIData -endpoint /job -head
+    }
+    if ($count.headers."Actifio-Count")
+    {
+        $count.headers."Actifio-Count"
     }
 }
 
