@@ -127,6 +127,7 @@ FunctionsToExport = @(
     'Get-AGMImageSystemRecovery',
     'Get-AGMImageSystemStateOptions',
     'Get-AGMJob',
+    'Get-AGMJobCount',
     'Get-AGMJobHistory',
     'Get-AGMJobStatus',
     'Get-AGMLDAPConfig',
