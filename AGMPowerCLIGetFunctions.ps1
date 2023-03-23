@@ -1558,17 +1558,17 @@ function Get-AGMJob ([string]$id,[string]$filtervalue,[string]$keyword,[switch][
 
 
 #job count
-function Get-AGMJobCount ([string]$filtervalue,[string]$keyword)
+function Get-AGMJobCount ([string]$filtervalue,[string]$keyword,[switch]$options)
 {
 <#
     .SYNOPSIS
     Gets a count of jobs
     .EXAMPLE
     Get-AGMJobCount 
-    Will count all jobs
+    Will count all running and queued jobs
     .EXAMPLE
-    Get-AGMJobCount -filtervalue "apptype=VMbackup"
-    Count all jobs that are type VMBackup 
+    Get-AGMJobCount  -filtervalue jobclass=snapshot
+    Count all running and queued snapshot jobs
     .DESCRIPTION
     A function to count all Jobs known to AGM.  
     Multiple filtervalues need to be encased in double quotes and separated by the & symbol
@@ -1576,8 +1576,11 @@ function Get-AGMJobCount ([string]$filtervalue,[string]$keyword)
     Filtervalues can be =, <, >, ~ (fuzzy) or ! (not)
     
     #>
-
-    if ($filtervalue -and $keyword)
+    if ($options)
+    { 
+        Get-AGMAPIData -endpoint /job -o
+    }
+    elseif ($filtervalue -and $keyword)
     {
         $count = Get-AGMAPIData -endpoint /job -filtervalue $filtervalue -keyword $keyword -head
     }
@@ -1585,8 +1588,9 @@ function Get-AGMJobCount ([string]$filtervalue,[string]$keyword)
     { 
         $count = Get-AGMAPIData -endpoint /job -keyword $keyword -head
     } 
-    elseif($filtervalue ){
-    $count = Get-AGMAPIData -endpoint /job -filtervalue $filtervalue -head
+    elseif($filtervalue)
+    {
+        $count = Get-AGMAPIData -endpoint /job -filtervalue $filtervalue -head
     }
     else
     {
