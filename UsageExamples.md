@@ -1114,7 +1114,7 @@ Output will be blank but the VMs will all be deleted.
 
 ## Importing and Exporting Policy Templates
 
-In this user story we are going to export our Policy Templates (also called Service Level Templates or SLTs) from our AGM/Management Console in case we want to import them into a different one.
+In this user story we are going to export our Policy Templates (also called Service Level Templates or SLTs) from our AGM/Management Console in case we want to import them into a different one. It is highly recommended to export your Policy Templates on a regular basis, and store a copy of these in a redudant storage solution like Google Drive, or a Multi-region Google Cloud Storage bucket.
 
 First we validate our SLTs.
 
