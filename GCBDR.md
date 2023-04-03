@@ -97,7 +97,7 @@ You can now proceed to login having _pre-added_ the user and assigned it a Manag
 
 ### Login process - PowerShell
 
-This uses the two existing PowerShell modules, ```AGMPowerCLI`` and ```AGMPowerLib```.
+This uses the two existing PowerShell modules, ```AGMPowerCLI``` and ```AGMPowerLib```.
 These modules can be used with both an Actifio GO AGM and Backup and DR Management Consoles.  The only difference is that we specify the service account as **-agmuser**, we do NOT need to specify a password, but we instead need to specify the oauth2ClientId using **-oauth2ClientId**.   If you do not specify the oauth2clientid then the login will fail.
 
 
