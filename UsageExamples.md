@@ -1026,7 +1026,7 @@ In this scenario, a large number of VMs that were no longer required were remove
 Error 933 - Failed to find VM with matching BIOS UUID
 ```
 
-### 1)  Create a list of affected VMs
+### 1) Create a list of affected VMs
 
 First we need to create a list of affected VMs.  The simplest way to do this is to run these commands:
 
@@ -1040,7 +1040,7 @@ We grab just the Appname  (which is the VMname) and AppID of each affected VM an
 ```
 Get-AGMJobHistory -filtervalue "errorcode=933&startdate>2020-09-01"  | select appname,appid | sort-object appname | Get-Unique -asstring | Export-Csv -Path .\missingvms.csv -NoTypeInformation
 ```
-### 2). Edit your list if needed
+### 2) Edit your list if needed
 
 Now open your CSV file called missingvms.csv and go to the VMware administrator.
 Validate each VM is truly gone.
