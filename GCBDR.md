@@ -1,5 +1,5 @@
 # Overview
-This document describes how to configure PowerShell access to the Backup and DR Management Console.  This document will also provide guidance if you are converting from Actifio GO
+This document describes how to configure PowerShell access to the Backup and DR Management Console.  This document will also provide guidance if you are converting from Actifio GO.
 
 ## Prerequisites
 To perform Backup and DR PowerShell operations, you need the following:
