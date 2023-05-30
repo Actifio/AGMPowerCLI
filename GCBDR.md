@@ -44,6 +44,8 @@ You then need to go to **IAM & Admin** > **Service Accounts**.  Find that servic
 Decide where/how you will run your service account. You have two options:
 1. Compute Engine Instance with attached service account
 
+> **Warning**: If you plan to run the commands in **ROOT** user, then you should choose option 2, when we attach the service account to a GCP VM, it will be automatically activated for all authenticated users, the root user is not included.
+
 In option 1 we are going to use a Compute Engine instance to run our API commands/automation and because a Compute Engine Instance can have an attached Service Account, we can avoid the need to install a service key on that host.   The host needs the GCloud CLI installed (which is automatic if you use a Google image to create the instance).  
 
 In your project create or select an instance that you want to use for API operations.   Ensure the service account that is attached to the instance has the permissions detailed above.  You can use an existing instance or create a new one.   If you need to change/set the Service Account, the instance needs to be powered off.
