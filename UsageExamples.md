@@ -2947,22 +2947,23 @@ Note you can also add **-forget** to forget learned images, or **-owner** to tak
 
 ## Persistent Disk Import From OnVault
 
-Imports or forgets PD Snapshot images.  Note there is no Forget-AGMLibPDSnapshot command.  You can do import and forget from this function. 
+Imports or forgets PD Snapshot images. This function Imports all PD snapshot images created by appliance ID 1415019931 and import  destination is determined by specified diskpool ID
+Note there is no Forget-AGMLibPDSnapshot command.  You can do import and forget from this function. 
 
-Imports all PD Snapshot images from disk pool ID 20060633 onto Appliance ID 1415019931
+Imports all PD Snapshot images from disk pool ID 20060633:
 ```
 Import-AGMLibPDSnapshot -diskpoolid 20060633 -applianceid 1415019931 
 ```
 
-Imports all PD Snapshot images from disk pool ID 20060633 and App ID 4788 onto Appliance ID 1415019931:
+Imports all PD Snapshot images from disk pool ID 20060633 and App ID 4788:
 ```
 Import-AGMLibPDSnapshot -diskpoolid 20060633 -applianceid 1415019931 -appid 4788
 ```
-Imports all PD Snapshot images from disk pool ID 20060633 and App ID 4788 onto Appliance ID 1415019931 and takes ownership:
+Imports all PD Snapshot images from disk pool ID 20060633 and App ID 4788  and takes ownership:
 ```
 Import-AGMLibPDSnapshot -diskpoolid 20060633 -applianceid 1415019931 -appid 4788 -owner
 ```
-Forgets all PD Snapshot images imported from disk pool ID 20060633 and App ID 4788 onto Appliance ID 1415019931:
+Forgets all PD Snapshot images imported from disk pool ID 20060633 and App ID 4788 :
 ```
 Import-AGMLibPDSnapshot -diskpoolid 20060633 -applianceid 1415019931 -appid 4788 -forget
 ```

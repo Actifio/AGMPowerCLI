@@ -1,4 +1,7 @@
 # Change log
+## AGMPowerCLI 0.0.0.58
+* Update Import-AGMLibPDSnapshot help
+
 ## AGMPowerCLI 0.0.0.57
 * Add Get-AGMJobCount
 

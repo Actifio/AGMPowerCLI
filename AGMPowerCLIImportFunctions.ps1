@@ -94,27 +94,28 @@ Function Import-AGMPDSnapshot ([string]$diskpoolid,[string]$applianceid,[string]
     <#
     .SYNOPSIS
     Imports or forgets PD Snapshot images
+    This function Imports all PD snapshot images created by appliance ID 1415019931 and import destination is determined by specified diskpool ID
     There is no Import-AGMPDSnapshot command.   You can do import and forget from this function. 
 
     .EXAMPLE
     Import-AGMPDSnapshot -diskpoolid 20060633 -applianceid 1415019931 
 
-    Imports all PD Snapshot images from disk pool ID 20060633 onto Appliance ID 1415019931
+    Imports all PD Snapshot images from disk pool ID 20060633
 
     .EXAMPLE
     Import-AGMPDSnapshot -diskpoolid 20060633 -applianceid 1415019931 -appid 4788
     
-    Imports all PD Snapshot images from disk pool ID 20060633 and App ID 4788 onto Appliance ID 1415019931
+    Imports all PD Snapshot images from disk pool ID 20060633 and App ID 4788 
 
     .EXAMPLE
     Import-AGMPDSnapshot -diskpoolid 20060633 -applianceid 1415019931 -appid 4788 -owner
     
-    Imports all PD Snapshot images from disk pool ID 20060633 and App ID 4788 onto Appliance ID 1415019931 and takes ownership
+    Imports all PD Snapshot images from disk pool ID 20060633 and App ID 4788  and takes ownership
 
     .EXAMPLE
     Import-AGMPDSnapshot -diskpoolid 20060633 -applianceid 1415019931 -appid 4788 -forget
     
-    Forgets all PD Snapshot images imported from disk pool ID 20060633 and App ID 4788 onto Appliance ID 1415019931
+    Forgets all PD Snapshot images imported from disk pool ID 20060633 and App ID 4788 
 
     .DESCRIPTION
     A function to import PD Snapshot images
