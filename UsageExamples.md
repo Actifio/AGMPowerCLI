@@ -2892,7 +2892,7 @@ id      bucket          applianceid
 ```
 Now use the ID as diskpoolid and the applianceid and run this command: 
 ```
-Import-AGMLibOnVault -diskpoolid 1065513 -applianceid 144091747698 -forget
+Import-AGMOnVault -diskpoolid 1065513 -applianceid 144091747698 -forget
 ```
 Typical output will look like this, where 2 images were forgotten:
 ```
@@ -2917,31 +2917,31 @@ Prior to running your scripts you may want to import the latest OnVault images i
 
 In general we just run the command with two parameters like this.
 ```
-Import-AGMLibOnVault -diskpoolid 20060633 -applianceid 1415019931 
+Import-AGMOnVault -diskpoolid 20060633 -applianceid 1415019931 
 ```
 Learn Diskpool ID with this command.  The appliance named here is the appliance we are importing into.  So its not the source appliance, but the target appliance that is going to use the imported images:
 ```
-Import-AGMLibOnVault -listdiskpools
+Import-AGMOnVault -listdiskpools
 ```
 Now take the diskpool ID to learn the appliance ID.  This is the appliance ID of the appliance that made the images:
 ```
-Import-AGMLibOnVault -diskpoolid 199085 -listapplianceids
+Import-AGMOnVault -diskpoolid 199085 -listapplianceids
 ```
 If you want to import a specific application, learn the application ID with this command.  Note the backupcount is the number of images in the pool, not how many will be imported (which could be less):
 ```
-Import-AGMLibOnVault -diskpoolid 199085 -applianceid 1415019931 -listapps
+Import-AGMOnVault -diskpoolid 199085 -applianceid 1415019931 -listapps
 ```
 Then use the appid you learned to import: 
 ```
- Import-AGMLibOnVault -diskpoolid 199085 -applianceid 1415019931 -appid 4788
+ Import-AGMOnVault -diskpoolid 199085 -applianceid 1415019931 -appid 4788
 ```
 Or just import every image in that disk pool:
 ```
- Import-AGMLibOnVault -diskpoolid 199085 -applianceid 1415019931
+ Import-AGMOnVault -diskpoolid 199085 -applianceid 1415019931
 ```
 If you want to monitor the import, add **-monitor** to the command:
 ```
-Import-AGMLibOnVault -diskpoolid 199085 -applianceid 1415019931 -monitor
+Import-AGMOnVault -diskpoolid 199085 -applianceid 1415019931 -monitor
 ```
 Note you can also add **-forget** to forget learned images, or **-owner** to take ownership of those images.
 
@@ -2952,20 +2952,20 @@ Note there is no Forget-AGMLibPDSnapshot command.  You can do import and forget 
 
 Imports all PD Snapshot images from disk pool ID 20060633:
 ```
-Import-AGMLibPDSnapshot -diskpoolid 20060633 -applianceid 1415019931 
+Import-AGMPDSnapshot -diskpoolid 20060633 -applianceid 1415019931 
 ```
 
 Imports all PD Snapshot images from disk pool ID 20060633 and App ID 4788:
 ```
-Import-AGMLibPDSnapshot -diskpoolid 20060633 -applianceid 1415019931 -appid 4788
+Import-AGMPDSnapshot -diskpoolid 20060633 -applianceid 1415019931 -appid 4788
 ```
 Imports all PD Snapshot images from disk pool ID 20060633 and App ID 4788  and takes ownership:
 ```
-Import-AGMLibPDSnapshot -diskpoolid 20060633 -applianceid 1415019931 -appid 4788 -owner
+Import-AGMPDSnapshot -diskpoolid 20060633 -applianceid 1415019931 -appid 4788 -owner
 ```
 Forgets all PD Snapshot images imported from disk pool ID 20060633 and App ID 4788 :
 ```
-Import-AGMLibPDSnapshot -diskpoolid 20060633 -applianceid 1415019931 -appid 4788 -forget
+Import-AGMPDSnapshot -diskpoolid 20060633 -applianceid 1415019931 -appid 4788 -forget
 ```
 
 
