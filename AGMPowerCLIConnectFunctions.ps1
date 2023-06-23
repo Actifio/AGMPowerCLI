@@ -150,7 +150,7 @@ function Connect-AGM
         }
     }
 
-    # OATH handling
+    # OAUTH handling
     if (($oauth2ClientId) -or ($accesstoken))
     {
         if (((get-host).Version.Major -eq 7) -and ((get-host).Version.Minor -eq 3))
