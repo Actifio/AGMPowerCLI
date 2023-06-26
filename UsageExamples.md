@@ -3342,7 +3342,7 @@ However we could update a large number of images with this command:
 Set-AGMLibImage
 ```
 ## Unmounting an Image
-We can find mounted image with  [Get-AGMLibActiveImages](#active-mounts) 
+We can find mounted image with  [Get-AGMLibActiveImage](#active-mounts) 
 
 Then use this command to unmount and delete a mounted image:
 ```
