@@ -93,9 +93,9 @@ This document contains usage examples that include both AGMPowerCLI and AGMPower
 **[Image Expiration In Bulk](#image-expiration-in-bulk)**<br>
 **[Image Expiration For a Deleted Cloud Storage Bucket](#image-expiration-for-a-deleted-cloud-storage-bucket)**<br>
 **[Image Import From OnVault](#image-import-from-onvault)**<br>
-**[Persistent Disk Import From OnVault](#persistent-disk-import-from-onvault)**<canc>
+**[Persistent Disk Import From OnVault](#persistent-disk-import-from-onvault)**<br>
 **[Image Restore](#image-restore)**<br>
-**[Setting an Image Label](#setting-an-image-label)**</br>
+**[Setting an Image Label](#setting-an-image-label)**<br>
 **[Setting an Image Label in Bulk](#setting-an-image-label-in-bulk)**</br>
 
 **[Installation](#installation)**<br>
@@ -162,7 +162,7 @@ This document contains usage examples that include both AGMPowerCLI and AGMPower
 
 # AGM
 
-An AGM or Actifio Global Manager is the management end point for all our activities.  We login to the AGM with ```Connect-AGM``` and then issue our commands.   Google Cloud Backup and DR uses a Management Console which performs the same function.
+An AGM or Actifio Global Manager is the management end point for all our activities. We login to the AGM with ```Connect-AGM``` and then issue our commands. Google Cloud Backup and DR uses a Management Console which performs the same function.
 
 ## AGM Login
 
@@ -176,7 +176,7 @@ We login with the ```Connect-AGM``` command but the exact syntax will vary:
 
 ## AGM Version
 
-The following command will display the version.   It can also be used as a simple command to confirm connectivity:
+The following command will display the version. It can also be used as a simple command to confirm connectivity:
 ```
 Get-AGMVersion
 ```
@@ -185,7 +185,7 @@ Get-AGMVersion
 
 # Appliances
 
-An Appliance does the work of creating backups.  There are two kinds of Appliance depending on which product you are using.  These commands apply to both unless otherwise stated.
+An Appliance does the work of creating backups. There are two kinds of Appliance depending on which product you are using. These commands apply to both unless otherwise stated.
 
 | Product | Device 
 | ---- | ---- 
@@ -194,9 +194,9 @@ An Appliance does the work of creating backups.  There are two kinds of Applianc
 
 ## Appliance add and remove (Actifio only)
 
-> **Note**:   You cannot perform appliance add and remove in Google Cloud Backup and DR.  This is for Actifio only.
+> **Note**: You cannot perform appliance add and remove in Google Cloud Backup and DR. This is for Actifio only.
 
-You may want to add or remove a Sky Appliance from the AGM Web GUI.   You can list all the Sky Appliances with this command:
+You may want to add or remove a Sky Appliance from the AGM Web GUI. You can list all the Sky Appliances with this command:
 ```
 Get-AGMAppliance | select id,name,ipaddress
 ```
@@ -254,7 +254,7 @@ id    name       ipaddress
 ```
 ## Appliance Discovery Schedule (10.0.4 to 11.0.3)
 
-> **Warning**:   This method will be deprecated in a future release and replaced with [Appliance Schedule Management](#appliance-schedule-management)
+> **Warning**: This method will be deprecated in a future release and replaced with [Appliance Schedule Management](#appliance-schedule-management)
 
 To set the start time when auto discovery runs (instead of the default 2am), first learn the appliance ID:
 ```
@@ -302,9 +302,9 @@ time  frequency
 
 ## Appliance Info And Report Commands (10.0.4 to 11.0.3)
 
-> **Warning**:   This method will be deprecated in a future release and replaced with [Appliance Schedule Management](#appliance-schedule-management) and [Appliance Parameter and Slot Management](#appliance-parameter-and-slot-management). 
+> **Warning**: This method will be deprecated in a future release and replaced with [Appliance Schedule Management](#appliance-schedule-management) and [Appliance Parameter and Slot Management](#appliance-parameter-and-slot-management). 
 > 
-> **Note**:   If you want to manage appliance parameters such as slots, use the **Get-AGMLibApplianceParameter** and **Set-AGMLibApplianceParameter** commands documented [here](#appliance-parameter-and-slot-management).
+> **Note**: If you want to manage appliance parameters such as slots, use the **Get-AGMLibApplianceParameter** and **Set-AGMLibApplianceParameter** commands documented [here](#appliance-parameter-and-slot-management).
 
 You can run info and report commands on an appliance using AGMPowerCLI.  To do this we need to tell the Management Console which appliance to run the command on. So first learn your appliance ID with ```Get-AGMAppliance```.  In this example the appliance we want to work with is ID 70194.
 ```
@@ -318,7 +318,7 @@ id     name
 70194  backup-server-32897
 ```
 ### Running info commands
-We can use ```Get-AGMAPIApplianceInfo``` to send info (also known as udsinfo) commands.   In this example we send the ```udsinfo lshost``` command to the appliance with ID 70194.
+We can use ```Get-AGMAPIApplianceInfo``` to send info (also known as udsinfo) commands. In this example we send the ```udsinfo lshost``` command to the appliance with ID 70194.
 ```
 Get-AGMAPIApplianceInfo -applianceid 70194 -command lshost | select id,hostname
 ```
@@ -400,13 +400,13 @@ A zip file will download in the folder you ran the command in.
 
 * If you don't know what log types to download, just run the command without parameters.
 * If you have more than one appliance you will need to specify which appliance to download from with ```-applianceid xxxx``` You can learn applianceID with ```Get-AGMAppliance```
-* You can download agent (connector) logs by specifying the host ID with ```-hostid xxx``` and ```-logtypes "agent"``` or for AGM, ```-logtypes "connector"```   Learn host ID with ```Get-AGMHost```
+* You can download agent (connector) logs by specifying the host ID with ```-hostid xxx``` and ```-logtypes "agent"``` or for AGM, ```-logtypes "connector"``` Learn host ID with ```Get-AGMHost```
 * You can also use ```-startdate``` and ```-enddate``` for instance ```-startdate "2022-10-01" -enddate "2022-10-04"```
 
 
 ## Appliance Parameter and Slot Management (10.0.4 to 11.0.3)
 
-> **Warning**:   This method will be deprecated in a future release and replaced with [Appliance Schedule Management](#appliance-schedule-management) and [Appliance Parameter and Slot Management](#appliance-parameter-and-slot-management). 
+> **Warning**: This method will be deprecated in a future release and replaced with [Appliance Schedule Management](#appliance-schedule-management) and [Appliance Parameter and Slot Management](#appliance-parameter-and-slot-management). 
 
 Each appliance has a set of parameters that are used to:
 
@@ -474,9 +474,9 @@ Note this is a system wide parameter. There is no way to set this on a per host 
 
 ### Changing maximum mount and backup jobs per appliance using slots (appliance level - affects all hosts)
 
-Each backup appliance uses a pacing mechanism known as *slots* to manage the number of jobs that can run simultaneously on that appliance.   This means that if has a policy has more applications attempting to start a backup job than there are available slots, that the appliance running your jobs may hit a slot limit, resulting in the excess jobs over the slot limit going into *queued* status, waiting for free slots, rather than starting immediately.    There is nothing inherently wrong this, its simply a form of *pacing*.
+Each backup appliance uses a pacing mechanism known as *slots* to manage the number of jobs that can run simultaneously on that appliance. This means that if has a policy has more applications attempting to start a backup job than there are available slots, that the appliance running your jobs may hit a slot limit, resulting in the excess jobs over the slot limit going into *queued* status, waiting for free slots, rather than starting immediately. There is nothing inherently wrong this, its simply a form of *pacing*.
 
-To manage this we can adjust what are called slot values.  Note that while we are using AGMPowerLib commands to do this, you need to ensure your AGMPowerCLI is on version 0.0.0.35 or higher.   You can check your AGMPowerCLI version with this command:
+To manage this we can adjust what are called slot values.  Note that while we are using AGMPowerLib commands to do this, you need to ensure your AGMPowerCLI is on version 0.0.0.35 or higher. You can check your AGMPowerCLI version with this command:
 **Get-Command -module AGMPowerCLI**
 
 Firstly learn the ID of the relevant Appliance.  In this case the appliance running our jobs is **project1sky** so we will use applianceid **361153**
@@ -567,7 +567,7 @@ Set-AGMLibApplianceParameter -applianceid 361153 -param unreservedslots -value 1
 ```
 ## Appliance Parameter and Slot Management
 
-> **Note**:   This method will be enabled in a future release.
+> **Note**: This method will be enabled in a future release.
 
 First learn the ID and Appliance ID of the relevant appliance (you will need both IDs, where the appliance ID is also referred to as the cluster ID):
 ```
@@ -601,7 +601,7 @@ paramvalue : 10
 ```
 ## Appliance Schedule Management 
 
-> **Note**:   This method will be enabled in a future release.
+> **Note**: This method will be enabled in a future release.
 
 First learn the ID of the Appliance you want to set the schedule on.
 ```
@@ -611,7 +611,7 @@ id   name
 --   ----
 7188 appliance-1-83040
 ```
-Now use that ID to query the current schedule.  You may not get a schedule if none has been set:
+Now use that ID to query the current schedule. You may not get a schedule if none has been set:
 ```
 Get-AGMApplianceSchedule -id 7188 -schedulename "autodiscovery"
 
@@ -663,7 +663,7 @@ status
      0
 
 ```
-Now wait 3 minutes (this takes a little time to update).   If you see the old timezone, please wait a little longer.
+Now wait 3 minutes (this takes a little time to update). If you see the old timezone, please wait a little longer.
 ```
 Get-AGMAppliance 406219 | select timezone
 ```
@@ -677,11 +677,11 @@ Australia/Sydney
 
 # Applications
 
-Applications are effectively data sources.  They contain the data we want to backup.
+Applications are effectively data sources. They contain the data we want to backup.
 
 ## Application IDs
 
-The most common requirement for many commands is to supply the application ID, which is a unique number for each application.   This command is the default choice however if you run it without [filters](README.md/#filtering) or select statements you will be overwhelmed:
+The most common requirement for many commands is to supply the application ID, which is a unique number for each application. This command is the default choice however if you run it without [filters](README.md/#filtering) or select statements you will be overwhelmed:
 ```
 Get-AGMApplication
 ```
@@ -700,7 +700,7 @@ An alternative is to use this command:
 ```
 Get-AGMLibApplicationID
 ```
-Lets say we are looking for a host called ```bastion```.   We could use a command like this and get the key information we need:
+Lets say we are looking for a host called ```bastion```. We could use a command like this and get the key information we need:
 ```
 Get-AGMLibApplicationID -appname bastion
 
@@ -727,7 +727,7 @@ In this example we have 99 applications:
 ```
 Get-AGMApplicationCount
 99  
-```   
+```
 We now add filters, first to see how many are managed (have a backup plan applied:
 ```
 Get-AGMApplicationCount -filtervalue managed=true
@@ -739,7 +739,7 @@ Get-AGMApplicationCount -filtervalue apptype=VMBackup
 50
 ```
 And see how many of them have backup plans:
-```                                                                                                                               
+``` 
 Get-AGMApplicationCount -filtervalue "apptype=VMBackup&managed=true"
 4
 ```
@@ -757,7 +757,8 @@ Get-AGMApplicationTypes
 ```
 Output will look like this:
 ```
-CIFS                                                                                                                                                                                     ConsistGrp
+CIFS
+ConsistGrp
 FileSystem
 GCPInstance
 NFS
@@ -825,17 +826,17 @@ We can list events in the audit log with this command, but the resulting output 
 ```
 Get-AGMAudit
 ```
-We need to use [filters](README.md/#filtering) and limits.  You can list all filterable fields with this command:
+We need to use [filters](README.md/#filtering) and limits. You can list all filterable fields with this command:
 ```
 Get-AGMAudit -o
 ```
-In this example we filter on issue date, user name as  well as use a limit:
+In this example we filter on issue date, user name as well as use a limit:
 ```
 Get-AGMAudit -filtervalue "username=apiuser@iam.gserviceaccount.com&issuedate>2022-11-18" -limit 15
 ```
 ## Finding the last command a user issued
 
-While the audit log contains a lot of events where users look at data (get) we may want to see commands where users changed things (post, put and delete).  So if we know the username we can use this command which looks at posts by default:
+While the audit log contains a lot of events where users look at data (get) we may want to see commands where users changed things (post, put and delete). So if we know the username we can use this command which looks at posts by default:
 ```
 Get-AGMLibLastPostCommand -username apiuser@.iam.gserviceaccount.com
 ```
@@ -855,18 +856,18 @@ privileged : False
 We can look for other command types with either:
 * ```-delete``` To look for deletes normally associated with deleting things 
 * ```-put``` To look for puts, normally associated with changing things
-* ```-limit 2``` To get the last 2 commands.   You can look for as many commands as you like.
+* ```-limit 2``` To get the last 2 commands. You can look for as many commands as you like.
 
 [Back to top](#usage-examples)
 # Backup Plans
 
-A Backup Plan is a combination of a policy template (that defines what backup policies we use, when they are run and how long the resulting backup is retained) and a resource profile (that defines which appliance creates the backup and where it stores it).  We apply a backup plan to an application and backups start to get created.
+A Backup Plan is a combination of a policy template (that defines what backup policies we use, when they are run and how long the resulting backup is retained) and a resource profile (that defines which appliance creates the backup and where it stores it). We apply a backup plan to an application and backups start to get created.
 
 Note that Backup Plans is the new term for the SLA Architect.  If you see the term Backup Plan, this is the equivalent of what Actifio called an SLA.
 
 ## Applying a Backup Plan
 
-When we apply a backup plan (SLA) to an application we are protecting or managing it.  To complete this task we need three things:
+When we apply a backup plan (SLA) to an application we are protecting or managing it. To complete this task we need three things:
 * ```-appid xxx```      The Application ID
 * ```-sltid yyy```   The Policy template ID
 * ```-slpid zzz```   The Resource profile ID
@@ -911,7 +912,7 @@ $appid = 709575
 $sltid = 108758
 $slpid = 706611
 New-AGMSLA -appid $appid -sltid $sltid -slpid $slpid 
-```    
+``` 
 The command should return SLA information.
 
 We can validate our policy is applied with a command like this:
@@ -919,17 +920,17 @@ We can validate our policy is applied with a command like this:
 (Get-AGMApplication $appid).sla
 ```
 ## Disabling a Backup Plan
-We can disable the SLA for a particular application or logical group or literally every known application.  This command is interactive:
+We can disable the SLA for a particular application or logical group or literally every known application. This command is interactive:
 ```
 Set-AGMLibSLA
 ```
-It will build a command you can run then or store for later.  A typical command would look like this:
+It will build a command you can run then or store for later. A typical command would look like this:
 ```
 Set-AGMLibSLA -slaid 741509  -scheduler enable -expiration enable
 ```
 
 ## Backup Plan Enablement Status
-Each backup plan can have its scheduler disabled (to prevent new backups being created) as well as its expiration disabled (to prevent old backups being expired).  To check on all applications you this command:
+Each backup plan can have its scheduler disabled (to prevent new backups being created) as well as its expiration disabled (to prevent old backups being expired). To check on all applications you this command:
 ```
 Get-AGMLibSLA 
 ```
@@ -994,7 +995,7 @@ rpo       : 24 hours
 
 ## Backup Plan Removal
 
-To remove a backup plan (SLA) from an application (to unprotect or unmanage it), we need the application ID.  In this example the application name is ```bastion``` so we find the Application ID with this command, confirming the apptype is correct and that it is currently being protected (managed=true):
+To remove a backup plan (SLA) from an application (to unprotect or unmanage it), we need the application ID. In this example the application name is ```bastion``` so we find the Application ID with this command, confirming the apptype is correct and that it is currently being protected (managed=true):
 ```
 $appname = "bastion"
 Get-AGMApplication -filtervalue appname=$appname | select id,appname,apptype,managed
@@ -1022,20 +1023,20 @@ id     appname apptype     managed
 
 In this scenario, a large number of VMs that were no longer required were removed from the vCenter. However, as those VMs were still being managed at the time of removal from the VCenter, the following error message is being received constantly
  
- ```
+```
 Error 933 - Failed to find VM with matching BIOS UUID
 ```
 
 ### 1) Create a list of affected VMs
 
-First we need to create a list of affected VMs.  The simplest way to do this is to run these commands:
+First we need to create a list of affected VMs. The simplest way to do this is to run these commands:
 
 There are two parameters in the filtervalue.
 The first is the errorcode of 933
-The second is the startdate.  You need to update this.
+The second is the startdate. You need to update this.
 
 This is the command we thus run (connect-agm logs us into the appliance).
-We grab just the Appname  (which is the VMname) and AppID of each affected VM and reduce to a unique list in a CSV file
+We grab just the Appname (which is the VMname) and AppID of each affected VM and reduce to a unique list in a CSV file
 
 ```
 Get-AGMJobHistory -filtervalue "errorcode=933&startdate>2020-09-01"  | select appname,appid | sort-object appname | Get-Unique -asstring | Export-Csv -Path .\missingvms.csv -NoTypeInformation
@@ -1044,13 +1045,13 @@ Get-AGMJobHistory -filtervalue "errorcode=933&startdate>2020-09-01"  | select ap
 
 Now open your CSV file called missingvms.csv and go to the VMware administrator.
 Validate each VM is truly gone.
-Edit the CSV and remove any VMs you don't want to unprotect.   
+Edit the CSV and remove any VMs you don't want to unprotect.
  
 ### 3) Unprotection script
 
 Because we have a CSV file of affected VMs we can run this simple PowerShell script. 
 
-Import the list and validate the import worked by displaying the imported variable.  In this example we have only four apps.
+Import the list and validate the import worked by displaying the imported variable. In this example we have only four apps.
 ```
 $appstounmanage = Import-Csv -Path .\missingvms.csv
 $appstounmanage
@@ -1093,7 +1094,7 @@ New-AGMSLA -appid 655615 -slpid 655697 -sltid 4181
 New-AGMSLA -appid 6227957 -slpid 655697 -sltid 4171
 New-AGMSLA -appid 5370126 -slpid 655697 -sltid 4181
 ```
-Now we are ready for the final step.  Run this script to unprotect the VMs:
+Now we are ready for the final step. Run this script to unprotect the VMs:
 ```
 foreach ($app in $appstounmanage)
 { Remove-AGMSLA -appid $($app.appid) }
@@ -1109,8 +1110,6 @@ foreach ($app in $appstounmanage)
 { Remove-AGMApplication -appid $($app.appid) }
 ```
 Output will be blank but the VMs will all be deleted.
-
-
 
 ## Importing and Exporting Policy Templates
 
@@ -1128,13 +1127,13 @@ id    name
 6523  Snap2OV
 6392  PDSnaps
 ```
-We now export all the SLTs to a file called export.json.  If we only want to export specific SLTs, then don't specify **-all** and you will get a help menu.
+We now export all the SLTs to a file called export.json. If we only want to export specific SLTs, then don't specify **-all** and you will get a help menu.
 ```
 Export-AGMLibSLT -all -filename export.json
 ```
 We now login to our target AGM/Management Console.
 
-We validate there are no Templates.   Currently this function expects there to be no templates in the target.  However if there are, as long as there are no name clashes, the import will still succeed.  In this example there are no templates in the target.
+We validate there are no Templates. Currently this function expects there to be no templates in the target. However if there are, as long as there are no name clashes, the import will still succeed. In this example there are no templates in the target.
 ```
 Get-AGMSLT
 ```
@@ -1172,11 +1171,11 @@ Our import is now complete.
 [Back to top](#usage-examples)
 # Billing
 
-Billing should be tracked in the relevant billing page of the Cloud Console.  This section is to help you understand what generated those bills.
+Billing should be tracked in the relevant billing page of the Cloud Console. This section is to help you understand what generated those bills.
 
 # Backup SKU Usage
 
-Usage for the Backup and DR Service is charged on a per GiB of protected application (front end) data.    Pricing is documented here:
+Usage for the Backup and DR Service is charged on a per GiB of protected application (front end) data. Pricing is documented here:
 https://cloud.google.com/backup-disaster-recovery/pricing
 
 If you wish to display how large your applications are in GiB per SKU type (to help allocate Backup SKU usage between business departments or just to understand how large an application is), then you can use the following command:
@@ -1209,11 +1208,11 @@ Compute Engine Instances and their backups are called different things depending
 
 ## Compute Engine Cloud Credentials
 
-Cloud Credentials point to stored credentials for the Service Account that is used to create Compute Engine instance backups and then use them.   
+Cloud Credentials point to stored credentials for the Service Account that is used to create Compute Engine instance backups and then use them.
 
 Changes with release 11.0.2 and higher:
 
-* If your Appliances were installed with version 11.0.2 or higher then each appliance will have an auto-created cloud credential that does not need JSON keys.   This means there is no need to ever run the ```New-AGMCredential``` function.   Simply use the default credential and in Cloud IAM add add the relevant appliance service account to the relevant projects with the ```Backup and DR Compure Engine Operator``` role.   If you still wish to manually add cloud credentials then the syntax needs to be modified.
+* If your Appliances were installed with version 11.0.2 or higher then each appliance will have an auto-created cloud credential that does not need JSON keys. This means there is no need to ever run the ```New-AGMCredential``` function. Simply use the default credential and in Cloud IAM add add the relevant appliance service account to the relevant projects with the ```Backup and DR Compure Engine Operator``` role. If you still wish to manually add cloud credentials then the syntax needs to be modified.
 * If your Appliances were installed version 11.0.1 or lower and have been upgraded to 11.0.2 or higher, then follow the procedure [here](https://cloud.google.com/backup-disaster-recovery/docs/configuration/create-cloud-credentials#replace_a_json_key_cloud_credential_with_an_appliance_service_account_credential) to covert to a *JSON-less* cloud credential.
 
 ### Listing Cloud Credentials
@@ -1323,11 +1322,11 @@ immutable      : False
 
 ### Updating an existing cloud credential
 
-The most common reason for doing this is to update the JSON key.  Use syntax like this where we specify the credential ID and the filename of the JSON file.
+The most common reason for doing this is to update the JSON key. Use syntax like this where we specify the credential ID and the filename of the JSON file.
 ```
 Set-AGMCredential -credentialid 1234 -filename keyfile.json
 ```
-You can also use this command to update the default zone or the credential name as well.   However zone, name and clusterid are not mandatory and only need to be supplied if you are changing them.   The clusterid parameter would determine which appliances get updated, by default all relevant appliances are updated.   You can learn the credential ID with **Get-AGMCredential** and the clusterid will be in the sources field of the same output.   
+You can also use this command to update the default zone or the credential name as well. However zone, name and clusterid are not mandatory and only need to be supplied if you are changing them. The clusterid parameter would determine which appliances get updated, by default all relevant appliances are updated. You can learn the credential ID with **Get-AGMCredential** and the clusterid will be in the sources field of the same output.
 
 ### Deleting a Cloud Credential
 ```
@@ -1390,7 +1389,7 @@ vmname      instanceid
 consoletest 4240202854121875692
 agm         6655459695622225630
 ```
-The total number of VMs that were found and the total number fetched will be different.  In this example, 57 VMs can be found, but only 50 were fetched as the limit defaults to 50:
+The total number of VMs that were found and the total number fetched will be different. In this example, 57 VMs can be found, but only 50 were fetched as the limit defaults to 50:
 ```
 Get-AGMCloudVM -credentialid 35548 -clusterid 144292692833 -projectid avwlab2
 ```
@@ -1412,7 +1411,7 @@ count items                             totalcount
 
 ```
 
-Or we could fetch the first 50 in one command and then in a second command, set an offset of 1, which will fetch all VMs from 51 onwards (offset it added to limit to denote the starting point).  In this example we fetch the remaining 7 VMs (since the limit is 50):
+Or we could fetch the first 50 in one command and then in a second command, set an offset of 1, which will fetch all VMs from 51 onwards (offset it added to limit to denote the starting point). In this example we fetch the remaining 7 VMs (since the limit is 50):
 ```
 Get-AGMCloudVM -credentialid 35548 -clusterid 144292692833 -projectid avwlab2 -limit 50 -offset 1
 ```
@@ -1453,7 +1452,7 @@ bastion     GCPInstance    True 209913 6392  35557
 
 ### How to apply backup to unmanaged Compute Engine Instance
 
-Use a command like this.   
+Use a command like this.
 ```
 New-AGMSLA -appid 209913 -sltid 6392 -slpid 35557 -scheduler enabled
 ```
@@ -1481,38 +1480,38 @@ $appdata.host.ipaddress
 
 ## Compute Engine Instance Conversion from VMware VM
 
-In this user story we are going to use VMware VM snapshots to create a new Compute Engine Instance.  This will be done by using the **New-AGMLibGCEConversion** command.
+In this user story we are going to use VMware VM snapshots to create a new Compute Engine Instance. This will be done by using the **New-AGMLibGCEConversion** command.
 
 This command requires several inputs so first we explore how to get them.
 
 ### Creating a single Compute Engine Instance Instance from VMware Backup
 
-The best way to create the syntax for this command, at least for the first time you run it,  is to simply run the **New-AGMLibGCEConversion** command without any parameters.
+The best way to create the syntax for this command, at least for the first time you run it, is to simply run the **New-AGMLibGCEConversion** command without any parameters.
 This starts what we called *guided mode* which will help you learn all the syntax to run the command.
 The guided menus will ask questions in roughly the same order as the menus appear in the Web GUI.
 The end result is you will get several choices:
 
 1. Run the command there and then
-1. Print out a simple command to run later.   Note you may want to edit this command as we explain in a moment.
+1. Print out a simple command to run later. Note you may want to edit this command as we explain in a moment.
 1. Print out a sample CSV file to use with  **New-AGMLibGCEConversionMulti**
 
 #### Determining which image is used for the mount
 
 The sample command printed by guidedmode has an imageid, an appid and an appname. Consider:
 ```
--appid       If you specify this, then the most recent image for that app will be mounted.  This is the most exact choice to get the latest image.
--appname     If you specify this, then the most recent image for that app will be mounted provided the appname is unique.   If the appname is not unique, then you will need to switch to appid.
+-appid       If you specify this, then the most recent image for that app will be mounted. This is the most exact choice to get the latest image.
+-appname     If you specify this, then the most recent image for that app will be mounted provided the appname is unique. If the appname is not unique, then you will need to switch to appid.
 -imageid     If you specify this, then this image will be mounted. You will need to learn this imageid before you run the command.
 -imagename   If you specify this, then this image will be mounted. You will need to learn this imagename before you run the command.
 ```
 In general the best choice is **-appid** as it saves you having to work out the imageid or name and gives you the most recent image (for the latest RPO).
-If constructing a CSV file for multi mount you always need to include the **appname**, even if you are using the **appid**.  This is to ensure we can identify the source app.
+If constructing a CSV file for multi mount you always need to include the **appname**, even if you are using the **appid**. This is to ensure we can identify the source app.
 
 #### Manually constructing output
 
 If you want to manually construct the output, or get some variables to tweak the output consider the following tips:
 
-To learn which Cloud Credential srcids are available use the following command.  Note that this is appliance specific, so when you specify a srcid you are specifing a service account that is stored on a specific appliance.  This means if you want to split the workload across multiple appliances, then you can do this by using the relevant srcid of each appliance (although this also need the relevant applications to be imported into the relative appliances when using OnVault backups).
+To learn which Cloud Credential srcids are available use the following command. Note that this is appliance specific, so when you specify a srcid you are specifing a service account that is stored on a specific appliance. This means if you want to split the workload across multiple appliances, then you can do this by using the relevant srcid of each appliance (although this also need the relevant applications to be imported into the relative appliances when using OnVault backups).
 ```
 Get-AGMLibCredentialSrcID
 ```
@@ -1527,39 +1526,39 @@ Get-AGMImage -filtervalue "apptype=SystemState&apptype=VMBackup&jobclass=OnVault
 
 There are many parameters that may need to be supplied:
 ```
--appid           The application ID of the source VMWare VM you want to mount.  If you use this you don't need to specify an image ID or imagename.   It will use the latest image of that application.
--appname         The application name of the source VMWare VM you want to mount.  This needs to be unique.  If you use this you don't need to specify an image ID or imagename.   It will use the latest image of that application.
--imageid         You need to supply either the imageid or the imagename or both (or specify -appid instead to get the latest image).  To avoid using this, you can specify -appid or -appname instead
--imagename       You need to supply either the imageid or the imagename or both (or specify -appid instead to get the latest image).  To avoid using this, you can specify -appid or -appname instead
--srcid           Learn this with Get-AGMLibCredentialSrcID.  You need to use the correct srcid that matches the appliance that is going to run the mount.
+-appid           The application ID of the source VMWare VM you want to mount. If you use this you don't need to specify an image ID or imagename. It will use the latest image of that application.
+-appname         The application name of the source VMWare VM you want to mount. This needs to be unique. If you use this you don't need to specify an image ID or imagename. It will use the latest image of that application.
+-imageid         You need to supply either the imageid or the imagename or both (or specify -appid instead to get the latest image). To avoid using this, you can specify -appid or -appname instead
+-imagename       You need to supply either the imageid or the imagename or both (or specify -appid instead to get the latest image). To avoid using this, you can specify -appid or -appname instead
+-srcid           Learn this with Get-AGMLibCredentialSrcID. You need to use the correct srcid that matches the appliance that is going to run the mount.
 -serviceaccount  The service account.
 -projectname     This is the unique Google Project name where the new instance will be created.
 -sharedvpcprojectid  If the instance is being created in a service project, what is the ID the project that is sharing the VPC (optional)
 -nodegroup       If creating an instance into a sole tenant node group, this is the name of the node group (optional)
--region          This is the Google Cloud Region such as:   australia-southeast1
+-region          This is the Google Cloud Region such as: australia-southeast1
 -zone            This is the Google Cloud Zone such as: australia-southeast1-c
--instancename    This is the name of the new instance that will be created.   It needs to be unique in that project
+-instancename    This is the name of the new instance that will be created. It needs to be unique in that project
 -machinetype     This is the Google Cloud instance machine type such as:  e2-micro
--networktags     Comma separate as many tags as you have, for instance:   -networktags "http-server,https-server"   
--labels          Labels are key value pairs.   Separate key and value with colons and each label with commas.   For example:   -labels "pet:cat,food:fish"
+-networktags     Comma separate as many tags as you have, for instance: -networktags "http-server,https-server"
+-labels          Labels are key value pairs. Separate key and value with colons and each label with commas. For example: -labels "pet:cat,food:fish"
 -nic0network     The network name in URL format for nic0
 -nic0subnet      The subnet name in URL format for nic0
--nic0externalip  Only 'none' and 'auto' are valid choices.  If you don't use this variable then the default for nic0 is 'none'
--nic0internalip  Only specify this is you want to set an internal IP.  Otherwise the IP for nic0 will be auto assigned.   
--poweroffvm      By default the new Compute Engine Instance will be left powered on after creation.   If you want it to be created but then powered off, then specify this flag.
--migratevm       By default the new Compute Engine Instance will be dependent on the mounting Appliance.  To migrate all data onto Compute Engine Persistent Disk, then specify this flag.
--preferedsource  Optional,  used if we want to force selection of images from a particular storage pool, either snapshot, streamsnap or onvault  (use lower case)
+-nic0externalip  Only 'none' and 'auto' are valid choices. If you don't use this variable then the default for nic0 is 'none'
+-nic0internalip  Only specify this is you want to set an internal IP. Otherwise the IP for nic0 will be auto assigned.
+-poweroffvm      By default the new Compute Engine Instance will be left powered on after creation. If you want it to be created but then powered off, then specify this flag.
+-migratevm       By default the new Compute Engine Instance will be dependent on the mounting Appliance. To migrate all data onto Compute Engine Persistent Disk, then specify this flag.
+-preferedsource  Optional, used if we want to force selection of images from a particular storage pool, either snapshot, streamsnap or onvault (use lower case)
 ```
 Optionally you can request a second NIC using nic1:
 ```
 -nic1network     The network name in URL format for nic1
 -nic1subnet      The subnet name in URL format for nic1
--nic1externalip  Only 'none' and 'auto' are valid choices.  If you don't use this variable then the default for nic1 is 'none'
--nic1internalip  Only specify this is you want to set an internal IP.  Otherwise the IP for nic1 will be auto assigned.   
+-nic1externalip  Only 'none' and 'auto' are valid choices. If you don't use this variable then the default for nic1 is 'none'
+-nic1internalip  Only specify this is you want to set an internal IP. Otherwise the IP for nic1 will be auto assigned.
 ```
 Optionally you can specify that all disks be a different type:
 ```
--disktype        Has to be one  of pd-balanced, pd-extreme, pd-ssd, pd-standard   All disks in the instance will use this disk type
+-disktype        Has to be one  of pd-balanced, pd-extreme, pd-ssd, pd-standard All disks in the instance will use this disk type
 ```
 This bring us to command like this one:
 ```
@@ -1567,11 +1566,10 @@ New-AGMLibGCEConversion -imageid 56410933 -srcid 1234 -region australia-southeas
 ```
 
 What is not supported right now:
-1)  Specifying more than one internal IP per subnet.
-2)  Specifying different disk types per disk
+1) Specifying more than one internal IP per subnet.
+2) Specifying different disk types per disk
 
 If you get timeouts, then increase the timeout value with **-timeout 600** when running connect-agm
-
 
 ## Compute Engine Instance Multi Conversion from VMware VM
 
@@ -1587,13 +1585,13 @@ The goal is to offer a simplified way to manage failover from Production to DR w
 * DR occurs by issuing commands to the DR Appliance to create new Compute Engine Instance Instances (most likely after importing the OnVault images)
 * You may need to first run an OnVault import using this [method](#image-import-from-onvault)
 
-The best way to create the syntax for this command, at least for the first time you run it,  simply run the **New-AGMLibGCEConversion** command without any parameters.
+The best way to create the syntax for this command, at least for the first time you run it, simply run the **New-AGMLibGCEConversion** command without any parameters.
 This starts what we called *guided mode* which will help you create the command.
 The guided menus will appear in roughly the same order as the menus appear in the Web GUI.
 The end result is you wil get two choices:
 
 1. Print out a simple command
-1. Print out a sample CSV file to use with  **New-AGMLibGCEConversionMulti**
+1. Print out a sample CSV file to use with **New-AGMLibGCEConversionMulti**
 
 If you want to manually construct the output, or get some variables to tweak the output consider the following tips:
 
@@ -1602,29 +1600,28 @@ If you want to manually construct the output, or get some variables to tweak the
 
 We can take the **New-AGMLibGCEConversion** command to create a new Compute Engine VM and store the parameters needed to run that command in a CSV file. 
 
-If the applications are not yet imported you can use the appname  field provided the VMnames are unique.
+If the applications are not yet imported you can use the appname field provided the VMnames are unique.
 Here is an example of the CSV file:
 ```
 srcid,appid,appname,projectname,sharedvpcprojectid,region,zone,instancename,machinetype,serviceaccount,nodegroup,networktags,poweroffvm,migratevm,labels,preferedsource,disktype,nic0network,nic0subnet,nic0externalip,nic0internalip,nic1network,nic1subnet,nic1externalip,nic1internalip
-391360,296433,"Centos2","project1","hostproject1","europe-west2","europe-west2-a","newvm1","n1-standard-2","systemstaterecovery@project1.iam.gserviceaccount.com","nodegroup1","https-server",False,True,status:failover,onvault,pd-standard,https://www.googleapis.com/compute/v1/projects/project1/global/networks/actifioanz,https://www.googleapis.com/compute/v1/projects/project1/regions/europe-west2/subnetworks/default,auto,,https://www.googleapis.com/compute/v1/projects/project1/global/networks/default,https://www.googleapis.com/compute/v1/projects/project1/regions/europe-west2/subnetworks/default,,  
-       
+391360,296433,"Centos2","project1","hostproject1","europe-west2","europe-west2-a","newvm1","n1-standard-2","systemstaterecovery@project1.iam.gserviceaccount.com","nodegroup1","https-server",False,True,status:failover,onvault,pd-standard,https://www.googleapis.com/compute/v1/projects/project1/global/networks/actifioanz,https://www.googleapis.com/compute/v1/projects/project1/regions/europe-west2/subnetworks/default,auto,,https://www.googleapis.com/compute/v1/projects/project1/global/networks/default,https://www.googleapis.com/compute/v1/projects/project1/regions/europe-west2/subnetworks/default,, 
 ```
 The main thing is the headers in the CSV file needs to be exactly as shown as they are the parameters we pass to the command (although the order is not important).
 We can then run a command like this specifying our CSV file:
 ```
 New-AGMLibGCEConversionMulti -instancelist recoverylist.csv 
 ```
-This will load the contents of the file **recoverylist.csv** and use it to start multiple **New-AGMLibGCEConversion** jobs.   They will run in parallel but be started serially.
+This will load the contents of the file **recoverylist.csv** and use it to start multiple **New-AGMLibGCEConversion** jobs. They will run in parallel but be started serially.
 
 What is not supported right now:
 
-1.  Specifying more than one internal IP per subnet.
-1.  Specifying different disk types per disk
-1.  More than two NICS per instance
+1. Specifying more than one internal IP per subnet.
+1. Specifying different disk types per disk
+1. More than two NICS per instance
 
 #### Monitoring the jobs created by a multi mount by creating an object
 
-When you run a multimount, by default all jobs will run before any output is printed.   What we output is a nicely formatted object listing each line in the CSV, the app details, the command that was run and the results.  
+When you run a multimount, by default all jobs will run before any output is printed. What we output is a nicely formatted object listing each line in the CSV, the app details, the command that was run and the results.  
 
 The best way to manage this is to load this output into your own object, so do something like this:
 ```
@@ -1681,7 +1678,7 @@ New-AGMLibGCEConversion -projectname project1 -machinetype n1-standard-2 -instan
 
 ### Managing the mounted Compute Engine Instance Instance 
 
-Once we have created a new Compute Engine Instance from PD snapshot, there is no dependency on the appliance because the disks for the instance are all Persistent Disks rather than shared disks from an appliance Storage Pool,  but the mount is still shown as an Active Image, which means it needs to be managed.   We can see the Active Images with this command:
+Once we have created a new Compute Engine Instance from PD snapshot, there is no dependency on the appliance because the disks for the instance are all Persistent Disks rather than shared disks from an appliance Storage Pool, but the mount is still shown as an Active Image, which means it needs to be managed. We can see the Active Images with this command:
 ```
 Get-AGMLibActiveImage
 ```
@@ -1705,11 +1702,11 @@ We have two choices on how to handle this image:
 1. Unmount and delete. This command deletes the mounted image record on the appliance side and the Compute Engine Instance on the Google Cloud side.
 
 ```
- Remove-AGMMount Image_0021181  -d
+ Remove-AGMMount Image_0021181 -d
 ```
-2. Preserve the image on Google Cloud side. This command deletes the mounted image record on the appliance side but leaves the Compute Engine Instance on the Google Cloud side. In the Web GUI this is called forgetting the image.   You can see the only difference with the choice above is the -p for preserve.
+2. Preserve the image on Google Cloud side. This command deletes the mounted image record on the appliance side but leaves the Compute Engine Instance on the Google Cloud side. In the Web GUI this is called forgetting the image. You can see the only difference with the choice above is the -p for preserve.
 ```
- Remove-AGMMount Image_0021181  -d -p
+ Remove-AGMMount Image_0021181 -d -p
 ```
 ## Compute Engine Instance Mount to Existing
 
@@ -1722,16 +1719,16 @@ To run this function we need three pieces of data:
     ```
     Get-AGMLibCredentialSrcID
     ```
-* instanceid or hostname or hostid. This is the either the unique instance ID of the target compute engine instance (that we are mounting to) or we can instead supply the hostname of that instance (provided it is unique on that management console).  We can also instead use the host ID.  Note there are three ways to specify the host, you only need to use one of them!  To learn the relevant values use this command:  
+* instanceid or hostname or hostid. This is the either the unique instance ID of the target compute engine instance (that we are mounting to) or we can instead supply the hostname of that instance (provided it is unique on that management console). We can also instead use the host ID. Note there are three ways to specify the host, you only need to use one of them!  To learn the relevant values use this command:  
     ```
     Get-AGMHost -filtervalue vmtype=GCP -sort hostname:asc | select id,hostname,@{N='instanceid'; E={$_.uniquename}}
     ```
-* imageid:  We need the ID of the image we are mounting. To learn imageid if hostname is called centos, use this:
+* imageid: We need the ID of the image we are mounting. To learn imageid if hostname is called centos, use this:
     ```
     $hostname = "windows"
     Get-AGMImage -filtervalue "apptype=GCPInstance&hostname=$hostname" | select id,consistencydate,@{N='hostid' ; E={$_.host.id}}
     ```
-* disktype:   This is not a mandatory field but may need to be specified.   Valid values are:
+* disktype: This is not a mandatory field but may need to be specified. Valid values are:
     * pd-balanced
     * pd-extreme
     * pd-ssd
@@ -1768,7 +1765,7 @@ id      consistencydate     hostid
 1891437 2023-03-15 06:00:14 1436920
 ```
 
-Once we have assembled the three mandatory pieces of information we can assemble our command.   Below we use the same command using three different ways to specify the target host.  You only need to use one of these commands!
+Once we have assembled the three mandatory pieces of information we can assemble our command. Below we use the same command using three different ways to specify the target host. You only need to use one of these commands!
 ```
 New-AGMLibGCEMountExisting -srcid 4368 -imageid 1905435 -hostname windows
 New-AGMLibGCEMountExisting -srcid 4368 -imageid 1905435 -hostid 1436920 
@@ -1782,36 +1779,36 @@ New-AGMLibGCEMountExisting -srcid 5230 -instanceid 3259136228063997846 -imageid 
 
 > **Note**:  If the mount fails with errors regarding the use of **hyperdisk-extreme**, ensure you manually specify a disktype that can be used to create your target instance, such as ```-disktype pd-balanced```
 
-In this user story we are going to use Persistent Disk Snapshots to create a new Compute Engine Instance.  This will be done by using the following command:   **New-AGMLibGCPInstance**
+In this user story we are going to use Persistent Disk Snapshots to create a new Compute Engine Instance. This will be done by using the following command: **New-AGMLibGCPInstance**
 
 This command requires several inputs so first we explore how to get them.
 
 ### Demo video
 
-This video will help you understand how to use this command:   https://youtu.be/hh1seRvRZos
+This video will help you understand how to use this command: https://youtu.be/hh1seRvRZos
 
 ### Creating a single Compute Engine Instance from Snapshot
 
-The best way to create the syntax for this command, at least for the first time you run it,  is to simply run the **New-AGMLibGCPInstance** command without any parameters.
+The best way to create the syntax for this command, at least for the first time you run it, is to simply run the **New-AGMLibGCPInstance** command without any parameters.
 This starts what we called *guided mode* which will help you learn all the syntax to run the command.
 The guided menus will appear in roughly the same order as the menus appear in the Web GUI.
 The end result is you will get several choices:
 
 1. Run the command
-1. Print out a simple command to run later.   Note you may want to edit this command as we explain in the next section.
-1. Print out a sample CSV file to use with  **New-AGMLibGCPInstanceMultiMount**
+1. Print out a simple command to run later. Note you may want to edit this command as we explain in the next section.
+1. Print out a sample CSV file to use with **New-AGMLibGCPInstanceMultiMount**
 
 #### Determining which image is used for the mount
 
 The sample command printed by guidedmode has an imageid, an appid and an appname. Consider:
 ```
 -appid       If you specify this, then the most recent image for that app will be mounted.  This is the most exact choice to get the latest image.
--appname     If you specify this, then the most recent image for that app will be mounted provided the appname is unique.   If the appname is not unique, then you will need to switch to appid.
+-appname     If you specify this, then the most recent image for that app will be mounted provided the appname is unique. If the appname is not unique, then you will need to switch to appid.
 -imageid     If you specify this, then this image will be mounted. You will need to learn this imageid before you run the command.
 -imagename   If you specify this, then this image will be mounted. You will need to learn this imagename before you run the command.
 ```
 In general the best choice is **-appid** as it saves you having to work out the imageid or imagename and gives you the most recent image (for the best RPO), 
-If constructing a CSV file for multi mount you always need to specify the appname, even if you are using the appid.  This is to ensure we can identify the source app.
+If constructing a CSV file for multi mount you always need to specify the appname, even if you are using the appid. This is to ensure we can identify the source app.
 
 #### Manually constructing output
 
@@ -1838,24 +1835,24 @@ Get-AGMImage -filtervalue "apptype=GCPInstance&jobclass=snapshot" | select appna
 ```
 There are many parameters that need to be supplied:
 ```
--appid           The application ID of the source Compute Engine Instance you want to mount.  If you use this you don't need to specify an image ID or name.   It will use the latest snapshot of that application.
+-appid           The application ID of the source Compute Engine Instance you want to mount.  If you use this you don't need to specify an image ID or name. It will use the latest snapshot of that application.
 -imageid         You need to supply either the imageid or the imagename or both (or specify -appid instead to get the latest image)
 -imagename       You need to supply either the imageid or the imagename or both (or specify -appid instead to get the latest image)
--srcid           Learn this with Get-AGMLibCredentialSrcID.   You need to use the correct srcid that matches the appliance that is protecting the application. 
+-srcid           Learn this with Get-AGMLibCredentialSrcID. You need to use the correct srcid that matches the appliance that is protecting the application. 
 -serviceaccount  The service account that is being used to request the instance creation.  This is optional.  Otherwise it will use the account from the cloud credential (which is the preferred method)
 -projectname     This is the unique Google Project name 
 -zone            This is the Compute Engine Zone such as: australia-southeast1-c
--instancename    This is the name of the new instance that will be created.   It needs to be unique in that project
+-instancename    This is the name of the new instance that will be created. It needs to be unique in that project
 -machinetype     This is the Compute Engine instance machine type such as:  e2-micro
--networktags     Comma separate as many tags as you have, for instance:   -networktags "http-server,https-server"   
--labels          Labels are key value pairs.   Separate key and value with colons and each label with commas.   For example:   -labels "pet:cat,drink:milk"
+-networktags     Comma separate as many tags as you have, for instance: -networktags "http-server,https-server"
+-labels          Labels are key value pairs. Separate key and value with colons and each label with commas. For example: -labels "pet:cat,drink:milk"
 -retainlabel     Specify true and then any labels in the selected image will be retained in the new Compute Engine instance. Partial label retention is not supported.
 -nic0hostproject The project ID of the host project.  This is only needed if nic0network is not in URL format and if the target project is a service project
 -nic0network     The network name in URL format for nic0
 -nic0subnet      The subnet name in URL format for nic0
--nic0externalip  Only 'none' and 'auto' are valid choices.  If you don't use this variable then the default for nic0 is 'none'
--nic0internalip  Only specify this is you want to set an internal IP.  Otherwise the IP for nic0 will be auto assigned.   
--poweronvm       By default the new Compute Engine Instance will be powered on.   If you want it to be created but left powered off, then specify: -poweronvm false
+-nic0externalip  Only 'none' and 'auto' are valid choices. If you don't use this variable then the default for nic0 is 'none'
+-nic0internalip  Only specify this is you want to set an internal IP. Otherwise the IP for nic0 will be auto assigned.
+-poweronvm       By default the new Compute Engine Instance will be powered on. If you want it to be created but left powered off, then specify: -poweronvm false
                  There is no need to specify: -poweronvm true 
 ```
 Optionally you can request a second NIC with these parameters:
@@ -1863,23 +1860,23 @@ Optionally you can request a second NIC with these parameters:
 -nic1hostproject The project ID of the host project.  This is only needed if nic0network is not in URL format and if the target project is a service project
 -nic1network     The network name in URL format for nic1
 -nic1subnet      The subnet name in URL format for nic1
--nic1externalip  Only 'none' and 'auto' are valid choices.  If you don't use this variable then the default for nic1 is 'none'
--nic1internalip  Only specify this is you want to set an internal IP.  Otherwise the IP for nic1 will be auto assigned.  
+-nic1externalip  Only 'none' and 'auto' are valid choices. If you don't use this variable then the default for nic1 is 'none'
+-nic1internalip  Only specify this is you want to set an internal IP. Otherwise the IP for nic1 will be auto assigned.  
 ```
 Optionally you can also change the disk type of the disks in the new Compute Engine VM:
 ```
--disktype        Has to be one of:   pd-balanced, pd-extreme, pd-ssd, pd-standard   All disks in the instance will use this disk type
+-disktype        Has to be one of: pd-balanced, pd-extreme, pd-ssd, pd-standard All disks in the instance will use this disk type
 ```
 You can specify any labels you want to supply for this new Compute Engine VM with -label, for instance:
 
- **-label "pet:cat,drink:milk"**
+**-label "pet:cat,drink:milk"**
 
 However if you add **-retainlabel true** then any labels that were used the Compute Engine Instance when the snapshot was created will be applied to the new VM.
 Lets imagine the original VM had a label:
 
 ```bird:parrot```
 
-and we specify the following:   
+and we specify the following:
 
 ```-retainlabel true -label "pet:cat,drink:milk"```
 
@@ -1905,7 +1902,7 @@ The goal is to offer a simplified way to manage failover or failback where:
 
 ### Demo video
 
-This video will help you understand how to use this command:   
+This video will help you understand how to use this command: 
 
 https://youtu.be/hh1seRvRZos
 
@@ -1931,9 +1928,9 @@ We can then run a command like this specifying our CSV file:
 ```
 New-AGMLibGCPInstanceMultiMount -instancelist recoverylist.csv
 ```
-This will load the contents of the file recoverylist.csv and use it to run multiple **New-AGMLibGCPInstance** jobs.  The jobs will run in parallel (up to the slot limit). In PowerShell 5 they are started in series, however in PowerShell 7 they are started in parallel in groups of 5 (which you can change with **-limit XX**)
+This will load the contents of the file recoverylist.csv and use it to run multiple **New-AGMLibGCPInstance** jobs. The jobs will run in parallel (up to the slot limit). In PowerShell 5 they are started in series, however in PowerShell 7 they are started in parallel in groups of 5 (which you can change with **-limit XX**)
  
-If you specify both appid and appname, then the appname column will be ignored.  However having appname is mandatory as it gives you the name of the source application.
+If you specify both appid and appname, then the appname column will be ignored. However having appname is mandatory as it gives you the name of the source application.
 
 What is not supported right now:
 
@@ -1952,7 +1949,7 @@ Then on the Google Console side, keep or delete them as you wish.
 
 #### Monitoring the jobs created by a multi mount by creating an object
 
-When you run a multimount, by default all jobs will run before any output is printed.   What we output is a nicely formatted object listing each line in the CSV, the app details, the command that was run and the results.  
+When you run a multimount, by default all jobs will run before any output is printed. What we output is a nicely formatted object listing each line in the CSV, the app details, the command that was run and the results.  
 
 The best way to manage this is to load this output into your own object, so do something like this:
 ```
@@ -1986,12 +1983,9 @@ The following command started this job:  Job_0867154Optional[Job_0867154] to mou
 New-AGMLibGCEConversion -projectname project1 -machinetype n1-standard-2 -instancename "apr12test1centos3" -nic0network "https://www.googleapis.com/compute/v1/projects/project1/global/networks/actifioanz" -nic0subnet "https://www.googleapis.com/compute/v1/projects/project1/regions/australia-southeast1/subnetworks/australia" -region "australia-southeast1" -zone "australia-southeast1-a" -srcid "391360" -appname "Centos3" -serviceaccount "systemstaterecovery@project1.iam.gserviceaccount.com" -preferedsource onvault
 ```
 
-
-
 ## Compute Engine Instance Onboarding Automation
 
 If we are onboarding large numbers of Compute Engine Instances or we want to auto protect new instances using automation, we can use a function called: **New-AGMLibGCEInstanceDiscovery**  
-
 We can run this command against each project/zone combination where we have instances we want to onboard (so if you have 40 projects all using the same zone, then you need to run this command 40 times) or we can put all project/zones in a CSV file so we can run this command just once.
 
 ### Using a CSV file to work with multiple zones and or projects
@@ -2021,9 +2015,9 @@ When you run  ```New-AGMLibGCEInstanceDiscovery``` you have to specify one of th
 * ```-backup```  This will add all new Compute Engine Instances it finds and for each Instance it will apply a backup plan based on two possible settings: 
     * you specify an instance label with ```-backupplanlabel```  If the value for that label is the name of an existing policy template, it will automatically protect that instance using that template. 
     * you specify a template ID with ```-sltid``` or template name with ```-sltname```
-    * you can also specify ```-bootonly``` to only protect the bootdisk of all appliances that are managed with a backup plan.   In addition we can specify ```diskbackuplabel``` to specify a label which can determine if only the boot drive of this instance shiould be protected
+    * you can also specify ```-bootonly``` to only protect the bootdisk of all appliances that are managed with a backup plan. In addition we can specify ```diskbackuplabel``` to specify a label which can determine if only the boot drive of this instance shiould be protected
 
-An example run is as follows.  In the first zone, no new instances were found.  In the second zone, 3 were found and two protected.   A second run is made on each zone where more than 5 instances need to be processed (since we process 5 at a time).  The third zone had no new VMs.   
+An example run is as follows. In the first zone, no new instances were found. In the second zone, 3 were found and two protected. A second run is made on each zone where more than 5 instances need to be processed (since we process 5 at a time). The third zone had no new VMs.
 ```
 New-AGMLibGCEInstanceDiscovery -discoveryfile ./disco.csv -backup -sltid 12345
 ```
@@ -2080,7 +2074,7 @@ We can specify additional options to control whether the discovered instances ar
 * ```-backupplanlabel backupplan``` To look for a user specified label on each VM to determine which SLT to use. In this example the key would be **backupplan**  and the value of the key should be a valid SLT name
 * ```-diskbackuplabel diskbackup``` To look for a user specified label on each VM to determine which disks to backup. In this example the key would be **diskbackup**  and the value should be **bootonly**.  If any other value is specified then all disks will be backed up.
 
-So an example command would look like this.  In this example we backup all instances using the sltname found in the **backupplan** label on each instance.
+So an example command would look like this. In this example we backup all instances using the sltname found in the **backupplan** label on each instance.
 ```
 GMLibGCEInstanceDiscovery -credentialid 706606 -applianceid 144091747698 -project avwarglab1 -zone australia-southeast2-a -backupplanlabel backupplan -backup
 ```
@@ -2098,26 +2092,26 @@ New-AGMLibGCEInstanceDiscovery -credentialid 706606 -applianceid 144091747698 -p
 ```
 ### FAQ
 
-1. How do I use a label assigned to the compute engine instance?    
+1. How do I use a label assigned to the compute engine instance? 
 
-You can do that by specifying  **-backupplanlabel**.   So lets say you add a label to each relevant instance where the label name is *corporatepolicy* and the value is a valid template name, then when you run the command, add **-backupplanlabel "corporatepolicy"**
+You can do that by specifying  **-backupplanlabel**. So lets say you add a label to each relevant instance where the label name is *corporatepolicy* and the value is a valid template name, then when you run the command, add **-backupplanlabel "corporatepolicy"**
 
 The whole command would look like:
 ```
 New-AGMLibGCEInstanceDiscovery -discoveryfile ./disco.csv -backup -backupplanlabel "corporatepolicy"
 ```
-2. How do I learn the names of the templates to use as values for the labels?    
+2. How do I learn the names of the templates to use as values for the labels?  
 
 You can either look at Templates in the SLA Architect in Web GUI or run: ```Get-AGMSLT```
 
-3. What if I don't want all instances to be added?   
+3. What if I don't want all instances to be added?
 
-This function has to add them all to ensure each instance is examined.   If you add them then delete them, they won't be added back in a second run because an Actifio label with a value of **unmanaged** will be added to them.
+This function has to add them all to ensure each instance is examined. If you add them then delete them, they won't be added back in a second run because an Actifio label with a value of **unmanaged** will be added to them.
 
 4. If I want to test this function how can I do this easily?
 
-    a.  Create a new template with a single snapshot policy that never runs.  You do this by clicking on *Except* and setting it to *everyday* so it snaps *everyday* except *everyday*    In the example below we call this template *testtemplate*
-    
+    a.  Create a new template with a single snapshot policy that never runs.  You do this by clicking on *Except* and setting it to *everyday* so it snaps *everyday* except *everyday*  In the example below we call this template *testtemplate*
+
     b.  Create a large number of VMs with this GCLOUD command (edit to mtach your project):
     ```
     gcloud compute instances bulk create \
@@ -2170,16 +2164,16 @@ This function has to add them all to ensure each instance is examined.   If you 
 
 ## Compute Engine Instance Image Audit
 
-When a Compute Engine instance backup is created it is effectively back-ended by persistent disk snapshots.   You may have two scenarios:
+When a Compute Engine instance backup is created it is effectively back-ended by persistent disk snapshots. You may have two scenarios:
 
-1.  You want to validate that the images shown by Backup and DR have matching persistent disk snapshots.    For this we use **Confirm-AGMLibComputeEngineImage**
+1.  You want to validate that the images shown by Backup and DR have matching persistent disk snapshots. For this we use **Confirm-AGMLibComputeEngineImage**
 1.  You want to validate that persistent disk snapshots have matching images in Backup and DR. For this we use **Confirm-AGMLibComputeEngineProject**
 
 ### Confirm-AGMLibComputeEngineImage
 
-This command confirms that the Compute Engine Snapshot created by a backup image still exists.  It does this using the GoogleCloud PowerShell module
+This command confirms that the Compute Engine Snapshot created by a backup image still exists. It does this using the GoogleCloud PowerShell module
 
-Lets take an example where we have several compute engine instances we want to validate.  We learn their application IDs like this:
+Lets take an example where we have several compute engine instances we want to validate. We learn their application IDs like this:
 ```
 Get-AGMApplication -filtervalue apptype=GCPInstance | select id,appname,apptype,managed,{$_.cluster.name} | ft
 
@@ -2205,7 +2199,7 @@ id      backupname    consistencydate
 1791809 Image_0176133 2023-03-01 23:40:55
 1745128 Image_0173061 2023-02-23 22:16:47
 ```
-Now that we have the image IDs we can validate them one at a time like this.   There are two things we want to find, which is to confirm there is a matching snapshotname and that the status is READY.
+Now that we have the image IDs we can validate them one at a time like this. There are two things we want to find, which is to confirm there is a matching snapshotname and that the status is READY.
 ```
 $image = 1845601
 Confirm-AGMLibComputeEngineImage $image
@@ -2227,9 +2221,9 @@ Note that if the GoogleCloud PowerShell module is not installed this function ca
 
 ### Confirm-AGMLibComputeEngineProject
 
-This function matches snapshots in compute engine to snapshots in Backup and DR using the GoogleCloud PowerShell module.   This function reads in all Compute Engine snapshots found in the nominated Google Cloud project and then matches them to those reported by Backup and DR.   If an image does not have a reported ID then no matching image was found by Backup and DR.  This means either the image is not being tracked by Backup and DR or is being tracked by a different instance of Backup and DR (a different Management Console and Backup Appliance) 
+This function matches snapshots in compute engine to snapshots in Backup and DR using the GoogleCloud PowerShell module. This function reads in all Compute Engine snapshots found in the nominated Google Cloud project and then matches them to those reported by Backup and DR. If an image does not have a reported ID then no matching image was found by Backup and DR. This means either the image is not being tracked by Backup and DR or is being tracked by a different instance of Backup and DR (a different Management Console and Backup Appliance) 
 
-You run the function like this (change $project to suit your project).  You will get a report on every persistent disk snapshot found in that project.
+You run the function like this (change $project to suit your project). You will get a report on every persistent disk snapshot found in that project.
 
 ```
 $project = "avwarglab1"
@@ -2261,8 +2255,8 @@ The Syntax to use Connect-AGM is documented here:
 
 | Product | Device | Instructions
 | ---- | ---- | --------
-| Actifio | AGM  | [Login to your AGM](https://github.com/Actifio/AGMPowerCLI#4-login-to-your-agm)             
-| Google Cloud Backup and DR | Management Console |  [GCBDR](https://github.com/Actifio/AGMPowerCLI/blob/main/GCBDR.md)
+| Actifio | AGM  | [Login to your AGM](https://github.com/Actifio/AGMPowerCLI#4-login-to-your-agm)  
+| Google Cloud Backup and DR | Management Console | [GCBDR](https://github.com/Actifio/AGMPowerCLI/blob/main/GCBDR.md)
 
 [Back to top](#usage-examples)
 
@@ -2356,7 +2350,7 @@ id      appname            apptype         managed ConsistencyGroupID Consistenc
 1437429 ProdDB             SqlServerWriter    True
 1437417 WINDOWS\SQLEXPRESS SqlInstance        True
 ```
-We can then add selected applications to the group with syntax like this.   Only add unmanaged applications:
+We can then add selected applications to the group with syntax like this. Only add unmanaged applications:
 ```
 $groupid = 1892114
 $applicationid=1891628
@@ -2417,7 +2411,7 @@ New-AGMLibDb2Mount
 
 # Disaster Recovery Automation
 
-There are several automation tools available to recovery multiple VMs and databases in a single command.  Most of these use a CSV file as an input.  Additional tools are being added based on demand.  
+There are several automation tools available to recovery multiple VMs and databases in a single command. Most of these use a CSV file as an input. Additional tools are being added based on demand.  
 
 ## Recovering Virtual Machines
 
@@ -2441,7 +2435,7 @@ While you can mount any databases using PowerShell, there are also some automati
 # Events
 
 ## Listing your events
-To list events use this command.  The output can be extensive so [filters](README.md/#filtering) and limits are recommended.
+To list events use this command. The output can be extensive so [filters](README.md/#filtering) and limits are recommended.
 ```
 Get-AGMEvent
 ```
@@ -2534,7 +2528,7 @@ This command **adds** iSCSI port name iqn1 to host ID 105008 on appliance ID 143
 ```
 New-AGMHost -applianceid 143112195179 -hostid "12345" iscsiname "iqn1"
 ```
-To learn applianceid, use this command:  ```Get-AGMAppliance``` and use the clusterid as applianceid.  If you have multiple applianceIDs, comma separate them
+To learn applianceid, use this command:  ```Get-AGMAppliance``` and use the clusterid as applianceid. If you have multiple applianceIDs, comma separate them
 To learn hostid, use this command:  ```Get-AGMHost```
 
 This command **removes** iSCSI port name iqn1:
@@ -2542,7 +2536,7 @@ This command **removes** iSCSI port name iqn1:
 Remove-AGMHost -applianceid 143112195179 -hostid "12345" iscsiname "iqn1"
 ```
 ## Deleting a Host
-You can remove a host with the command.  Note you cannot remove a host if there are still applications depending on it.  In this example we learn the host ID and cluster ID:
+You can remove a host with the command.  Note you cannot remove a host if there are still applications depending on it. In this example we learn the host ID and cluster ID:
 ```
 Get-AGMHost -filtervalue hostname=testvm | select id,name,clusterid
 
@@ -2557,7 +2551,7 @@ Remove-AGMHost -id 430741 -clusterid 144091747698
 
 ## Deleting Stale Hosts
 
-You may have a situation where you have many stale hosts after a DR or failover test.   You can only delete a single host at a time using the GUI, so we can use this multi step process to delete many stale hosts:
+You may have a situation where you have many stale hosts after a DR or failover test. You can only delete a single host at a time using the GUI, so we can use this multi step process to delete many stale hosts:
 
 The first three commands learn all hosts that have applications ```$hostswithapps``` and then all known hosts ```$allhosts``` which are then compared to generate a list of stale hosts ```$stalehosts``` that are hosts that have no applications:
 ```
@@ -2577,7 +2571,7 @@ We can then delete them with this script:
 ```
 foreach ($object in $stalehosts) { Remove-AGMHost -id $object.id -applianceid $object.sourcecluster }
 ```
-> **Note**:   The ```Remove-AGMHost``` does not currently return a message, so don't be concerned if the deletion appears to be slow or stuck. 
+> **Note**: The ```Remove-AGMHost``` does not currently return a message, so don't be concerned if the deletion appears to be slow or stuck. 
 
 
 [Back to top](#usage-examples)
@@ -2586,7 +2580,7 @@ foreach ($object in $stalehosts) { Remove-AGMHost -id $object.id -applianceid $o
 
 ## Image creation with an OnDemand Job
 
-When we want to manually create a new backup image, this is called running an on-demand job.   We can do this with the ```New-AGMLibImage``` command.
+When we want to manually create a new backup image, this is called running an on-demand job. We can do this with the ```New-AGMLibImage``` command.
 You can learn the application ID of the application in question with:  ```Get-AGMApplication```  You may want to use [filters](README.md/#filtering). 
 This is a good example of a filter:
 ```
@@ -2597,7 +2591,7 @@ Here is an example of the output:
 id      appname   apptype                                                                                                                                                                         --      -------   -------
 1425738 filepath1 LVM Volume
 ```
-In this example we know the application ID so we request a new image.   A snapshot job will automatically run.   If a snapshot policy cannot be found, a direct to onvault job will be attempted.
+In this example we know the application ID so we request a new image. A snapshot job will automatically run. If a snapshot policy cannot be found, a direct to onvault job will be attempted.
 ```
 $appid = 1425738
 New-AGMLibImage $appid
@@ -2676,7 +2670,7 @@ Now since this user story relies on running specific policies for specific group
 There are two ways to achieve this:
 
 * Using unique Templates for each group
-* Using LogicalGroups to group your apps.   This is the recommended method.
+* Using LogicalGroups to group your apps. This is the recommended method.
 
 Once we have done this, then we can use **Start-AGMLibPolicy** to run a job against all apps either for one policy or in one logical group (or both).
 So just run the command and follow the prompts to build your command:
@@ -2706,13 +2700,13 @@ running       97
 running       98
 ```
 Your logic would work like this:
-1. Count the relevant apps.  In this example we have 2.
+1. Count the relevant apps. In this example we have 2.
 ```
 $appgrab = Get-AGMApplication -filtervalue "sltname=FSSnaps_RW_OV"
 $appgrab.count
 2
 ```
-2. Count the current images.  We currently have 6 OnVault images.
+2. Count the current images. We currently have 6 OnVault images.
 ```
 $imagegrab = Get-AGMImage -filtervalue "sltname=FSSnaps_RW_OV&jobclass=OnVault"
 $imagegrab.count
@@ -2727,7 +2721,7 @@ Output should look like this. We get two jobs started.
 Starting job for appid 20577 using cloud policy ID 25627 from SLT FSSnaps_RW_OV
 Starting job for appid 6965 using cloud policy ID 25627 from SLT FSSnaps_RW_OV
 ```
-4.  Scan for running jobs until they all finish
+4. Scan for running jobs until they all finish
 ```
 Get-AGMJob -filtervalue "policyname=OndemandOV" | select status,progress
 
@@ -2756,7 +2750,7 @@ status progress
 ------ --------
 
 ```
-5. Count the images and ensure they went up by the number of apps.   Note that if expiration run at this time, this will confuse the issue.
+5. Count the images and ensure they went up by the number of apps. Note that if expiration run at this time, this will confuse the issue.
 You can see here we went from 6 to 8.
 ```
 $imagegrab = Get-AGMImage -filtervalue "sltname=FSSnaps_RW_OV&jobclass=OnVault"
@@ -2771,7 +2765,7 @@ Remove-AGMImage Image_2133445
 
 ## Image Expiration In Bulk
 
-You may have a requirement to expire large numbers of images at one time.   One way to approach this is to use the ```Remove-AGMImage``` command in a loop. However this may fail as shown in the example below.  The issue is that the first expiration job is still running while you attempt to execute the following jobs, which causes a collision:
+You may have a requirement to expire large numbers of images at one time. One way to approach this is to use the ```Remove-AGMImage``` command in a loop. However this may fail as shown in the example below.  The issue is that the first expiration job is still running while you attempt to execute the following jobs, which causes a collision:
 ```
 $images = Get-AGMImage -filtervalue appid=35590 | select backupname
 $images
@@ -2803,7 +2797,7 @@ err_code err_message
    10023 avwlab2sky:,	errormessage: expiration in progress, try again later,	errorcode: 10017
 
 ```
-There are two solutions for this.   Either insert a sleep in between each Remove-AGMImage command, or preferably use the method below, where we set the image expiration date instead:
+There are two solutions for this. Either insert a sleep in between each Remove-AGMImage command, or preferably use the method below, where we set the image expiration date instead:
 
 First we learn the expiration dates
 ```
@@ -2865,7 +2859,7 @@ foreach ($image in $images) { Set-AGMImage -imagename $image.backupname -expirat
 
 If you have a situation where you have deleted a Cloud Storage bucket, then all OnVault operations to that bucket including expirations, will fail.  
 
-At this point you will have images that are stuck.   To clean this up, use the following procedure:
+At this point you will have images that are stuck. To clean this up, use the following procedure:
 
 First learn the ID of the affected bucket using this command:
 ```
@@ -2913,7 +2907,7 @@ If you targeted the wrong pool and regret what you just did, simply run the comm
 
 ## Image Import from OnVault
 
-Prior to running your scripts you may want to import the latest OnVault images into your appliance.  To learn the syntax, just run the command without any options.   It will run guided mode.  We can also learn everything we need, step by step as shown below.
+Prior to running your scripts you may want to import the latest OnVault images into your appliance.  To learn the syntax, just run the command without any options. It will run guided mode.  We can also learn everything we need, step by step as shown below.
 
 In general we just run the command with two parameters like this.
 ```
@@ -2947,27 +2941,29 @@ Note you can also add **-forget** to forget learned images, or **-owner** to tak
 
 ## Persistent Disk Import From OnVault
 
-Imports or forgets PD Snapshot images. This function Imports all PD snapshot images created by appliance ID 1415019931 and import  destination is determined by specified diskpool ID
-Note there is no Forget-AGMLibPDSnapshot command.  You can do import and forget from this function. 
+Imports or forgets PD Snapshot images. This function Imports all PD snapshot images created by source appliance ID 1415019931 and import destination is determined by specified diskpool ID
+Note there is no Forget-AGMLibPDSnapshot command. You can do import and forget from this function. The AppId used in imports, is not the target AppId, it is the source appliance AppId.
 
-Imports all PD Snapshot images from disk pool ID 20060633:
+To learn the AppIDs use this command (note the ApplianceName is where the images were created, in other words the source appliance, not the one running the mount):
+```
+Get-AGMApplication -filtervalue "apptype=SystemState&apptype=VMBackup" | select id,appname,@{N='appliancename'; E={$_.cluster.name}} | sort-object appname
+```
+Imports all PD Snapshot images from disk pool ID 20060633, the appliance id (appid) is for the source appliance that initialy created the images:
 ```
 Import-AGMPDSnapshot -diskpoolid 20060633 -applianceid 1415019931 
 ```
-
-Imports all PD Snapshot images from disk pool ID 20060633 and App ID 4788:
+Imports all PD Snapshot images from disk pool ID 20060633 and App ID 4788, the appliance id is for the source appliance that initialy created the images:
 ```
 Import-AGMPDSnapshot -diskpoolid 20060633 -applianceid 1415019931 -appid 4788
 ```
-Imports all PD Snapshot images from disk pool ID 20060633 and App ID 4788  and takes ownership:
+Imports all PD Snapshot images from disk pool ID 20060633 and source appliance appid 4788 and takes ownership:
 ```
 Import-AGMPDSnapshot -diskpoolid 20060633 -applianceid 1415019931 -appid 4788 -owner
 ```
-Forgets all PD Snapshot images imported from disk pool ID 20060633 and App ID 4788 :
+Forgets all PD Snapshot images imported from disk pool ID 20060633 and source appliance appid 4788 :
 ```
 Import-AGMPDSnapshot -diskpoolid 20060633 -applianceid 1415019931 -appid 4788 -forget
 ```
-
 
 ## Image restore
 For the vast bulk of application types where we want to restore the application, the main thing we need is the image ID that will be used.
@@ -2980,7 +2976,7 @@ This will give you the application ID (in this example it is 425468), which we t
 $appid=425468
 Get-AGMImage -filtervalue appid=$appid -sort consistencydate:desc | select id,consistencydate,jobclass
 ```
-We then take the image ID and run a restore.   However some application types can restore individual objects which we can specify as an objectlist, so we use this syntax to find the objects:
+We then take the image ID and run a restore. However some application types can restore individual objects which we can specify as an objectlist, so we use this syntax to find the objects:
 ```
 $imageid = 791691
 (Get-AGMImage 791691).restorableobjects.name
@@ -2989,7 +2985,7 @@ There are a number of parameters we can use:
 * $imageid:  The imageid or imagename are mandatory.
 * $imagename: The imageid or imagename are mandatory.
 * $jsonbody:  This can be used if you know what the desired JSON body is, otherwise use the following parameters:
-* $donotrecover:   This is for databases.  Specifies that the Databases is not restored with recovery.
+* $donotrecover:  This is for databases.  Specifies that the Databases is not restored with recovery.
 * $disableschedule:  This is a switch that will control whether the schedule will be disabled when a restore is run.  By default it is is false
 * $objectlist:  This is a comma separated list of objects to be restored, such as DBs in an instance or Consistency Group
 * $username:  This is a username
@@ -3012,9 +3008,9 @@ Set-AGMImage -imagename Image_2133445 -label "testimage"
 ## Setting an Image Label in bulk
 
 This function is used to label a large number of images in a single command.  This is done by supplying one of the following:
-* A list of images to label, normally created with ```New-AGMLibImageRange```  We then use:   ```Set-AGMLibImage -imagelist <imagelist>```
+* A list of images to label, normally created with ```New-AGMLibImageRange```  We then use: ```Set-AGMLibImage -imagelist <imagelist>```
 * A CSV file contained a list of images with new labels.  The file needs to have at least id,backupname,label as headings.  You could use ```New-AGMLibImageRange``` to create this file.  Then use:  ```Set-AGMLibImage -filename <filename.csv>```
-* An imagename.   You could learn this in the Web GUI.   Then use:  ```Set-AGMLibImage -imagename <imagename> -label <newlabel>"```
+* An imagename. You could learn this in the Web GUI. Then use:  ```Set-AGMLibImage -imagename <imagename> -label <newlabel>"```
 
 [Back to top](#usage-examples)
 
@@ -3024,7 +3020,7 @@ Installation on how to install AGMPowerCLI and [AGMPowerLib](https://github.com/
 
 | Module |  Instructions
 | ---- | --------
-| AGMPowerCLI|  [Install or Upgrade AGMPowerCLI](https://github.com/Actifio/AGMPowerCLI#1-install-or-upgrade-agmpowercli)             
+| AGMPowerCLI|  [Install or Upgrade AGMPowerCLI](https://github.com/Actifio/AGMPowerCLI#1-install-or-upgrade-agmpowercli)
 | AGMPowerLib |  [Install or upgrade AGMPowerLib](https://github.com/Actifio/AGMPowerLib#install-or-upgrade-agmpowerlib)
 
 
@@ -3084,14 +3080,14 @@ You can also use a variety of options:
 * ```-sltname gold``` Track jobs started by a specific policy template, in this example one named *gold*
 
 ## Canceling a Running Job
-This command will cancel a running job.  You need to know the job name:
+This command will cancel a running job. You need to know the job name:
 ```
 Remove-AGMJob Job_2133445
 ```
 
 ## Following a Running Job
  
-If you have a started a job you might want to track it to completion so you know when its finished.  You can do this with his command:
+If you have a started a job you might want to track it to completion so you know when its finished. You can do this with his command:
 ```
 $jobname = "Job_0198174"
 Get-AGMLibFollowJobStatus $jobname
@@ -3127,7 +3123,7 @@ To create a mount from an LVM image, you can build a command in guided mode by j
 ```
  New-AGMLibLVMMount
 ```
-A typical example of a mount would be a command like this one.  Which mounts the latest snapshot of appid 1425738 to host ID 1425591 on appliance ID (clusterid) 145666187717 using the mount point ```/testme```
+A typical example of a mount would be a command like this one. Which mounts the latest snapshot of appid 1425738 to host ID 1425591 on appliance ID (clusterid) 145666187717 using the mount point ```/testme```
 ```
 New-AGMLibLVMMount -appid 1425738 -targethostid 1425591 -mountapplianceid 145666187717 -mountaction specifymountlocation -mountlocation "/testme"
 ```
@@ -3135,7 +3131,7 @@ New-AGMLibLVMMount -appid 1425738 -targethostid 1425591 -mountapplianceid 145666
 
 1. Run this command in guided mode to learn the available images and select one
 1. Learn the imagename and specify that as part of the command with -imagename
-1. Learn the Appid and Cluster ID for the appliance that will mount the image and then use -appid and -mountapplianceid .  This will use the latest snapshot, StreamSnap or OnVault image on that appliance
+1. Learn the Appid and Cluster ID for the appliance that will mount the image and then use -appid and -mountapplianceid. This will use the latest snapshot, StreamSnap or OnVault image on that appliance
 
 The mount action field is used to determine which mount action to take:
 * ```-mountaction agentmanaged```             Will mount using the mount points selected by the agent (this is the default behaviour)
@@ -3151,7 +3147,7 @@ Currently this function does not offer the option to use the source location or 
 
 ## Active Mounts 
 
-An active image is another term for a mounted image.   In the GUI we display them by going to ```App Manager > Active Mounts```
+An active image is another term for a mounted image. In the GUI we display them by going to ```App Manager > Active Mounts```
 
 We can display them by running this command:
 ```
@@ -3222,7 +3218,7 @@ This command runs a guided menu to mount an image to a container
 ```
 New-AGMLibContainerMount 
 ```
-In this example we mount Image ID 54380607  The ```-volumes``` list each moint point in the image.  Each mount point is comma separated.  For each each mountpoint we need three values, that are semi-colon separated.  In this example, there are two mount points, the first one is ```/dev/hanavg/log``` .  It is given an appliance mountpoint of ```/test1``` and an NFS export path of ```/custmnt2```
+In this example we mount Image ID 54380607  The ```-volumes``` list each moint point in the image. Each mount point is comma separated. For each each mountpoint we need three values, that are semi-colon separated. In this example, there are two mount points, the first one is ```/dev/hanavg/log``` .  It is given an appliance mountpoint of ```/test1``` and an NFS export path of ```/custmnt2```
 
 The allowedips is a comma separated list of IP addresses that can connect to the appliance mountpoint.
 ```
@@ -3231,7 +3227,7 @@ New-AGMLibContainerMount -imageid 54380607 -volumes "dasvol:/dev/hanavg/log;/tmp
 
 ## Display Container Mount YAML
 
-If you have used the option to mount to a Container, you may want to get the YAML file needed to allow the Container to access it.  First learn the mounted image ID or imagename with the [Get-AGMLibActiveImage](#active-mounts) command and then use it like this:
+If you have used the option to mount to a Container, you may want to get the YAML file needed to allow the Container to access it. First learn the mounted image ID or imagename with the [Get-AGMLibActiveImage](#active-mounts) command and then use it like this:
 ```
 $imagename = Image_0174936
 Get-AGMLibContainerYAML -imagename $imagename
@@ -3239,9 +3235,9 @@ Get-AGMLibContainerYAML -imagename $imagename
 
 ## Multi Mount for Ransomware Analysis
 
-There are many cases where you may want to mount many filesystems in one hit.  A simple scenario is ransomware, where you are trying to find an uninfected or as yet unattacked (but infected) image for each production filesystem.   So lets mount as many images as we can as quickly as we can so we can find unaffected filesystems and start the recovery.
+There are many cases where you may want to mount many filesystems in one hit. A simple scenario is ransomware, where you are trying to find an uninfected or as yet unattacked (but infected) image for each production filesystem. So lets mount as many images as we can as quickly as we can so we can find unaffected filesystems and start the recovery.
 
-There is a composite function that is designed to help you find all the commands.   You can start this by running:  
+There is a composite function that is designed to help you find all the commands. You can start this by running:  
 ```
 Start-AGMLibRansomwareRecovery
 ```
@@ -3249,11 +3245,11 @@ Start-AGMLibRansomwareRecovery
 ### Stopping the Scheduler and/or expiration 
 
 Prior to beginning recovery efforts you may want to stop the scheduler and expiration on large numbers of Apps or even your whole environment.
-If you created Logical Groups this is one convenient way to manage this.   
+If you created Logical Groups this is one convenient way to manage this.
 There are two commands you can use:
 
-* ```Get-AGMLibSLA```      This command will list the Scheduler and Expiration status for all your apps, or if you use -appid or -slaid, for a specific app
-* ```Set-AGMLibSLA```      This command will let you set the scheduler or Expiration status for all your apps, specific apps or specific Logical Groups.
+* ```Get-AGMLibSLA```  This command will list the Scheduler and Expiration status for all your apps, or if you use -appid or -slaid, for a specific app
+* ```Set-AGMLibSLA```  This command will let you set the scheduler or Expiration status for all your apps, specific apps or specific Logical Groups.
 
 #### Building a list of images
 First we build an object that contains a list of images.  For this we can use **Get-AGMLibImageRange** in a syntax like this, where in this example we get all images of filesystems created in the last day:
@@ -3264,14 +3260,14 @@ If we know that images created in the last 24 hours are all infected, we could u
 ```
 $imagelist = Get-AGMLibImageRange -apptype FileSystem -appliancename sa-sky -olderlimit 3 -newerlimit 1
 ```
-We can also use the Template Name (SLT) to find our apps.  This is a handy way to separate apps since you can create as many SLTs as you like and use them as a unique way to group apps.
+We can also use the Template Name (SLT) to find our apps. This is a handy way to separate apps since you can create as many SLTs as you like and use them as a unique way to group apps.
 ```
 $imagelist = Get-AGMLibImageRange -sltname FSSnaps_RW_OV -olderlimit 3 -newerlimit 1
 ```
 
 #### Editing your $Imagelist 
 
-You could create a CSV of images, edit it and then convert that into an object.  This would let you delete all the images you don't want to recover, or create chunks to recover (say 20 images at a time)
+You could create a CSV of images, edit it and then convert that into an object. This would let you delete all the images you don't want to recover, or create chunks to recover (say 20 images at a time)
 
 In this example we grab 20 days of images:
 
@@ -3279,7 +3275,7 @@ In this example we grab 20 days of images:
 Get-AGMLibImageRange -apptype FileSystem -appliancename sa-sky -olderlimit 20 | Export-Csv -Path .\images.csv
 ```
 
-We now edit the CSV  we created **images.csv** to remove images we don't want.   We then import what is left into our $imagelist variable:
+We now edit the CSV  we created **images.csv** to remove images we don't want. We then import what is left into our $imagelist variable:
 ```
 $imagelist = Import-Csv -Path .\images.csv
 ```
@@ -3311,7 +3307,7 @@ We can now fire our new command using the settings we defined and our image list
 ```
 New-AGMLibMultiMount -imagelist $imagelist -hostlist $hostlist -mountpoint /tmp/
 ```
-For uniqueness we have quite a few choices to generate mounts with useful names.   A numeric indicator will always be added to each mountpoint as a suffix.  Optionally we can use any of the following.   They will be added in the order they are listed here:
+For uniqueness we have quite a few choices to generate mounts with useful names. A numeric indicator will always be added to each mountpoint as a suffix. Optionally we can use any of the following. They will be added in the order they are listed here:
 
 * -h or hostnamesuffix   :  which will add the host name of the image to the mountpoint
 * -a or -appnamesuffix   :  which will add the appname of the image to the mountpoint
@@ -3321,7 +3317,7 @@ For uniqueness we have quite a few choices to generate mounts with useful names.
 
 This will mount all the images in the list and round robin through the host list.
 
-If you don't specify a label, all the image will get the label **MultiFS Recovery**   This will let you easily spot your mounts by doing this:
+If you don't specify a label, all the image will get the label **MultiFS Recovery** This will let you easily spot your mounts by doing this:
 ```
 $mountlist = Get-AGMLibActiveImage | where-object  {$_.label -eq "MultiFS Recovery"}
 ```
@@ -3351,8 +3347,8 @@ Remove-AGMLibMount -imagename $imagename -delete
 ```
 You can also use the following:
 * ```-imageid 1234``` To use image ID rather than image name
-* ```-force``` To force the unmount.   Don't do this without clear reason
-* ```-preservevm ``` This applies to Compute Engine Instances created from Persistent Disk Snapshot.   When used the Appliance Image of the mount is removed, but on the Compute Engine  side the new VM is retained.   
+* ```-force``` To force the unmount. Don't do this without clear reason
+* ```-preservevm ``` This applies to Compute Engine Instances created from Persistent Disk Snapshot. When used the Appliance Image of the mount is removed, but on the Compute Engine  side the new VM is retained.
 * ```-gceinstanceforget```  Forgets all mounted Compute Engine Instance.  This is the same as running ```-preservevm``` against them
 [Back to top](#usage-examples)
 # MySQL
@@ -3375,7 +3371,7 @@ New-AGMLibOracleMount
 
 ## Organization Creation
 
-If we want to create an Organization we need to get the IDs of the various resources we want to put into the Organization.   We could run a series of commands like this:
+If we want to create an Organization we need to get the IDs of the various resources we want to put into the Organization. We could run a series of commands like this:
 ```
 Get-AGMHost | Select-Object id,name
 Get-AGMSLP | Select-Object id,name
@@ -3406,7 +3402,7 @@ hostlistcount : 2
 slplistcount  : 1
 poollistcount : 1
 ```
-We then realize we added the wrong host ID.   We need to remove 460500 and add 449560.   First we remove 460500 by setting the Org to **0**
+We then realize we added the wrong host ID. We need to remove 460500 and add 449560. First we remove 460500 by setting the Org to **0**
 ```
  Set-AGMOrgHost -orglist "0" -hostid 460500
  ```
@@ -3450,27 +3446,27 @@ So now we know the id of the Database inside our HANA instance, we just need to 
 ```
 New-AGMLibSAPHANAMount -appid 577110 -targethostname coe-hana-2 -dbsid "TGT" -userstorekey "ACTBACKUP" -mountpointperimage "/tgt" -label "Test HANA database"
 ```
-If you run ```New-AGMLibSAPHANAMount``` in guided mode, you can take the option to generate a CSV file.   This can be used to run ```New-AGMLibSAPHANAMultiMount```
+If you run ```New-AGMLibSAPHANAMount``` in guided mode, you can take the option to generate a CSV file. This can be used to run ```New-AGMLibSAPHANAMultiMount```
 
 ##  SAP HANA Multi Mount
 
-You can run ```New-AGMLibSAPHANAMount``` in guided mode and take the option to generate a CSV file which you can then edit it to mount multiple new SAP HANA instances at once.   A sample file would look like this:
+You can run ```New-AGMLibSAPHANAMount``` in guided mode and take the option to generate a CSV file which you can then edit it to mount multiple new SAP HANA instances at once. A sample file would look like this:
 ```
 appid,appname,mountapplianceid,imagename,targethostid,dbsid,userstorekey,mountpointperimage,label,recoverypoint,mountmode,mapdiskstoallesxhosts,sltid,slpid
 835132,"act","144091747698","Image_0160795","749871","act","actbackup","/mount","label1","2022-11-07 17:00:39","nfs","false","108758","706611"
 ```
 The following fields are mandatory:
-* ```appname```   the appname field is used to ensure you know which instances you are looking at.   Of course if all your SAP HANA instances are called  ```act``` this still might not help.
+* ```appname```  the appname field is used to ensure you know which instances you are looking at. Of course if all your SAP HANA instances are called  ```act``` this still might not help.
 * ```mountapplianceid```  this is the id of the appliance that will run the mount.  You can learn this with ```Get-AGMAppliance```
-* ```targethostid``` this is the ID of the host we are mounting to.   You can learn this with ```Get-AGMHost```
+* ```targethostid``` this is the ID of the host we are mounting to. You can learn this with ```Get-AGMHost```
 * ```dbsid```  this is the new DB SID we are creating 
 * ```userstorekey```  this is the stored credential the agent will use to authorize its host side activities
 * ```mountpointperimage```  this is the mount point where the mount will be placed
 
 The following fields are optional:
-* ```appid```  If the appnames are all unique, we don't need appid.  If you are working on an imported image, the source appid may not be useful.  Learn this with ```Get-AGMApplication```
+* ```appid```  If the appnames are all unique, we don't need appid. If you are working on an imported image, the source appid may not be useful. Learn this with ```Get-AGMApplication```
 * ```label```  the label is handy as it lets us leave comments about this mount, but it is not mandatory
-* ```recoverypoint```  the recoverypoint is only useful if there are logs to roll forward.  You don't have to specify it.   For a mount we don't roll forward logs
+* ```recoverypoint```  the recoverypoint is only useful if there are logs to roll forward.  You don't have to specify it. For a mount we don't roll forward logs
 * ```mountmode``` VMware only (are we using NFS, vRDM or pRDM)
 * ```mapdiskstoallesxhosts```  VMware only (are we mapping to all ESXi hosts)
 * ```sltid```  template ID if re-protection is requested. Learn this with ```Get-AGMSLT```
@@ -3543,7 +3539,7 @@ WINSQL-2
 ```
 To break down this command:
 * This starts a clone for a database with ImageID 80862 on target host WinSQL-2 and uses the SQL Instance WINSQL-2.
-* Files will be renamed to match the new database name because we didn't specify:  **-dontrenamedatabasefiles**
+* Files will be renamed to match the new database name because we didn't specify: **-dontrenamedatabasefiles**
 * The database will be recovered, and also logs will be applied to the most recent available to roll-forward.
 * The database will be renamed as DevDB01, where as the source database is called Database01, this has a comma between source name and target name : **source_database_name,cloned_database_name**
 * The database will be recovered using the same recovery model as the source, alternatively you can choose: **Simple, Full or Bulk Logged**
@@ -3632,7 +3628,7 @@ id       hostname   osrelease                                    appliancename a
 43673548 demo-sql-4 Microsoft Windows Server 2019 (version 1809) sa-sky        172.24.1.180 Sky
 ```
 
-The user validates the SQL instance name on the target host.  Because the user isn't sure about naming of the hostname  they used '~' to get a fuzzy search.  Because they couldn't remember the exact apptype for SQL instance, they again just used a fuzzy search for 'instance':
+The user validates the SQL instance name on the target host. Because the user isn't sure about naming of the hostname they used '~' to get a fuzzy search. Because they couldn't remember the exact apptype for SQL instance, they again just used a fuzzy search for 'instance':
 
 ```
 Get-AGMApplication -filtervalue "hostname~demo-sql-4&apptype~instance" | select pathname
@@ -3643,7 +3639,7 @@ pathname
 --------
 DEMO-SQL-4
 ```
-Because applications can have images on multiple appliances, if we don't specify an Image name or Image ID, we need to tell the system which appliance to use for the source image.   We do this specifying the clusterid of the relevant appliance with -mountapplianceid.   To learn the clusterids we run this command:
+Because applications can have images on multiple appliances, if we don't specify an Image name or Image ID, we need to tell the system which appliance to use for the source image. We do this specifying the clusterid of the relevant appliance with -mountapplianceid. To learn the clusterids we run this command:
 ```
 Get-AGMAppliance | select-object name,clusterid
 ```
@@ -3721,7 +3717,7 @@ Remove-AGMApplication 52410625
 ```
 ### Finding Images if the application is orphaned
 
-Presuming we know the name of our orphan app and the host it once lived on.  Choose the backupname of the image you want by searching for the appname:
+Presuming we know the name of our orphan app and the host it once lived on. Choose the backupname of the image you want by searching for the appname:
 
 ```
 get-agmimage -filtervalue appname=avdb1 | select id,host,consistencydate,backupname,jobclass | ft *
@@ -3750,7 +3746,7 @@ Rather than learn the image ID, we can store the appid and mount appliance ID an
 ```
 -appid 884945 -mountapplianceid 1415071155
 ```
-We set a label.  This is optional but a very good idea on every mount:
+We set a label. This is optional but a very good idea on every mount:
 ```
 -label "test1"
 ```
@@ -3764,20 +3760,20 @@ We set the DB name for the mounted DB.
 ```
 
 ### Check the mount
-Once the mount has been created, we are ready to start the migrate.   We can check our mount with:  **Get-AGMLibActiveImage**
+Once the mount has been created, we are ready to start the migrate. We can check our mount with: **Get-AGMLibActiveImage**
 
 ### Start the migrate
 
-We run **New-AGMLibMSSQLMigrate** to build our migrate command.   The final command looks like this:
+We run **New-AGMLibMSSQLMigrate** to build our migrate command. The final command looks like this:
 
 ```
 New-AGMLibMSSQLMigrate -imageid 6859821 -files -restorelist "SQL_smalldb.mdf,D:\Data,d:\avtest1;SQL_smalldb_log.ldf,E:\Logs,e:\avtest1"
 ```
 To break down this command:
-* This starts a migrate with default copy thread of 4 and default frequency set to 24 hours for ImageID 6859821.   We could have set thread count and frequency with syntax like:  **-copythreadcount 2 -frequency 2**
+* This starts a migrate with default copy thread of 4 and default frequency set to 24 hours for ImageID 6859821. We could have set thread count and frequency with syntax like:  **-copythreadcount 2 -frequency 2**
 * Files will be renamed to match the new database name because we didn't specify:  **-dontrenamedatabasefiles**
 * Because **-files** was specified, the **-restorelist** must contain the file name, the source location and the targetlocation.
-* Each file is separated by a semicolon,  the three fields for each file are comma separated.
+* Each file is separated by a semicolon, the three fields for each file are comma separated.
 * In this example, the file **SQL_smalldb.mdf** found in **D:\Data** will be migrated to **d:\avtest1**
 * In this example, the file **SQL_smalldb_log** found in **E:\Logs** will be migrated to **e:\avtest1**
 * The order of the fields must be **filename,sourcefolder,targetfolder** so for two files **filename1,source1,target1;filename2,source2,target2**
@@ -3786,11 +3782,11 @@ We could have specified volume migration rather than file migration, or we could
 
 ### Change migrate settings
 
-To change migrate settings we can run:  **Set-AGMLibMSSQLMigrate** and follow the prompts.  Or we can use syntax like this:
+To change migrate settings we can run: **Set-AGMLibMSSQLMigrate** and follow the prompts. Or we can use syntax like this:
 ```
 Set-AGMLibMSSQLMigrate -imageid 6860452 -copythreadcount 2 -frequency 2
 ```
-This syntax sets the copy threads to 2 and the frequency to 2 hours for Image ID 6860452.   You can learn the image ID with **Get-AGMLibActiveImage -i** or **Set-AGMLibMSSQLMigrate**
+This syntax sets the copy threads to 2 and the frequency to 2 hours for Image ID 6860452. You can learn the image ID with **Get-AGMLibActiveImage -i** or **Set-AGMLibMSSQLMigrate**
 This command is the same as using *Update Migration Frequency* in the Active Mounts panel of the Web GUI.
 You can check the migration settings with a command like this:
 ```
@@ -3814,14 +3810,14 @@ This command is the same as using *Cancel Migration* in the Active Mounts panel 
 
 ### Run an on-demand migration job
 
-The frequency you set will determine how often migrate jobs are run.   You can run on-demand migrations with:
+The frequency you set will determine how often migrate jobs are run. You can run on-demand migrations with:
 ```
 Start-AGMMigrate -imageid 56072427 
 ```
-This runs a migration job for Image ID 56072427.  You can learn the image ID with **Get-AGMLibActiveImage -i** or **Set-AGMLibMSSQLMigrate**
+This runs a migration job for Image ID 56072427. You can learn the image ID with **Get-AGMLibActiveImage -i** or **Set-AGMLibMSSQLMigrate**
 This command is the same as using *Run Migration Job Now* in the Active Mounts panel of the Web GUI.
 
-You can monitor this job with this command.  We need to know the App ID of the source application.  It will show both running and completed jobs
+You can monitor this job with this command. We need to know the App ID of the source application. It will show both running and completed jobs
 ```
 get-agmjobstatus -filtervalue "jobclass=Migrate&appid=884945" | select-object status,startdate,enddate | sort-object startdate
 ```
@@ -3835,14 +3831,14 @@ running   2020-10-09 14:54:55
 ```
 
 ### Run a finalize job
-When you are ready to switch over, we need to run a finalize with this job:    
+When you are ready to switch over, we need to run a finalize with this job:  
 ```
 Start-AGMMigrate -imageid 56072427 -finalize
 ```
 This command runs a Finalize job for Image ID 56072427. You can learn the image ID with **Get-AGMLibActiveImage -i** or **Set-AGMLibMSSQLMigrate**
 This command is the same as using *Finalize Migration* in the Active Mounts panel of the Web GUI.
 
-You can monitor this job with this command.  We need to know the App ID of the source application.  It will show both running and completed jobs
+You can monitor this job with this command. We need to know the App ID of the source application. It will show both running and completed jobs
 ```
 Get-agmjobstatus -filtervalue "jobclass=Finalize&appid=884945" | select-object status,startdate,enddate | sort-object startdate
 ```
@@ -3857,7 +3853,7 @@ succeeded 2020-10-09 15:02:15 2020-10-09 15:04:06
 
 In this user story we are going to use SQL Mount and Migrate to move a Mount back to server disk but we are going to run multiple mounts and migrates in a single pass using a CSV file
 
-This video also documents the process:   https://youtu.be/QX5Sn3XHbCM
+This video also documents the process: https://youtu.be/QX5Sn3XHbCM
 
 ### Create the CSV sourcefile
 
@@ -3876,15 +3872,15 @@ appid,appname,imagename,imageid,mountapplianceid,targethostid,targethostname,sql
 
 ### Create the CSV runfile
 
-Where the source file needs to exist before you start,  the runfile will be created the first time you run **New-AGMLibMSSQLMulti** by specifying the name of a new file that doesnt yet exist.
-The idea is that you will use this file throughout one DR or test event.   Once all databases are finalized then you can delete the runfile and start your next test using a a new file
+Where the source file needs to exist before you start, the runfile will be created the first time you run **New-AGMLibMSSQLMulti** by specifying the name of a new file that doesnt yet exist.
+The idea is that you will use this file throughout one DR or test event. Once all databases are finalized then you can delete the runfile and start your next test using a a new file
 
-If you want to use the latest point in time image, leave imagename and imageid columns empty.   If you want the image rolled forward to the latest log point in time, just enter **latest** in the recoverypoint column.
+If you want to use the latest point in time image, leave imagename and imageid columns empty. If you want the image rolled forward to the latest log point in time, just enter **latest** in the recoverypoint column.
 
 ### Checking image state
 At any point in the process, we use **-checkimagestate** to validate whether our mounts exist.  
 ```
-New-AGMLibMSSQLMulti -sourcefile recoverylist.csv  -runfile rundate22052022.csv -checkimagestate
+New-AGMLibMSSQLMulti -sourcefile recoverylist.csv -runfile rundate22052022.csv -checkimagestate
 ```
 The first time you run this command, the output will look like this:
 ```
@@ -3904,9 +3900,9 @@ currentimagestate  : NoMountedImage
 ### Running the multi mount.
 We start all the mounts at once with this command:
 ```
-New-AGMLibMSSQLMulti -sourcefile recoverylist.csv  -runfile rundate22052022.csv -runmount
+New-AGMLibMSSQLMulti -sourcefile recoverylist.csv -runfile rundate22052022.csv -runmount
 ```
-This will run multiple New-AGMLibMSSQLMount jobs.  If run twice, any collisions with existing mounts will not run. 
+This will run multiple New-AGMLibMSSQLMount jobs. If run twice, any collisions with existing mounts will not run. 
 This means if a mount fails, after you resolve the cause of the issue you can just run the same command again without interfering with existing mounts.
 After you run **New-AGMLibMSSQLMulti**  with **-runmount** then check the state with **-checkimagestate**
 
@@ -3935,7 +3931,7 @@ currentimagestate  : Mounted
 If you run the **-runmount** again, the existing mounts will be unaffected, but previousimagestate will change to: *MountFailed: mount is unsuccessful due to duplicate application on the same host/instance not allowed:*
 
 ### Starting the migration
-Once all our images are mounted, we can start migrating.   If you run this command with some mounts still running, then migration will only start on those mounts that are ready and you will need to run startmigration again.
+Once all our images are mounted, we can start migrating. If you run this command with some mounts still running, then migration will only start on those mounts that are ready and you will need to run startmigration again.
 ```
 New-AGMLibMSSQLMulti -sourcefile recoverylist.csv -runfile rundate22052022.csv -startmigration
 ```
@@ -3969,7 +3965,7 @@ New-AGMLibMSSQLMulti -sourcefile recoverylist.csv -runfile rundate22052022.csv -
 If you use -runmigration without having first run -startmigration then nothing will happen.
 
 ### Starting the finalize
-This last option may not be desirable in all cases.  A finalize is disruptive while the switch is made.   You may wish to run this last step one by one using the GUI.  Note if you need multiple finalize jobs per host, you need to run them one at a time.   This might mean running **-finalizemigration** multiple times.
+This last option may not be desirable in all cases. A finalize is disruptive while the switch is made. You may wish to run this last step one by one using the GUI. Note if you need multiple finalize jobs per host, you need to run them one at a time. This might mean running **-finalizemigration** multiple times.
 ```
 New-AGMLibMSSQLMulti -sourcefile recoverylist.csv -runfile rundate22052022.csv -finalizemigration
 ```
@@ -3984,7 +3980,7 @@ label              : sqlinst1
 previousimagestate : FinalizeStarted
 currentimagestate  : FinalizeEligible
 ```
-Once finalize is finished you will see this, where currentimagestate is ImageNotFound.  This is normal because at the end of the finalize the mount gets deleted.    Once you see this, validate the DB on the target host and you are complete.
+Once finalize is finished you will see this, where currentimagestate is ImageNotFound. This is normal because at the end of the finalize the mount gets deleted. Once you see this, validate the DB on the target host and you are complete.
 ```
 id                 : 82789
 appname            : WINDOWS\SQLEXPRESS
@@ -3998,7 +3994,7 @@ currentimagestate  : ImageNotFound
 
 ## SQL Server Database Mount with point in time recovery
 
-In this 'story' a user wants to mount a specific snapshot of a SQL DB to a host rolled to a specific point in time.   We start with an appname:
+In this 'story' a user wants to mount a specific snapshot of a SQL DB to a host rolled to a specific point in time. We start with an appname:
 
 The user finds the appID for the source DB
 
@@ -4027,7 +4023,7 @@ Image_24386274        snapshot     2020-06-25 11:46:22 2020-06-25 15:07:16
 ```
 We have two snapshots and logs as well.
 
-The user runs a mount command specifying the source appid, target host and SQL Instance and DB name on the target as well as a recovery point in ISO 860 format and image name.  However they specify the wrong date, one earlier than the consistency point:
+The user runs a mount command specifying the source appid, target host and SQL Instance and DB name on the target as well as a recovery point in ISO 860 format and image name. However they specify the wrong date, one earlier than the consistency point:
 
 ```
 New-AGMLibMSSQLMount -imagename Image_24351142 -appid 5552336 -targethostname demo-sql-4 -label "test and dev made easy" -sqlinstance DEMO-SQL-4 -dbname avtest -recoverypoint "2020-06-23 16:00"
@@ -4046,7 +4042,7 @@ New-AGMLibMSSQLMount -imagename Image_24351142 -appid 5552336 -targethostname de
 
 ## SQL Server Instance mount
 
-In this 'story' a user wants to mount two databases from the latest snapshot of a SQL Instance to a host.  Most aspects of the story are the same as above, however they need some more information to run their mount command.   They learn the App ID of the SQL Instance:
+In this 'story' a user wants to mount two databases from the latest snapshot of a SQL Instance to a host. Most aspects of the story are the same as above, however they need some more information to run their mount command. They learn the App ID of the SQL Instance:
 
 ```
 Get-AGMLibApplicationID  HQ-SQL
@@ -4075,7 +4071,7 @@ eligiblelist    : {@{id=5552340; appname=ReportServer; apptype=SqlServerWriter; 
                   @{id=50805022; appname=model; apptype=SqlServerWriter; srcid=23401122; sensitivity=0; systemdb=False; ispartofmemberrule=False; appstate=0}…}               
 ```
 
-However the eligible list is not easy to read, so lets expand it and put it into a table.  This is much easier to read:
+However the eligible list is not easy to read, so lets expand it and put it into a table. This is much easier to read:
 
 ```
 Get-AGMApplicationInstanceMember 5534398 | Select-Object -ExpandProperty eligiblelist | ft
@@ -4093,7 +4089,7 @@ id       appname            apptype         srcid    sensitivity systemdb ispart
 5552332  smalldb2           SqlServerWriter 4804               0    False              False        0
 5552330  smalldb3           SqlServerWriter 4803               0    False              False        0
 ```
-So now we know the names of the DBs inside our SQL instance, we just need to chose a Consistency group name  to hold them and any prefixes and suffixes we want to use.  We then run our mount command like this:
+So now we know the names of the DBs inside our SQL instance, we just need to chose a Consistency group name to hold them and any prefixes and suffixes we want to use. We then run our mount command like this:
 
 ```
  New-AGMLibMSSQLMount -appid 5534398 -targethostname demo-sql-5 -label "AV instance mount" -sqlinstance DEMO-SQL-5 -consistencygroupname avcg -dbnamelist "smalldb1,smalldb2" -dbnameprefix "testdev_" -dbnamesuffix "_av"
@@ -4103,7 +4099,7 @@ So now we know the names of the DBs inside our SQL instance, we just need to cho
 
 In this story, we create a child app of a SQL DB that is protected by an on-demand template.
 
-First we create the child app.   There are several things about this command.   Firstly it does not specify an image ID, it will just use the latest snapshot.   It specifies the SLTID and SLPID to manage the child app.  This command was generated by running **New-AGMLibMSSQLMount** in guided mode.  
+First we create the child app. There are several things about this command. Firstly it does not specify an image ID, it will just use the latest snapshot. It specifies the SLTID and SLPID to manage the child app. This command was generated by running **New-AGMLibMSSQLMount** in guided mode.  
 ```
 New-AGMLibMSSQLMount -appid 884945 -mountapplianceid 1415071155  -label "avtest" -targethostid 655169 -sqlinstance "SYDWINSQL5" -dbname "avtestrp10" -sltid 6318469 -slpid 655697
 ```
@@ -4150,7 +4146,7 @@ sltname         : bookmarkOnDemand
 slpname         : Local Only
 policyname      : SnapOnDemand
 ```
-We can now continue to use our development child-app in the knowledge we can re-wind to a known good point.    
+We can now continue to use our development child-app in the knowledge we can re-wind to a known good point. 
 
 If we need to re-wind, we simply run the following command, referencing the image ID:
 ```
@@ -4192,7 +4188,7 @@ To create a new VMware VM from backup use this command which runs a guided menu:
 New-AGMLibVM 
 ```
 In this example we mount image ID 53773979 as a new VM called testvm9 to the specified vCenter/ESX host.  
-Valid values for mountmode are:   nfs, vrdm or prdm with nfs being the default if nothing is selected.
+Valid values for mountmode are: nfs, vrdm or prdm with nfs being the default if nothing is selected.
 ```
 New-AGMLibVM -imageid 53773979 -vmname avtestvm9 -datastore "ORA-RAC-iSCSI" -vcenterid 5552150 -esxhostid 5552164 -mountmode nfs 
 ```
@@ -4205,20 +4201,20 @@ There are several mandatory parameters:
 Image selection will be determined by:
 
 * ```-appid nnn```       If you specify this, then the most recent image for that app will be mounted.  This is the most exact choice to get the latest image.
-* ```-appname aaa```     If you specify this, then the most recent image for that app will be mounted provided the appname is unique.   If the appname is not unique, then you will need to switch to appid.
+* ```-appname aaa```     If you specify this, then the most recent image for that app will be mounted provided the appname is unique. If the appname is not unique, then you will need to switch to appid.
 * ```-imageid iii```     If you specify this, then this image will be mounted. You will need to learn this imageid before you run the command.
 * ```-imagename mmm```   If you specify this, then this image will be mounted. You will need to learn this imagename before you run the command.
 * ```-onvault true```    Will use the latest OnVault image rather than latest snapshot image when used with ```-appid``` or ```-appname```
 
 If mounting from OnVault we can use this:
-*  ```-perfoption <choice>```    You can specify either:  **StorageOptimized**, **Balanced**, **PerformanceOptimized** or **MaximumPerformance**.   Note if you run this option when mounting a snapshot image, the mount will fail
+*  ```-perfoption <choice>```  You can specify either:  **StorageOptimized**, **Balanced**, **PerformanceOptimized** or **MaximumPerformance**. Note if you run this option when mounting a snapshot image, the mount will fail
 
 There are some other options:
-* ```-label LLLL```   To set a label
-* ```-restoremacaddr``` This will assign the MAC Address from the source VM to the target VM.   Do this in DR situations where you need to preserve the MAC Address
+* ```-label LLLL```  To set a label
+* ```-restoremacaddr```  This will assign the MAC Address from the source VM to the target VM. Do this in DR situations where you need to preserve the MAC Address
 
 Monitoring options:
-* ```-wait```     This will wait up to 2 minutes for the job to start, checking every 15 seconds to show you the job name
+* ```-wait```  This will wait up to 2 minutes for the job to start, checking every 15 seconds to show you the job name
 * ```-monitor```  Same as -wait but will also run Get-AGMLibFollowJobStatus to monitor the job to completion 
 
 
@@ -4231,16 +4227,16 @@ New-AGMLibVMExisting
 
 ## VMware Multi Mount
 
-There are many cases where you may want to mount many VMs in one hit.  A simple scenario is ransomware, where you are trying to find an uninfected or as yet unattacked (but infected) image for each production VM.   So lets mount as many images as we can as quickly as we can so we can find unaffected VMs and start the recovery.
+There are many cases where you may want to mount many VMs in one hit. A simple scenario is ransomware, where you are trying to find an uninfected or as yet unattacked (but infected) image for each production VM. So lets mount as many images as we can as quickly as we can so we can find unaffected VMs and start the recovery.
 
-There is a composite function that is designed to help you find all the commands.   You can start this by running:  
+There is a composite function that is designed to help you find all the commands. You can start this by running:  
 ```
 Start-AGMLibRansomwareRecovery
 ```
 
 
 ### Building a list of images
-First we build an object that contains a list of images.  For this we can use Get-AGMLibImageRange in a syntax like this:
+First we build an object that contains a list of images. For this we can use Get-AGMLibImageRange in a syntax like this:
 ```
 $imagelist = Get-AGMLibImageRange
 ```
@@ -4252,14 +4248,14 @@ If we know that images created in the last 24 hours are all infected, we could u
 ```
 $imagelist = Get-AGMLibImageRange -apptype VMBackup -appliancename sa-sky -olderlimit 3 -newerlimit 1
 ```
-We can also use the Template Name (SLT) to find our apps.  This is a handy way to separate apps since you can create as many SLTs as you like and use them as a unique way to group apps.
+We can also use the Template Name (SLT) to find our apps. This is a handy way to separate apps since you can create as many SLTs as you like and use them as a unique way to group apps.
 ```
 $imagelist = Get-AGMLibImageRange -sltname FSSnaps_RW_OV
 ```
 
 ### Editing your $Imagelist 
 
-You could create a CSV of images, edit it and then convert that into an object.  This would let you delete all the images you don't want to recover, or create chunks to recover (say 20 images at a time)
+You could create a CSV of images, edit it and then convert that into an object. This would let you delete all the images you don't want to recover, or create chunks to recover (say 20 images at a time)
 
 In this example we grab 20 days of images:
 
@@ -4267,7 +4263,7 @@ In this example we grab 20 days of images:
 Get-AGMLibImageRange -apptype VMBackup -appliancename sa-sky -olderlimit 20 | Export-Csv -Path .\images.csv
 ```
 
-We now edit the CSV  we created **images.csv** to remove images we don't want.   We then import what is left into our $imagelist variable:
+We now edit the CSV  we created **images.csv** to remove images we don't want. We then import what is left into our $imagelist variable:
 ```
 $imagelist = Import-Csv -Path .\images.csv
 ```
@@ -4324,16 +4320,16 @@ We can now fire our new command using the VMware settings we defined and our ima
 ```
 New-AGMLibMultiVM -imagelist $imagelist -vcenterid $vcenterid -esxhostlist $esxhostlist -datastorelist 
 ```
-For uniqueness we have quite a few choices to generate VMs with useful names.   If you do nothing, then a numeric indicator will be added to each VM as a suffix.  Otherwise we can use:
+For uniqueness we have quite a few choices to generate VMs with useful names. If you do nothing, then a numeric indicator will be added to each VM as a suffix. Otherwise we can use:
 
-* -prefix xxxx           :   where xxxx is a prefix
-* -suffix yyyy           :   where yyyy is a suffix
+* -prefix xxxx           :  where xxxx is a prefix
+* -suffix yyyy           :  where yyyy is a suffix
 * -c or -condatesuffix   :  which will add the consistency date of the image as a suffix
 * -i  or -imagesuffix    :  which will add the image name of the image as a suffix
 
 This will mount all the images in the list and round robin through the ESX host list and data store list.
 
-If you don't specify a label, all the VMs will get the label **MultiVM Recovery**   This will let you easily spot your mounts by doing this:
+If you don't specify a label, all the VMs will get the label **MultiVM Recovery** This will let you easily spot your mounts by doing this:
 ```
 $mountlist = Get-AGMLibActiveImage | where-object  {$_.label -eq "MultiVM Recovery"}
 ```
@@ -4347,7 +4343,7 @@ Remove-AGMMount $mount -d
 
 #### esxhostid vs esxhostlist
 
-You can just specify one esxhost ID with -esxhostid.   If you are using NFS datastore and you will let DRS rebalance later, this can make things much faster
+You can just specify one esxhost ID with -esxhostid. If you are using NFS datastore and you will let DRS rebalance later, this can make things much faster
 
 #### datastore vs datastorelist
 
@@ -4369,13 +4365,13 @@ You can then use other options to work with a specific workflow ID:
 
 ## Running a Workflow
 
-Note there is no function to create Workflows, so continue to use the GUI for this.   
+Note there is no function to create Workflows, so continue to use the GUI for this.
 There are two functions for workflows:
 
 * Get-AGMLibWorkflowStatus
 * Start-AGMLibWorkflow 
 
-For both commands, you don't need any details, just run the command and a wizard will run.   You can use this to learn things like workflow IDs and App IDs so that you can then use these commands as part of automation.
+For both commands, you don't need any details, just run the command and a wizard will run. You can use this to learn things like workflow IDs and App IDs so that you can then use these commands as part of automation.
 
 We can start a workflow with a command like this:
 ```
