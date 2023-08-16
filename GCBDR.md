@@ -20,7 +20,7 @@ In this example (yours will be different!):
 * Management Console URL: ```https://bmc-1234567-randomchars-dot-asia-southeast1.backupdr.googleusercontent.com/actifio```
 * You only need the end point part of the URL:  ```bmc-1234567-randomchars-dot-asia-southeast1.backupdr.googleusercontent.com```
 
-> **Note**: As of version 11.0.5 your management console URL starts with **bmc-** rather than **agm-** and you will no longer need to supply an OAUth 2.0 client ID.
+> **Note**: As of version 11.0.5 your management console URL starts with **bmc-** rather than **agm-** and you will no longer need to supply an OAuth 2.0 client ID.
 
 ## Creating your Service Account
 
