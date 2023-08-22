@@ -26,7 +26,7 @@
 RootModule = 'AGMPowerCLI.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.0.0.58'
+ModuleVersion = '0.0.0.59'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -95,6 +95,8 @@ FunctionsToExport = @(
     'Put-AGMAPIData',
     'Connect-AGM',
     'Disconnect-AGM',
+    'Connect-vCenter',
+    'Disconnect-vCenter',
     'Convert-FromUnixDate',
     'Convert-ToUnixDate',
     'Convert-AGMDuration',
@@ -148,6 +150,7 @@ FunctionsToExport = @(
     'Get-AGMVersion',
     'Get-AGMVersionDetail',
     'Get-AGMWorkflow',
+    'Get-AGMClusterName',
     'Import-AGMOnVault',
     'Import-AGMPDSnapshot',
     'New-AGMAppDiscovery',
@@ -161,10 +164,13 @@ FunctionsToExport = @(
     'New-AGMRole',
     'New-AGMSLA',
     'New-AGMUser',
+    'New-AGMVMDiscovery',
+    'New-AGMVMApp',
     'Set-AGMApplianceParameter',
     'Set-AGMApplianceSchedule',
     'Set-AGMAPIApplianceTask',
     'Save-AGMPassword',
+    'Save-vCenterPassword',
     'Set-AGMCredential',
     'Set-AGMAPILimit',
     'Set-AGMConsistencyGroup',
@@ -196,7 +202,8 @@ FunctionsToExport = @(
     'Start-AGMReplicateLog',
     'Start-AGMMigrate',
     'Update-AGMOrg',
-    'Get-GoogleCloudBackupDRConsole')
+    'Get-GoogleCloudBackupDRConsole',
+    'Find-vCenterHostName')
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
 CmdletsToExport = '*'
