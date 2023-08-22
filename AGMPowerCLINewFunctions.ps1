@@ -766,7 +766,7 @@ Discover VMWare VMs through AGM
 .EXAMPLE
 New-AGMVMDiscovery -vCenterId 6880886
 #>
-Function New-AGMVMDiscovery {
+function New-AGMVMDiscovery {
     [CmdletBinding()]
     param (
         [Parameter(Mandatory)]
@@ -784,7 +784,7 @@ Create a new application for a VMWare VM.
 .EXAMPLE
 New-AGMVMApp -vCenterId 7550156 -Cluster 6019 -ClusterName cluster_foo -VmUuids ["91cd1ae2-9fbe-16bf-de71-f1577ab0a1b3"]
 #>
-Function New-AGMVMApp {
+function New-AGMVMApp {
     [CmdletBinding()]
     param (
         # The `id` of the vCenter host, you can find the `id` by `(Get-AGMHost -filtervalue "isvcenterhost=true") | Select-Object id,name`

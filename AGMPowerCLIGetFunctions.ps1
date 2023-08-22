@@ -2624,7 +2624,7 @@ function Get-AGMWorkFlow ([string]$filtervalue,[string]$keyword,[switch][alias("
     }
 }
 
-Function Get-AGMClusterName {
+function Get-AGMClusterName {
     [CmdletBinding()]
     param (
         # The `id` of the vCenter host, you can find the `id` by `(Get-AGMHost -filtervalue "isvcenterhost=true") | Select-Object id,name`
