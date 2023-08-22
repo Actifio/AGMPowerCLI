@@ -815,11 +815,9 @@ Function New-AGMVMApp {
     }
     $json = $body | ConvertTo-Json
 
-    if ($Verbose) {
-        Write-Verbose "New-AGMVMApp"
-        Write-Verbose "/host/$vCenterId/host/$ClusterName/addvms" 
-        Write-Verbose $json
-    }
+    Write-Verbose "New-AGMVMApp"
+    Write-Verbose "/host/$vCenterId/host/$ClusterName/addvms" 
+    Write-Verbose $json
 
     Post-AGMAPIData -endpoint "/host/$vCenterId/host/$ClusterName/addvms" -body $json
 }
