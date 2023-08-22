@@ -784,10 +784,12 @@ function Connect-vCenter {
     if ($PassFilePath) {
         if (Test-Path $PassFilePath) {
             $password_enc = Get-Content $PassFilePath | ConvertTo-SecureString;
-        } else {
+        }
+        else {
             $password_enc = Save-vCenterPassword -FileName $PassFilePath
         }
-    } else {
+    }
+    else {
         # Read credentials from the standard input
         $password_enc = Read-Host -AsSecureString -Prompt "Password"
     }
@@ -852,26 +854,26 @@ function Save-vCenterPassword {
     )
 
     # if no file is provided, prompt for one
-	if (!$FileName) {
-		$FileName = Read-Host "File Name";
-	}
+    if (!$FileName) {
+        $FileName = Read-Host "File Name";
+    }
 
-	# if the filename already exists. don't overwrite it. error and exit.
-	if ( Test-Path $FileName )  {
-		Get-AGMErrorMessage -messagetoprint "The file: $FileName already exists. Please delete it first.";
-		return;
-	}
+    # if the filename already exists. don't overwrite it. error and exit.
+    if ( Test-Path $FileName ) {
+        Get-AGMErrorMessage -messagetoprint "The file: $FileName already exists. Please delete it first.";
+        return;
+    }
 
-	# prompt for password 
+    # prompt for password 
     if (!($PasswordEnc)) {
-	    $PasswordEnc = Read-Host -AsSecureString "Password"
+        $PasswordEnc = Read-Host -AsSecureString "Password"
     }
     
     try {
         $PasswordEnc | ConvertFrom-SecureString | Out-File $FileName -ErrorAction Stop
 
         Write-Host "Password saved to $FileName."
-		Write-Host "You may now use -PassFilePath with `Connect-vCenter` to provide a saved password file."
+        Write-Host "You may now use -PassFilePath with `Connect-vCenter` to provide a saved password file."
 
         return $PasswordEnc
     }
