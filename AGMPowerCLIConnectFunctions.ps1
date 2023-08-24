@@ -769,14 +769,13 @@ function Connect-vCenter {
     if ($vCenterId) {
         $vCenterHostName = Find-vCenterHostName $vCenterId
     }
+
+    Write-Output "Connecting vCenter, hostname: $vCenterHostName, user: $UserName"
     
     # Clean up the stale server configuration
     # `Invoke-CreateSession` will fail if we don't perform this step since the user credentials will be cleared after
     # retrieving the api session.
-    $serverConfiguration = Get-vSphereServerConfiguration
-    if ($null -ne $serverConfiguration) {
-        Remove-vSphereServerConfiguration $serverConfiguration
-    }
+    Disconnect-vCenter
 
     # Check if the user passes -PassFilePath option,
     # If uses, read from the password file if exists, otherwise prompt for password and save it into the `PassFilePath`
@@ -803,6 +802,8 @@ function Connect-vCenter {
     # Set the API Key in the vSphere Server Configuration, received with the API Session.
     # This step will celar the user credentials and will only keep the API Session ID
     $serverConfiguration = $serverConfiguration | Set-vSphereServerConfigurationApiKey -SessionResponse $apiSession
+
+    Write-Output "vCenter connected"
 }
 
 <#
@@ -814,25 +815,6 @@ function Disconnect-vCenter {
     if ($null -ne $serverConfiguration) {
         Remove-vSphereServerConfiguration $serverConfiguration
     }
-}
-
-<#
-.SYNOPSIS
-Find the host name of a vCenter by its vCenter ID.
-
-.EXAMPLE
-Find-vCenterHostName -vCenterId 6880886
-#>
-function Find-vCenterHostName {
-    [CmdletBinding()]
-    param (
-        # The `id` of the vCenter host, you can find the `id` by `(Get-AGMHost -filtervalue "isvcenterhost=true") | Select-Object id,name`
-        [Parameter(Mandatory = $true)]
-        [int]
-        $vCenterId
-    )
-
-    (Get-AGMHost -filtervalue "isvcenterhost=true&id=$vCenterId").hostname
 }
 
 <#

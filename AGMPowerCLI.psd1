@@ -203,6 +203,7 @@ FunctionsToExport = @(
     'Start-AGMMigrate',
     'Update-AGMOrg',
     'Get-GoogleCloudBackupDRConsole',
+    'Find-vCenterTaggedVMs',
     'Find-vCenterHostName')
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
