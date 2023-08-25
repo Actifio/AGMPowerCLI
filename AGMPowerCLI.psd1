@@ -69,7 +69,13 @@ PowerShellVersion = '5.0'
 # ProcessorArchitecture = ''
 
 # Modules that must be imported into the global environment prior to importing this module
-# RequiredModules = @()
+RequiredModules = @(
+    'VMware.Sdk.vSphere.Cis',
+    'VMware.Sdk.vSphere.Cis.Tagging',
+    'VMware.Sdk.vSphere.vCenter',
+    'VMware.Sdk.Runtime',
+    'VMware.Sdk.vSphereRuntime'
+)
 
 # Assemblies that must be loaded prior to importing this module
 # RequiredAssemblies = @()
