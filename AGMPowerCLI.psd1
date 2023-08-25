@@ -150,7 +150,6 @@ FunctionsToExport = @(
     'Get-AGMVersion',
     'Get-AGMVersionDetail',
     'Get-AGMWorkflow',
-    'Get-AGMClusterName',
     'Import-AGMOnVault',
     'Import-AGMPDSnapshot',
     'New-AGMAppDiscovery',

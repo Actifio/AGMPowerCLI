@@ -2623,14 +2623,3 @@ function Get-AGMWorkFlow ([string]$filtervalue,[string]$keyword,[switch][alias("
         Get-AGMAPIData -endpoint /workflow -limit $limit -sort $sort
     }
 }
-
-function Get-AGMClusterName {
-    [CmdletBinding()]
-    param (
-        # The `id` of the vCenter host, you can find the `id` by `(Get-AGMHost -filtervalue "isvcenterhost=true") | Select-Object id,name`
-        [Parameter(Mandatory = $true)]
-        [int]
-        $vCenterId
-    )
-    (Get-AGMAPIData -endpoint "host/$vCenterId/host").name
-}
