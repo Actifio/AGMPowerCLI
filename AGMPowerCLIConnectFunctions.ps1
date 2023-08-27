@@ -777,33 +777,38 @@ function Connect-vCenter {
     # retrieving the api session.
     Disconnect-vCenter
 
-    # Check if the user passes -PassFilePath option,
-    # If uses, read from the password file if exists, otherwise prompt for password and save it into the `PassFilePath`
-    # If not uses, read the password from the standard input
-    if ($PassFilePath) {
-        if (Test-Path $PassFilePath) {
-            $password_enc = Get-Content $PassFilePath | ConvertTo-SecureString;
+    try {
+        # Check if the user passes -PassFilePath option,
+        # If uses, read from the password file if exists, otherwise prompt for password and save it into the `PassFilePath`
+        # If not uses, read the password from the standard input
+        if ($PassFilePath) {
+            if (Test-Path $PassFilePath) {
+                $password_enc = Get-Content $PassFilePath | ConvertTo-SecureString;
+            }
+            else {
+                $password_enc = Save-vCenterPassword -FileName $PassFilePath
+            }
         }
         else {
-            $password_enc = Save-vCenterPassword -FileName $PassFilePath
+            # Read credentials from the standard input
+            $password_enc = Read-Host -AsSecureString -Prompt "Password"
         }
+
+        # Create vSphere Server Configuration with the provided Credentials.
+        $serverConfiguration = New-vSphereServerConfiguration -Server $vCenterHostName -User $UserName -Password $password_enc
+
+        # Creates a Session with the vSphere API if we don't have a session.
+        $apiSession = Invoke-CreateSession -WithHttpInfo -ErrorAction Stop
+
+        # Set the API Key in the vSphere Server Configuration, received with the API Session.
+        # This step will celar the user credentials and will only keep the API Session ID
+        $serverConfiguration = $serverConfiguration | Set-vSphereServerConfigurationApiKey -SessionResponse $apiSession
+
+        Write-Output "vCenter connected"
     }
-    else {
-        # Read credentials from the standard input
-        $password_enc = Read-Host -AsSecureString -Prompt "Password"
+    catch {
+        Write-Error "Failed to connect to the vCenter, please double check the credentials."
     }
-
-    # Create vSphere Server Configuration with the provided Credentials.
-    $serverConfiguration = New-vSphereServerConfiguration -Server $vCenterHostName -User $UserName -Password $password_enc
-
-    # Creates a Session with the vSphere API if we don't have a session.
-    $apiSession = Invoke-CreateSession -WithHttpInfo
-
-    # Set the API Key in the vSphere Server Configuration, received with the API Session.
-    # This step will celar the user credentials and will only keep the API Session ID
-    $serverConfiguration = $serverConfiguration | Set-vSphereServerConfigurationApiKey -SessionResponse $apiSession
-
-    Write-Output "vCenter connected"
 }
 
 <#
