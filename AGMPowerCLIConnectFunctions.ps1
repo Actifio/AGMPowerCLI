@@ -794,7 +794,7 @@ function Connect-vCenter {
     }
 
     # Create vSphere Server Configuration with the provided Credentials.
-    $serverConfiguration = New-vSphereServerConfiguration -Server $vCenterHostName -User $User -Password $password_enc
+    $serverConfiguration = New-vSphereServerConfiguration -Server $vCenterHostName -User $UserName -Password $password_enc
 
     # Creates a Session with the vSphere API if we don't have a session.
     $apiSession = Invoke-CreateSession -WithHttpInfo
