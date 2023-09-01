@@ -26,7 +26,7 @@
 RootModule = 'AGMPowerCLI.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.0.0.58'
+ModuleVersion = '0.0.0.59'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -69,7 +69,13 @@ PowerShellVersion = '5.0'
 # ProcessorArchitecture = ''
 
 # Modules that must be imported into the global environment prior to importing this module
-# RequiredModules = @()
+RequiredModules = @(
+    'VMware.Sdk.vSphere.Cis',
+    'VMware.Sdk.vSphere.Cis.Tagging',
+    'VMware.Sdk.vSphere.vCenter',
+    'VMware.Sdk.Runtime',
+    'VMware.Sdk.vSphereRuntime'
+)
 
 # Assemblies that must be loaded prior to importing this module
 # RequiredAssemblies = @()
@@ -95,6 +101,8 @@ FunctionsToExport = @(
     'Put-AGMAPIData',
     'Connect-AGM',
     'Disconnect-AGM',
+    'Connect-vCenter',
+    'Disconnect-vCenter',
     'Convert-FromUnixDate',
     'Convert-ToUnixDate',
     'Convert-AGMDuration',
@@ -161,10 +169,13 @@ FunctionsToExport = @(
     'New-AGMRole',
     'New-AGMSLA',
     'New-AGMUser',
+    'New-AGMVMDiscovery',
+    'New-AGMVMApp',
     'Set-AGMApplianceParameter',
     'Set-AGMApplianceSchedule',
     'Set-AGMAPIApplianceTask',
     'Save-AGMPassword',
+    'Save-vCenterPassword',
     'Set-AGMCredential',
     'Set-AGMAPILimit',
     'Set-AGMConsistencyGroup',
@@ -196,7 +207,9 @@ FunctionsToExport = @(
     'Start-AGMReplicateLog',
     'Start-AGMMigrate',
     'Update-AGMOrg',
-    'Get-GoogleCloudBackupDRConsole')
+    'Get-GoogleCloudBackupDRConsole',
+    'Find-vCenterTaggedVMs',
+    'Find-vCenterHostName')
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
 CmdletsToExport = '*'

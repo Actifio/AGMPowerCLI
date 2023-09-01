@@ -1,4 +1,7 @@
 # Change log
+## AGMPowerCLI 0.0.0.59
+* Add Connect-vCenter, Disconnect-vCenter, Find-vCenterHostName, Find-vCenterTaggedVMs, Save-vCenterPassword, New-AGMVMDiscovery, New-AGMVMApp, Get-AGMClusterName
+
 ## AGMPowerCLI 0.0.0.58
 * Update Import-AGMLibPDSnapshot help
 

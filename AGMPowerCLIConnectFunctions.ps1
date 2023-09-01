@@ -718,3 +718,153 @@ function Get-GoogleCloudBackupDRConsole ([string]$project,[string]$location)
     }
 }
 
+<#
+.SYNOPSIS
+Log into the vCenter.
+This function will read the password from the masked standard input or a specified password file. You can use `Save-vCenterPassword` before calling this function.
+If the specified password file does not exist, it will prompt to ask the password and save the inputed password into the password file.
+
+.EXAMPLE
+Connect-vCenter -vCenterHostName abcd-112233.e123abc45.southamerica-east1.abc.com -User user-01@abc.com -PassFilePath '.vcenter_pass'
+
+# If .vcenter_pass does not exists, will prompt
+Password: ************
+
+.EXAMPLE
+Save-vCenterPassword -FileName '.vcenter_pass'
+Connect-vCenter -vCenterHostName abcd-112233.e123abc45.southamerica-east1.abc.com -User user-01@abc.com -PassFilePath '.vcenter_pass'
+
+.EXAMPLE
+Connect-vCenter -vCenterHostName abcd-112233.e123abc45.southamerica-east1.abc.com -User user-01@abc.com
+
+.EXAMPLE
+Connect-vCenter -vCenterHostId 6880886 -User user-01@abc.com
+#>
+function Connect-vCenter {
+    [CmdletBinding()]
+    param (
+        # The host name of the vCenter, e.g. abcd-112233.e123abc45.southamerica-east1.abc.com
+        [Parameter(Mandatory = $true, ParameterSetName = "LogInByHostName")]
+        [string]
+        $vCenterHostName,
+
+        # The `id` of the vCenter host, you can find the `id` by `(Get-AGMHost -filtervalue "isvcenterhost=true") | Select-Object id,name`
+        [Parameter(Mandatory = $true, ParameterSetName = "LogInByHostId")]
+        [int]
+        $vCenterId,
+
+        # The user name for logging into the vCenter
+        [Parameter(Mandatory = $true, ParameterSetName = "LogInByHostName")]
+        [Parameter(Mandatory = $true, ParameterSetName = "LogInByHostId")]
+        [string]
+        $UserName,
+
+        # File that saves the encrypted password
+        [Parameter(Mandatory = $false)]
+        [string]
+        $PassFilePath
+    )
+
+    # If specified vCenterId, we will try to find the host name by this parameter
+    if ($vCenterId) {
+        $vCenterHostName = Find-vCenterHostName $vCenterId
+    }
+
+    Write-Output "Connecting vCenter, hostname: $vCenterHostName, user: $UserName"
+    
+    # Clean up the stale server configuration
+    # `Invoke-CreateSession` will fail if we don't perform this step since the user credentials will be cleared after
+    # retrieving the api session.
+    Disconnect-vCenter
+
+    try {
+        # Check if the user passes -PassFilePath option,
+        # If uses, read from the password file if exists, otherwise prompt for password and save it into the `PassFilePath`
+        # If not uses, read the password from the standard input
+        if ($PassFilePath) {
+            if (Test-Path $PassFilePath) {
+                $password_enc = Get-Content $PassFilePath | ConvertTo-SecureString;
+            }
+            else {
+                $password_enc = Save-vCenterPassword -FileName $PassFilePath
+            }
+        }
+        else {
+            # Read credentials from the standard input
+            $password_enc = Read-Host -AsSecureString -Prompt "Password"
+        }
+
+        # Create vSphere Server Configuration with the provided Credentials.
+        $serverConfiguration = New-vSphereServerConfiguration -Server $vCenterHostName -User $UserName -Password $password_enc
+
+        # Creates a Session with the vSphere API if we don't have a session.
+        $apiSession = Invoke-CreateSession -WithHttpInfo -ErrorAction Stop
+
+        # Set the API Key in the vSphere Server Configuration, received with the API Session.
+        # This step will celar the user credentials and will only keep the API Session ID
+        $serverConfiguration = $serverConfiguration | Set-vSphereServerConfigurationApiKey -SessionResponse $apiSession
+
+        Write-Output "vCenter connected"
+    }
+    catch {
+        Write-Error "Failed to connect to the vCenter, please double check the credentials."
+    }
+}
+
+<#
+.SYNOPSIS
+Disconnect from vCenter and delete the API session. You will need to call `Connect-vCenter` next time.
+#>
+function Disconnect-vCenter {
+    $serverConfiguration = Get-vSphereServerConfiguration
+    if ($null -ne $serverConfiguration) {
+        Remove-vSphereServerConfiguration $serverConfiguration
+    }
+}
+
+<#
+.SYNOPSIS
+Encrypt and save the password of the vCenter into a file.
+#>
+function Save-vCenterPassword {
+    [CmdletBinding()]
+    param (
+        # Absolute or relative location where the file should be saved.
+        [Parameter(Mandatory = $true)]
+        [string]
+        $FileName,
+
+        # Encrypted password
+        [Parameter(Mandatory = $false, ValueFromPipeline = $true)]
+        [SecureString]
+        $PasswordEnc
+    )
+
+    # if no file is provided, prompt for one
+    if (!$FileName) {
+        $FileName = Read-Host "File Name";
+    }
+
+    # if the filename already exists. don't overwrite it. error and exit.
+    if ( Test-Path $FileName ) {
+        Get-AGMErrorMessage -messagetoprint "The file: $FileName already exists. Please delete it first.";
+        return;
+    }
+
+    # prompt for password 
+    if (!($PasswordEnc)) {
+        $PasswordEnc = Read-Host -AsSecureString "Password"
+    }
+    
+    try {
+        $PasswordEnc | ConvertFrom-SecureString | Out-File $FileName -ErrorAction Stop
+
+        Write-Host "Password saved to $FileName."
+        Write-Host "You may now use -PassFilePath with `Connect-vCenter` to provide a saved password file."
+
+        return $PasswordEnc
+    }
+    catch {
+        Get-AGMErrorMessage -messagetoprint "An error occurred in saving the password"
+    }
+}

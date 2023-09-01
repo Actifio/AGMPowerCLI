@@ -758,3 +758,66 @@ Function New-AGMUser ([string]$name,[string]$timezone,[string]$rolelist,[string]
 
     Post-AGMAPIData  -endpoint /user -body $jsonbody
 }
+
+<#
+.SYNOPSIS
+Discover VMWare VMs through AGM
+
+.EXAMPLE
+New-AGMVMDiscovery -vCenterId 6880886
+#>
+function New-AGMVMDiscovery {
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory)]
+        [int]
+        $vCenterId
+    )
+
+    Get-AGMAPIData -endpoint "/host/$vCenterId/discovervm"
+}
+
+<#
+.SYNOPSIS
+Create a new application for a VMWare VM.
+
+.EXAMPLE
+New-AGMVMApp -vCenterId 7550156 -Cluster 6019 -ClusterName cluster_foo -VmUuids ["91cd1ae2-9fbe-16bf-de71-f1577ab0a1b3"]
+#>
+function New-AGMVMApp {
+    [CmdletBinding()]
+    param (
+        # The `id` of the vCenter host, you can find the `id` by `(Get-AGMHost -filtervalue "isvcenterhost=true") | Select-Object id,name`
+        [Parameter(Mandatory = $true)]
+        [int]
+        $vCenterId,
+
+        # The `id` of an appliance, it is NOT the `appliance_id`, you can get the appliance by `Get-AGMAppliance`
+        [Parameter(Mandatory = $true)]
+        [int]
+        $Cluster,
+
+        # The `clustername` of a cluster, you can get the cluster name by `Get-AGMClusterName -vCenterId <your-vcenter-id>`
+        [Parameter(Mandatory = $true)]
+        [string]
+        $ClusterName,
+
+        # The UUIDs of those VMs to be protected, UUIDs are included in the response of `New-AGMVMDiscovery`
+        [Parameter(Mandatory = $true)]
+        [string[]]
+        $VmUuids
+    )
+
+    $body = [ordered]@{
+        cluster=$Cluster;
+        addvms=$true;
+        vms=$VmUuids;
+    }
+    $json = $body | ConvertTo-Json
+
+    Write-Verbose "New-AGMVMApp"
+    Write-Verbose "/host/$vCenterId/host/$ClusterName/addvms" 
+    Write-Verbose $json
+
+    Post-AGMAPIData -endpoint "/host/$vCenterId/host/$ClusterName/addvms" -body $json
+}
