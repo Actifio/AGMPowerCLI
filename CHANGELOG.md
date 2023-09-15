@@ -1,5 +1,7 @@
 # Change log
 ## AGMPowerCLI 0.0.0.59
+* Update UsageExamples.md with Vmware VM Onboarding Automation i.e New-AGMLibVMwareVMDiscovery
+## AGMPowerCLI 0.0.0.59
 * Add Connect-vCenter, Disconnect-vCenter, Find-vCenterHostName, Find-vCenterTaggedVMs, Save-vCenterPassword, New-AGMVMDiscovery, New-AGMVMApp, Get-AGMClusterName
 
 ## AGMPowerCLI 0.0.0.58
@@ -72,3 +74,4 @@
 * Remove-AGMSLA will error if a non-protected Appid is specified rather than requesting an SLA ID
 * Get-AGMAPIApplianceInfo will now allow user to use $id
 * Get-AGMCloudVM can handle minor API change in GCBDR by looking for projectid rather than project
+

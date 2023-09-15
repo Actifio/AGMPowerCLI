@@ -151,7 +151,8 @@ This document contains usage examples that include both AGMPowerCLI and AGMPower
 >**[Listing Your Storage Pools](#listing-your-storage-pools)**</br>
 
 **[VMware](#vmware)**</br>
->**[Using a VMware mount to create a new VMware VM](#using-a-vmware-mount-to-create-a-new-vmware-vm)**</br>
+>**[Vmware VM Onboarding Automation](#vmware-vm-onboarding-automation)**</br>
+**[Using a VMware mount to create a new VMware VM](#using-a-vmware-mount-to-create-a-new-vmware-vm)**</br>
 **[Mounting a VMware VM backup to an existing VM](#mounting-a-vmware-vm-backup-to-an-existing-vm)**</br>
 **[VMware Multi Mount](#vmware-multi-mount)**</br>
 
@@ -4182,6 +4183,77 @@ Get-AGMDiskPool
 [Back to top](#usage-examples)
 # VMware
 
+## Vmware VM Onboarding Automation
+
+If we are onboarding large numbers of Vmware VM's or we want to auto protect new VM's using automation, we can use a function called: **New-AGMLibVMwareVMDiscovery**
+
+### Using a CSV file to work with multiple Appliances and or Vcenters
+
+
+This function can use a CSV file as input to supply the following data to the function which you specify with:
+
+```-discoveryfile **filename.csv**```
+
+The CSV needs the following columns:
+
+* **applianceid**  This is used to determine which backup appliance will manage the new Vmware VM. 
+* **vcenterid**   This determines Vcenter. Get-AGMHost -filtervalue "isvcenterhost=true" | select id,name to get the details 
+
+An example CSV file is as follows:
+```
+applianceid,vcenterid
+143112195179,2110151
+143112190000,2110122
+```
+When you run  ```New-AGMLibVMwareVMDiscovery``` you have to specify vmtag, Vcenter credentials (Username and Password), sltid/sltname, slpid/slpname and one of these two choices:
+* ```-nobackup```  This will add all new Vmware VM's it finds without protecting them
+* ```-backup```  This will add all new Vmware VM's it finds and for each VM it will apply specified sltid/sltname and slpid/slpname
+
+An example run is as follows
+```
+New-AGMLibVMwareVMDiscovery -vmtag mytag -discoveryfile discovery.csv -backup -sltname snap_alone -slpname local -username user-01@abc.com
+New-AGMLibVMwareVMDiscovery -vmtag mytag -discoveryfile discovery.csv -nobackup -username user-01@abc.com  -passfilepath '.vcenterpassfile'
+```
+
+### Using a single command with applianceid and vcenterid
+
+Instead of using a discovery file we can specify applianceid and vcenterid needed by the command:
+
+Example runs are as follows
+```
+New-AGMLibVMwareVMDiscovery -vmtag mytag -applianceid 143112195179 -vcenterid 2110151 -nobackup -username user-01@abc.com -passfilepath '.vcenterpass'
+New-AGMLibVMwareVMDiscovery -vmtag mytag -applianceid 142106226624 -vcenterid 7550156 -backup -sltid 24314 -slpid 49363 -username user-01@abc.com 
+```
+output should like this 
+```
+Discovering VMs with applianceid=142106226624, vcenterid=7550156 ...
+vCenter connected
+Now processing the cluster: cluster
+VMs have already created an application: ora12c st-gcve-vm-11
+Creating applications for the VMs: patg-centos-01 st-gcve-vm-1 st-gcve-vm-10 st-gcve-vm-12
+All applications have been created successfully.                                                                        
+Protecting applications: st-gcve-vm-10 st-gcve-vm-12 st-gcve-vm-1 patg-centos-01 ora12c st-gcve-vm-11
+Fetching SLA list...
+
+appid    sltid slpid
+-----    ----- -----
+52440300 24314 49363
+52440250 24314 49363
+52440248 24314 49363
+52440234 24314 49363
+51817900 24314 49363
+49953557 24314 49363
+
+Applying SLA to all protectable applications...
+Successfully protected tagged VMs for Cluster: cluster, vCenter ID: 7550156, Appliance applianceid: 142106226624, Appliance Name: backup-server-34038!
+Successfully protected all tagged VMs!
+```
+> **Note**: If New-AGMLibVMwareVMDiscovery is executed without passfilepath then it will prompt to provide Venter password </br>
+> </br>
+> If New_AGMLibVMwareVMDiscovery is executed with passfilepath and If the password file does not exist it prompts for inputting vCenter password, and then save the encrypted password to specified file. </br>
+
+
+
 ## Using a VMware mount to create a new VMware VM
 To create a new VMware VM from backup use this command which runs a guided menu:
 ```
@@ -4425,3 +4497,4 @@ reprovision succeeded 2020-10-17 11:52:57 2020-10-17 11:55:08
 ```
 
 [Back to top](#usage-examples)
+
