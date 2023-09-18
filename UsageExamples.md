@@ -4183,9 +4183,9 @@ Get-AGMDiskPool
 [Back to top](#usage-examples)
 # VMware
 
-## Vmware VM Onboarding Automation
+## VMware VM Onboarding Automation
 
-If we are onboarding large numbers of Vmware VM's or we want to auto protect new VM's using automation, we can use a function called: **New-AGMLibVMwareVMDiscovery**
+If we are onboarding large numbers of VMware VM's or we want to auto protect new VM's using automation, we can use a function called: **New-AGMLibVMwareVMDiscovery**
 
 ### Using a CSV file to work with multiple Appliances and or Vcenters
 
@@ -4196,7 +4196,7 @@ This function can use a CSV file as input to supply the following data to the fu
 
 The CSV needs the following columns:
 
-* **applianceid**  This is used to determine which backup appliance will manage the new Vmware VM. 
+* **applianceid**  This is used to determine which backup appliance will manage the new VMware VM. 
 * **vcenterid**   This determines Vcenter. Get-AGMHost -filtervalue "isvcenterhost=true" | select id,name to get the details 
 
 An example CSV file is as follows:
@@ -4206,8 +4206,8 @@ applianceid,vcenterid
 143112190000,2110122
 ```
 When you run  ```New-AGMLibVMwareVMDiscovery``` you have to specify vmtag, Vcenter credentials (Username and Password), sltid/sltname, slpid/slpname and one of these two choices:
-* ```-nobackup```  This will add all new Vmware VM's it finds without protecting them
-* ```-backup```  This will add all new Vmware VM's it finds and for each VM it will apply specified sltid/sltname and slpid/slpname
+* ```-nobackup```  This will add all new VMware VM's it finds without protecting them
+* ```-backup```  This will add all new VMware VM's it finds and for each VM it will apply specified sltid/sltname and slpid/slpname
 
 An example run is as follows
 ```
