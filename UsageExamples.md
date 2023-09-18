@@ -4187,7 +4187,7 @@ Get-AGMDiskPool
 
 If we are onboarding large numbers of VMware VM's or we want to auto protect new VM's using automation, we can use a function called: **New-AGMLibVMwareVMDiscovery**
 
-### Using a CSV file to work with multiple Appliances and or Vcenters
+### Using a CSV file to work with multiple Appliances and or VCenters
 
 
 This function can use a CSV file as input to supply the following data to the function which you specify with:
@@ -4197,7 +4197,7 @@ This function can use a CSV file as input to supply the following data to the fu
 The CSV needs the following columns:
 
 * **applianceid**  This is used to determine which backup appliance will manage the new VMware VM. 
-* **vcenterid**   This determines Vcenter. Get-AGMHost -filtervalue "isvcenterhost=true" | select id,name to get the details 
+* **vcenterid**   This determines vCenter. Get-AGMHost -filtervalue "isvcenterhost=true" | select id,name to get the details 
 
 An example CSV file is as follows:
 ```
@@ -4205,7 +4205,7 @@ applianceid,vcenterid
 143112195179,2110151
 143112190000,2110122
 ```
-When you run  ```New-AGMLibVMwareVMDiscovery``` you have to specify vmtag, Vcenter credentials (Username and Password), sltid/sltname, slpid/slpname and one of these two choices:
+When you run  ```New-AGMLibVMwareVMDiscovery``` you have to specify vmtag, VCenter credentials (Username and Password), sltid/sltname, slpid/slpname and one of these two choices:
 * ```-nobackup```  This will add all new VMware VM's it finds without protecting them
 * ```-backup```  This will add all new VMware VM's it finds and for each VM it will apply specified sltid/sltname and slpid/slpname
 
@@ -4251,7 +4251,6 @@ Successfully protected all tagged VMs!
 > **Note**: If New-AGMLibVMwareVMDiscovery is executed without passfilepath then it will prompt to provide Venter password </br>
 > </br>
 > If New_AGMLibVMwareVMDiscovery is executed with passfilepath and If the password file does not exist it prompts for inputting vCenter password, and then save the encrypted password to specified file. </br>
-
 
 
 ## Using a VMware mount to create a new VMware VM
