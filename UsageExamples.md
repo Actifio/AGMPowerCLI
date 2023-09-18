@@ -4185,7 +4185,15 @@ Get-AGMDiskPool
 
 ## Vmware VM Onboarding Automation
 
-If we are onboarding large numbers of Vmware VM's or we want to auto protect new VM's using automation, we can use a function called: **New-AGMLibVMwareVMDiscovery**
+If we are onboarding large numbers of Vmware VM's or we want to auto protect new VM's using automation, we can use a function called: **New-AGMLibVMwareVMDiscovery**. This function query Vcenter and get list of VM's which has specified tag and it uses following vcenter powershell modules and can be installed using **Install-Module -Name Module name** command </br>
+
+```
+Install-Module -Name VMware.Sdk.vSphere.Cis 
+Install-Module -Name VMware.Sdk.vSphere.Cis.Tagging 
+Install-Module -Name VMware.Sdk.vSphere.vCenter 
+Install-Module -Name VMware.Sdk.Runtime 
+Install-Module -Name VMware.Sdk.vSphereRuntime 
+```
 
 ### Using a CSV file to work with multiple Appliances and or Vcenters
 
@@ -4211,7 +4219,7 @@ When you run  ```New-AGMLibVMwareVMDiscovery``` you have to specify vmtag, Vcent
 
 An example run is as follows
 ```
-New-AGMLibVMwareVMDiscovery -vmtag mytag -discoveryfile discovery.csv -backup -sltname snap_alone -slpname local -username user-01@abc.com
+New-AGMLibVMwareVMDiscovery -vmtag mytag -discoveryfile discovery.csv -backup -sltname snap_alone -slpname local -username user-01@abc.com  -passfilepath '.vcenterpassfile'
 New-AGMLibVMwareVMDiscovery -vmtag mytag -discoveryfile discovery.csv -nobackup -username user-01@abc.com  -passfilepath '.vcenterpassfile'
 ```
 
@@ -4222,7 +4230,7 @@ Instead of using a discovery file we can specify applianceid and vcenterid neede
 Example runs are as follows
 ```
 New-AGMLibVMwareVMDiscovery -vmtag mytag -applianceid 143112195179 -vcenterid 2110151 -nobackup -username user-01@abc.com -passfilepath '.vcenterpass'
-New-AGMLibVMwareVMDiscovery -vmtag mytag -applianceid 142106226624 -vcenterid 7550156 -backup -sltid 24314 -slpid 49363 -username user-01@abc.com 
+New-AGMLibVMwareVMDiscovery -vmtag mytag -applianceid 142106226624 -vcenterid 7550156 -backup -sltid 24314 -slpid 49363 -username user-01@abc.com -passfilepath '.vcenterpass'
 ```
 output should like this 
 ```
@@ -4497,4 +4505,5 @@ reprovision succeeded 2020-10-17 11:52:57 2020-10-17 11:55:08
 ```
 
 [Back to top](#usage-examples)
+
 
