@@ -2113,7 +2113,7 @@ This function has to add them all to ensure each instance is examined. If you ad
 
     a.  Create a new template with a single snapshot policy that never runs.  You do this by clicking on *Except* and setting it to *everyday* so it snaps *everyday* except *everyday*  In the example below we call this template *testtemplate*
 
-    b.  Create a large number of VMs with this GCLOUD command (edit to mtach your project):
+    b.  Create a large number of VMs with this GCLOUD command (edit to match your project):
     ```
     gcloud compute instances bulk create \
         --name-pattern=gcpdemo-### \
@@ -4248,7 +4248,7 @@ Applying SLA to all protectable applications...
 Successfully protected tagged VMs for Cluster: cluster, vCenter ID: 7550156, Appliance applianceid: 142106226624, Appliance Name: backup-server-34038!
 Successfully protected all tagged VMs!
 ```
-> **Note**: If New-AGMLibVMwareVMDiscovery is executed without passfilepath then it will prompt to provide Venter password </br>
+> **Note**: If New-AGMLibVMwareVMDiscovery is executed without passfilepath then it will prompt to provide vCenter password </br>
 > </br>
 > If New_AGMLibVMwareVMDiscovery is executed with passfilepath and If the password file does not exist it prompts for inputting vCenter password, and then save the encrypted password to specified file. </br>
 
