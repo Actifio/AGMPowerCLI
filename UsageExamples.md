@@ -1022,7 +1022,7 @@ id     appname apptype     managed
 ```
 ## Backup Plan Removal In Bulk
 
-In this scenario, a large number of VMs that were no longer required were removed from the vCenter. However, as those VMs were still being managed at the time of removal from the VCenter, the following error message is being received constantly
+In this scenario, a large number of VMs that were no longer required were removed from the vCenter. However, as those VMs were still being managed at the time of removal from the vCenter, the following error message is being received constantly
  
 ```
 Error 933 - Failed to find VM with matching BIOS UUID
@@ -4187,7 +4187,7 @@ Get-AGMDiskPool
 
 If we are onboarding large numbers of VMware VM's or we want to auto protect new VM's using automation, we can use a function called: **New-AGMLibVMwareVMDiscovery**
 
-### Using a CSV file to work with multiple Appliances and or VCenters
+### Using a CSV file to work with multiple Appliances and or vCenters
 
 
 This function can use a CSV file as input to supply the following data to the function which you specify with:
@@ -4205,7 +4205,7 @@ applianceid,vcenterid
 143112195179,2110151
 143112190000,2110122
 ```
-When you run  ```New-AGMLibVMwareVMDiscovery``` you have to specify vmtag, VCenter credentials (Username and Password), sltid/sltname, slpid/slpname and one of these two choices:
+When you run  ```New-AGMLibVMwareVMDiscovery``` you have to specify vmtag, vCenter credentials (Username and Password), sltid/sltname, slpid/slpname and one of these two choices:
 * ```-nobackup```  This will add all new VMware VM's it finds without protecting them
 * ```-backup```  This will add all new VMware VM's it finds and for each VM it will apply specified sltid/sltname and slpid/slpname
 
