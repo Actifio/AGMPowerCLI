@@ -484,7 +484,69 @@ Function Set-AGMHostPort ([string]$clusterid,[string]$applianceid,[string]$hosti
     Post-AGMAPIData  -endpoint /host/$hostid/port -body $json 
 }
 
+Function Set-AGMHostSecret ([string]$secret, [string]$hostid, [switch]$force) {
+    <#
+    .SYNOPSIS
+    Updates a host with a new secret to establish trusted communication. 
 
+    .EXAMPLE
+    Set-AGMHostSecret -secret "do1rg334omavci24yqvczfp6x3v8ih5yvfnvrs8wtk3egdgupx4sqerw" -hostid "12345"
+
+    To learn hostid, use this command:  Get-AGMHost
+    
+    A secret can be found after successful installation of the Google Backup and DR agent. A new secret can be created with the 
+    following commands. 
+    'udsagent secret --reset [--restart]' or 'udsagent.exe secret --reset [--restart]'
+
+    .EXAMPLE
+    If the host already has trusted communication, and the certificate is active, the caller will be prompted for overwriting current certificate.
+    There is a force parameter that can be set to avoid this behavior. 
+
+    Set-AGMHostSecret -secret "do1rg334omavci24yqvczfp6x3v8ih5yvfnvrs8wtk3egdgupx4sqerw" -hostid "12345" -force
+
+    .DESCRIPTION
+    A function to update an existing host with a secret for trusted communication. Requires the Google Backup and DR agent to be installed on the host
+    #>
+    if (!$secret) {
+        [string]$secret = Read-Host "Secret"
+    }
+    if (!$hostid) {
+        [string]$hostid = Read-Host "Host ID"
+    }
+    if (!$hostid) {
+        Get-AGMErrorMessage -messagetoprint "Host ID is required. Run Get-AGMHost to learn host id for the available hosts."
+        return
+    }
+    $body = Get-AGMHost -hostid $hostid
+    if ($body.errormessage) {
+        Get-AGMErrorMessage -messagetoprint $body.errormessage
+        return
+    }
+    if ($body.pki_state -eq "TRUSTED" -and (-not $body.cert_revoked) -and (-not $force)) {
+        Write-Host "This host appears to already have established trusted communications. Are you sure you want to re-initialize the trust relationship?"
+        [string]$overWrite = Read-Host "(y/n)"
+        if ($overWrite -ne "y") {
+            Get-AGMErrorMessage -messagetoprint "Input was $overWrite. Host has not been updated."
+            return
+        }
+    }
+    $body.udsagent | Add-Member -Name "shared_secret" -Type NoteProperty -Value $secret
+    $json = $body | ConvertTo-Json -Depth 100
+    $response = Put-AGMAPIData -endpoint /host/$hostid -body $json
+    if ($response.pki_errors) {
+        # If PKI state is not applicable, return the error response
+        $errorMessage = "Updating the secret failed. $($response.pki_errors)"
+        # If PKI state is trusted but cert has been revoked, return error response and help message for resetting the secret.
+        if ($response.cert_revoked) {
+            $errorMessage += "Finally, if the certificate had previously been revoked, it will be necessary to reset the agent on the host 
+            machine with the command 'udsagent secret --reset [--restart]' or 'udsagent.exe secret --reset [--restart]'. 
+            Please note that restarting the agent is required, and will interrupt any running jobs."
+        }
+        Get-AGMErrorMessage -messagetoprint $errorMessage
+        return
+    }
+    return $response
+}
 
 
 
