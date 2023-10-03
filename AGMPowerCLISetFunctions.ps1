@@ -530,6 +530,10 @@ Function Set-AGMHostSecret ([string]$secret, [string]$hostid, [switch]$force) {
             return
         }
     }
+    if (-not $body.udsagent) {
+        $o = [PSCustomObject]@{}
+        $body | Add-Member -Name "udsagent" -Type NoteProperty -Value $o
+    }
     $body.udsagent | Add-Member -Name "shared_secret" -Type NoteProperty -Value $secret
     $json = $body | ConvertTo-Json -Depth 100
     $response = Put-AGMAPIData -endpoint /host/$hostid -body $json
