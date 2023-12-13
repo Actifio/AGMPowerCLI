@@ -1,6 +1,6 @@
 
 # Usage Examples
-This document contains usage examples that include both AGMPowerCLI and AGMPowerLIB commands.
+This document contains usage examples that include both AGMPowerCLI and AGMPowerLib commands.
 
 **[AGM](#agm)**<br>
 >**[AGM Version](#agm-version)**<br>
