@@ -4185,7 +4185,7 @@ Get-AGMDiskPool
 
 ## VMware VM Onboarding Automation
 
-If we are onboarding large numbers of VMware VM's or we want to auto protect new VM's using automation, we can use a function called: **New-AGMLibVMwareVMDiscovery**. This function query vCenter and get list of VM's which has specified tag and it uses following vcenter powershell modules and can be installed using **Install-Module -Name Module name** command </br>
+If we are onboarding large numbers of VMware VM's or we want to auto protect new VM's using automation, we can use a function called: **New-AGMLibVMwareVMDiscovery**. This function queries vCenter and gets a list of VM's which has a specified tag and it uses the following vCenter powershell modules, and can be installed using **Install-Module -Name Module name** command </br>
 
 ```
 Install-Module -Name VMware.Sdk.vSphere.Cis 
@@ -4195,8 +4195,7 @@ Install-Module -Name VMware.Sdk.Runtime
 Install-Module -Name VMware.Sdk.vSphereRuntime 
 ```
 
-### Using a CSV file to work with multiple Appliances and or Vcenters
-
+### Using a CSV file to work with multiple Appliances and or vCenters
 
 This function can use a CSV file as input to supply the following data to the function which you specify with:
 
@@ -4204,8 +4203,8 @@ This function can use a CSV file as input to supply the following data to the fu
 
 The CSV needs the following columns:
 
-* **applianceid**  This is used to determine which backup appliance will manage the new Vmware VM. 
-* **vcenterid**   This determines Vcenter. Get-AGMHost -filtervalue "isvcenterhost=true" | select id,name to get the details 
+* **applianceid**  This is used to determine which backup appliance will manage the new VMware VM. 
+* **vcenterid**  This determines Vcenter. Get-AGMHost -filtervalue "isvcenterhost=true" | select id,name to get the details 
 
 An example CSV file is as follows:
 ```
@@ -4213,14 +4212,14 @@ applianceid,vcenterid
 143112195179,2110151
 143112190000,2110122
 ```
-When you run  ```New-AGMLibVMwareVMDiscovery``` you have to specify vmtag, Vcenter credentials (Username and Password), sltid/sltname, slpid/slpname and one of these two choices:
-* ```-nobackup```  This will add all new Vmware VM's it finds without protecting them
-* ```-backup```  This will add all new Vmware VM's it finds and for each VM it will apply specified sltid/sltname and slpid/slpname
+When you run  ```New-AGMLibVMwareVMDiscovery``` you have to specify vmtag, vCenter credentials (Username and Password or Passfile), sltid/sltname, slpid/slpname and one of these two choices:
+* ```-nobackup``` This will add all new VMware VM's it finds without protecting them
+* ```-backup``` This will add all new VMware VM's it finds and for each VM it will apply specified sltid/sltname and slpid/slpname
 
 An example run is as follows
 ```
-New-AGMLibVMwareVMDiscovery -vmtag mytag -discoveryfile discovery.csv -backup -sltname snap_alone -slpname local -username user-01@abc.com  -passfilepath '.vcenterpassfile'
-New-AGMLibVMwareVMDiscovery -vmtag mytag -discoveryfile discovery.csv -nobackup -username user-01@abc.com  -passfilepath '.vcenterpassfile'
+New-AGMLibVMwareVMDiscovery -vmtag mytag -discoveryfile discovery.csv -backup -sltname snap_alone -slpname local -username solution-user-01@gve.local  -passfilepath '.vcenterpassfile'
+New-AGMLibVMwareVMDiscovery -vmtag mytag -discoveryfile discovery.csv -nobackup -username solution-user-01@gve.local  -passfilepath '.vcenterpassfile'
 ```
 
 ### Using a single command with applianceid and vcenterid
@@ -4229,10 +4228,10 @@ Instead of using a discovery file we can specify applianceid and vcenterid neede
 
 Example runs are as follows
 ```
-New-AGMLibVMwareVMDiscovery -vmtag mytag -applianceid 143112195179 -vcenterid 2110151 -nobackup -username user-01@abc.com -passfilepath '.vcenterpass'
-New-AGMLibVMwareVMDiscovery -vmtag mytag -applianceid 142106226624 -vcenterid 7550156 -backup -sltid 24314 -slpid 49363 -username user-01@abc.com -passfilepath '.vcenterpass'
+New-AGMLibVMwareVMDiscovery -vmtag mytag -applianceid 143112195179 -vcenterid 2110151 -nobackup -username solution-user-01@gve.local -passfilepath '.vcenterpass'
+New-AGMLibVMwareVMDiscovery -vmtag mytag -applianceid 142106226624 -vcenterid 7550156 -backup -sltid 24314 -slpid 49363 -username solution-user-01@gve.local -passfilepath '.vcenterpass'
 ```
-output should like this 
+Output should like this 
 ```
 Discovering VMs with applianceid=142106226624, vcenterid=7550156 ...
 vCenter connected
@@ -4256,11 +4255,9 @@ Applying SLA to all protectable applications...
 Successfully protected tagged VMs for Cluster: cluster, vCenter ID: 7550156, Appliance applianceid: 142106226624, Appliance Name: backup-server-34038!
 Successfully protected all tagged VMs!
 ```
-> **Note**: If New-AGMLibVMwareVMDiscovery is executed without passfilepath then it will prompt to provide Venter password </br>
+> **Note**: If New-AGMLibVMwareVMDiscovery is executed without passfilepath then it will prompt to provide vCenter password </br>
 > </br>
 > If New_AGMLibVMwareVMDiscovery is executed with passfilepath and If the password file does not exist it prompts for inputting vCenter password, and then save the encrypted password to specified file. </br>
-
-
 
 ## Using a VMware mount to create a new VMware VM
 To create a new VMware VM from backup use this command which runs a guided menu:
@@ -4273,9 +4270,9 @@ Valid values for mountmode are: nfs, vrdm or prdm with nfs being the default if 
 New-AGMLibVM -imageid 53773979 -vmname avtestvm9 -datastore "ORA-RAC-iSCSI" -vcenterid 5552150 -esxhostid 5552164 -mountmode nfs 
 ```
 There are several mandatory parameters:
-* ```-vmname www```  Specifies the name of the new VMware VM
+* ```-vmname www```    Specifies the name of the new VMware VM
 * ```-vcenterid xxx``` Specifies the vCenter that will manage the VM
-* ```-esxhostid yyy```  Specifies the ESXi host where the VM will run
+* ```-esxhostid yyy``` Specifies the ESXi host where the VM will run
 * ```-datastore zzz``` Specifies the name of the datastore where we will store the VMX file and VM swap file
 
 Image selection will be determined by:
@@ -4295,9 +4292,7 @@ There are some other options:
 
 Monitoring options:
 * ```-wait```  This will wait up to 2 minutes for the job to start, checking every 15 seconds to show you the job name
-* ```-monitor```  Same as -wait but will also run Get-AGMLibFollowJobStatus to monitor the job to completion 
-
-
+* ```-monitor```  Same as -wait but will also run Get-AGMLibFollowJobStatus to monitor the job to completion
 
 ## Mounting a VMware VM backup to an existing VM
 To mount to an existing host use this command:
@@ -4313,7 +4308,6 @@ There is a composite function that is designed to help you find all the commands
 ```
 Start-AGMLibRansomwareRecovery
 ```
-
 
 ### Building a list of images
 First we build an object that contains a list of images. For this we can use Get-AGMLibImageRange in a syntax like this:
