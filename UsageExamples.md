@@ -4183,9 +4183,9 @@ Get-AGMDiskPool
 [Back to top](#usage-examples)
 # VMware
 
-## Vmware VM Onboarding Automation
+## VMware VM Onboarding Automation
 
-If we are onboarding large numbers of Vmware VM's or we want to auto protect new VM's using automation, we can use a function called: **New-AGMLibVMwareVMDiscovery**. This function query Vcenter and get list of VM's which has specified tag and it uses following vcenter powershell modules and can be installed using **Install-Module -Name Module name** command </br>
+If we are onboarding large numbers of VMware VM's or we want to auto protect new VM's using automation, we can use a function called: **New-AGMLibVMwareVMDiscovery**. This function query vCenter and get list of VM's which has specified tag and it uses following vcenter powershell modules and can be installed using **Install-Module -Name Module name** command </br>
 
 ```
 Install-Module -Name VMware.Sdk.vSphere.Cis 
