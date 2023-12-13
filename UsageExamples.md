@@ -151,7 +151,7 @@ This document contains usage examples that include both AGMPowerCLI and AGMPower
 >**[Listing Your Storage Pools](#listing-your-storage-pools)**</br>
 
 **[VMware](#vmware)**</br>
->**[Vmware VM Onboarding Automation](#vmware-vm-onboarding-automation)**</br>
+>**[VMware VM Onboarding Automation](#vmware-vm-onboarding-automation)**</br>
 **[Using a VMware mount to create a new VMware VM](#using-a-vmware-mount-to-create-a-new-vmware-vm)**</br>
 **[Mounting a VMware VM backup to an existing VM](#mounting-a-vmware-vm-backup-to-an-existing-vm)**</br>
 **[VMware Multi Mount](#vmware-multi-mount)**</br>
