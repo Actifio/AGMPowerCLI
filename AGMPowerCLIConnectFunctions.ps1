@@ -122,14 +122,14 @@ function Connect-AGM
     }
 
     $agmipsniff = $agmip.Substring(0,4)
-    if ($agmipsniff = "bmc-")
+    if ($agmipsniff -eq "bmc-")
     {
         $accesstoken = $true
     }
 
     if ((!($agmpassword)) -and (!($passwordfile)) -and (!($oauth2ClientId)) -and (!($accesstoken)))
     {
-        if ($agmipsniff = "agm-")
+        if ($agmipsniff -eq "agm-")
         {
             $oauth2ClientId = Read-Host "oauth2ClientId"
         }
