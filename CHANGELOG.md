@@ -1,6 +1,10 @@
 # Change log
+## AGMPowerCLI 0.0.0.61
+* Fix wrong compare syntax in Connect-AGM function.
+
 ## AGMPowerCLI 0.0.0.59
 * Update UsageExamples.md with Vmware VM Onboarding Automation i.e New-AGMLibVMwareVMDiscovery
+
 ## AGMPowerCLI 0.0.0.59
 * Add Connect-vCenter, Disconnect-vCenter, Find-vCenterHostName, Find-vCenterTaggedVMs, Save-vCenterPassword, New-AGMVMDiscovery, New-AGMVMApp, Get-AGMClusterName
 
