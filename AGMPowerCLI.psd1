@@ -181,6 +181,7 @@ FunctionsToExport = @(
     'Set-AGMConsistencyGroup',
     'Set-AGMConsistencyGroupMember',
     'Set-AGMHostPort',
+    'Set-AGMHostSecret',
     'Set-AGMImage',
     'Set-AGMPromoteUser',
     'Set-AGMTimeZoneHandling',
