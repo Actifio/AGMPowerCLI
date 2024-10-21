@@ -97,7 +97,7 @@ These modules can be used with both an Actifio GO AGM and Backup and DR Manageme
 
 To login use syntax like this:
 
-> **Note**: As of version 11.0.5 of the management console (URL starts with **bmc-** rather than **agm-**) you will no longer need to supply an OAUth 2.0 client ID for _connect-agm_.
+> **Note**: As of version 11.0.5 of the management console (URL starts with **bmc-** rather than **agm-**) you will no longer need to supply an OAuth 2.0 client ID for _connect-agm_.
 
 ```
 connect-agm -agmip bmc-1234567-randomchars-dot-asia-southeast1.backupdr.googleusercontent.com -agmuser powershell@avwservicelab1.iam.gserviceaccount.com
