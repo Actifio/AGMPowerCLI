@@ -228,7 +228,7 @@ authconfig : @{method=DATABASE}
 region     : asia-southeast1
 
 ```
-### Can I use this Service Account to login to the Management Console WEB GUI?
+### Can I use this Service Account to login to the Management Console Web GUI?
 
 No you cannot. A service account cannot be used to login to a Web Browser to authorize Console access
 
