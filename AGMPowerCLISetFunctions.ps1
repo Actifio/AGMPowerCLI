@@ -674,38 +674,7 @@ Function Set-AGMUser ([string]$userid,[string]$timezone,[string]$rolelist,[strin
     Put-AGMAPIData  -endpoint /user/$userid -body $jsonbody
 }
 
-function Set-AGMHostConfig {
-    [CmdletBinding(DefaultParameterSetName='Individual')]
-    param(
-        # Individual Host Parameter Set
-        [Parameter(Mandatory=$true, ParameterSetName='Individual')]
-        [string]$HostId,
-
-        [Parameter(Mandatory=$false, ParameterSetName='Individual')]
-        [string]$Secret,
-
-        [Parameter(Mandatory=$false, ParameterSetName='Individual')]
-        [string]$IPAddress,
-
-        [Parameter(Mandatory=$false, ParameterSetName='Individual')]
-        [string]$Hostname,
-
-        [Parameter(Mandatory=$false, ParameterSetName='Individual')]
-        [ValidateSet("BLOCK", "NFS", "AUTO")]
-        [string]$DiskPref,
-
-        [Parameter(Mandatory=$false, ParameterSetName='Individual')]
-        [string[]]$AlternateIPs,
-
-        [Parameter(Mandatory=$false, ParameterSetName='Individual')]
-        [string]$FriendlyName,
-
-        # CSV Input Parameter Set
-        [Parameter(Mandatory=$true, ParameterSetName='CsvInput')]
-        [string]$CsvPath
-    )
-
-    <#
+ <#
 .SYNOPSIS
 Updates configuration for an existing AGM Host, either individually or in bulk via CSV.
 
@@ -767,6 +736,36 @@ Set-AGMHostConfig -CsvPath "./host_updates.csv"
 Assumes the existence of Get-AGMAPIData, Put-AGMAPIData, and Connect-AGM functions.
 The script will connect to AGM using hardcoded values, consider parameterizing this.
 #>
+function Set-AGMHostConfig {
+    [CmdletBinding(DefaultParameterSetName='Individual')]
+    param(
+        # Individual Host Parameter Set
+        [Parameter(Mandatory=$true, ParameterSetName='Individual')]
+        [string]$HostId,
+
+        [Parameter(Mandatory=$false, ParameterSetName='Individual')]
+        [string]$Secret,
+
+        [Parameter(Mandatory=$false, ParameterSetName='Individual')]
+        [string]$IPAddress,
+
+        [Parameter(Mandatory=$false, ParameterSetName='Individual')]
+        [string]$Hostname,
+
+        [Parameter(Mandatory=$false, ParameterSetName='Individual')]
+        [ValidateSet("BLOCK", "NFS", "AUTO")]
+        [string]$DiskPref,
+
+        [Parameter(Mandatory=$false, ParameterSetName='Individual')]
+        [string[]]$AlternateIPs,
+
+        [Parameter(Mandatory=$false, ParameterSetName='Individual')]
+        [string]$FriendlyName,
+
+        # CSV Input Parameter Set
+        [Parameter(Mandatory=$true, ParameterSetName='CsvInput')]
+        [string]$CsvPath
+    )
 
 
     # Internal function to process the update for a single host's data
