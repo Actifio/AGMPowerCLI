@@ -673,3 +673,232 @@ Function Set-AGMUser ([string]$userid,[string]$timezone,[string]$rolelist,[strin
 
     Put-AGMAPIData  -endpoint /user/$userid -body $jsonbody
 }
+
+function Set-AGMHostConfig {
+    [CmdletBinding(DefaultParameterSetName='Individual')]
+    param(
+        # Individual Host Parameter Set
+        [Parameter(Mandatory=$true, ParameterSetName='Individual')]
+        [string]$HostId,
+
+        [Parameter(Mandatory=$false, ParameterSetName='Individual')]
+        [string]$Secret,
+
+        [Parameter(Mandatory=$false, ParameterSetName='Individual')]
+        [string]$IPAddress,
+
+        [Parameter(Mandatory=$false, ParameterSetName='Individual')]
+        [string]$Hostname,
+
+        [Parameter(Mandatory=$false, ParameterSetName='Individual')]
+        [ValidateSet("BLOCK", "NFS", "AUTO")]
+        [string]$DiskPref,
+
+        [Parameter(Mandatory=$false, ParameterSetName='Individual')]
+        [string[]]$AlternateIPs,
+
+        [Parameter(Mandatory=$false, ParameterSetName='Individual')]
+        [string]$FriendlyName,
+
+        # CSV Input Parameter Set
+        [Parameter(Mandatory=$true, ParameterSetName='CsvInput')]
+        [string]$CsvPath
+    )
+
+    <#
+.SYNOPSIS
+Updates configuration for an existing AGM Host, either individually or in bulk via CSV.
+
+.DESCRIPTION
+This function modifies properties of a host registered in AGM. It fetches the
+current host configuration, applies the changes specified in the parameters,
+and PUTs the updated host object back to the AGM.
+
+Input can be provided for a single host using individual parameters, or for
+multiple hosts by specifying a CSV file path.
+
+.PARAMETER HostId
+The mandatory ID of the host to modify when using the 'Individual' parameter set.
+
+.PARAMETER Secret
+(Optional) Sets the shared secret for the UDS agent on the host.
+
+.PARAMETER IPAddress
+(Optional) Updates the primary IP address of the host.
+
+.PARAMETER Hostname
+(Optional) Updates the hostname.
+
+.PARAMETER DiskPref
+(Optional) Sets the disk preference. Valid values are BLOCK, NFS, AUTO.
+
+.PARAMETER AlternateIPs
+(Optional) An array of strings representing alternate IP addresses for the host.
+This will replace any existing alternate IPs. In CSV, this should be a comma-separated string within the cell (e.g., "192.168.1.1,192.168.1.2").
+
+.PARAMETER FriendlyName
+(Optional) Sets a friendly name (path) for the host.
+
+.PARAMETER CsvPath
+The full path to a CSV file containing host information to update.
+The CSV must have a header row. Expected column names are:
+HostId (Mandatory), Secret, IPAddress, Hostname, DiskPref, AlternateIPs, FriendlyName.
+Only include columns for the properties you wish to update.
+
+.EXAMPLE
+# Update a single host's Secret and DiskPref
+Set-AGMHostConfig -HostId 14217 -Secret "newsecretkey123" -DiskPref BLOCK
+
+.EXAMPLE
+# Update a single host's IPAddress and AlternateIPs
+Set-AGMHostConfig -HostId 14217 -IPAddress "10.12.12.23" -AlternateIPs @("192.168.1.10", "192.168.1.11")
+
+.EXAMPLE
+# Update multiple hosts based on a CSV file
+Set-AGMHostConfig -CsvPath "./host_updates.csv"
+
+# Example CSV content (host_updates.csv):
+# HostId,Secret,IPAddress,AlternateIPs,DiskPref
+# 14217,newsecret1,10.1.1.1,"192.168.0.1,192.168.0.2",NFS
+# 14218,,10.1.1.2,,
+# 14219,newsecret3,,,
+
+.NOTES
+Assumes the existence of Get-AGMAPIData, Put-AGMAPIData, and Connect-AGM functions.
+The script will connect to AGM using hardcoded values, consider parameterizing this.
+#>
+
+
+    # Internal function to process the update for a single host's data
+    function Update-AGMHostInternal {
+        param(
+            [Parameter(Mandatory=$true)]
+            [PSCustomObject]$HostInfo
+        )
+
+        $currentHostId = $HostInfo.HostId
+        if ([string]::IsNullOrWhiteSpace($currentHostId)) {
+            Write-Error "HostId is missing in the provided data."
+            return
+        }
+
+        Write-Verbose "Fetching current configuration for Host ID: $currentHostId"
+        $currentHost = $null
+        try {
+            $currentHost = Get-AGMHost -filtervalue "id=$currentHostId"
+            if (-not $currentHost -or $currentHost.id -ne $currentHostId) {
+                Write-Error "Failed to fetch host details for ID: $currentHostId"
+                return
+            }
+        }
+        catch {
+            Write-Error "Error fetching host $currentHostId : $($_.Exception.Message)"
+            return
+        }
+
+        Write-Verbose "Successfully fetched host: $($currentHost.name)"
+
+        $updateBody = $currentHost | ConvertTo-Json -Depth 10 | ConvertFrom-Json
+        $update = $false
+
+        # Helper to check if a property exists in the HostInfo object
+        $propExists = { param($propName) $HostInfo.PSObject.Properties.Name -contains $propName }
+
+        if ((& $propExists 'Secret') -and -not [string]::IsNullOrWhiteSpace($HostInfo.Secret)) {
+            if (-not $updateBody.udsagent) {
+                 $updateBody | Add-Member -MemberType NoteProperty -Name 'udsagent' -Value ([PSCustomObject]@{});
+            }
+            if ($updateBody.udsagent.PSObject.Properties.Match('shared_secret').Count -eq 0) {
+                $updateBody.udsagent | Add-Member -MemberType NoteProperty -Name 'shared_secret' -Value $HostInfo.Secret
+            } else {
+                $updateBody.udsagent.shared_secret = $HostInfo.Secret
+            }
+            Write-Verbose "Updating Secret for $currentHostId"
+            $update = $true
+        }
+        if ((& $propExists 'IPAddress') -and -not [string]::IsNullOrWhiteSpace($HostInfo.IPAddress)) {
+            $updateBody.ipaddress = $HostInfo.IPAddress
+            Write-Verbose "Updating IPAddress to $($HostInfo.IPAddress) for $currentHostId"
+            $update = $true
+        }
+        if ((& $propExists 'Hostname') -and -not [string]::IsNullOrWhiteSpace($HostInfo.Hostname)) {
+            $updateBody.hostname = $HostInfo.Hostname
+            Write-Verbose "Updating Hostname to $($HostInfo.Hostname) for $currentHostId"
+            $update = $true
+        }
+        if ((& $propExists 'DiskPref') -and -not [string]::IsNullOrWhiteSpace($HostInfo.DiskPref)) {
+            $updateBody.diskpref = $HostInfo.DiskPref
+            Write-Verbose "Updating DiskPref to $($HostInfo.DiskPref) for $currentHostId"
+            $update = $true
+        }
+        if ((& $propExists 'AlternateIPs') -and -not [string]::IsNullOrWhiteSpace($HostInfo.AlternateIPs)) {
+            $altIps = $HostInfo.AlternateIPs -split ',' | ForEach-Object {$_.Trim()}
+            $updateBody.alternateip = $altIps
+            Write-Verbose "Updating AlternateIPs for $currentHostId"
+            $update = $true
+        }
+        if ((& $propExists 'FriendlyName') -and -not [string]::IsNullOrWhiteSpace($HostInfo.FriendlyName)) {
+            $updateBody.friendlypath = $HostInfo.FriendlyName
+            Write-Verbose "Updating FriendlyName to $($HostInfo.FriendlyName) for $currentHostId"
+            $update = $true
+        }
+
+        if (-not $update) {
+            Write-Warning "No changes specified or values are empty for host $currentHostId."
+            return
+        }
+
+        $jsonBody = $updateBody | ConvertTo-Json -Depth 10 -Compress
+        Write-Verbose "Updated JSON Payload for $currentHostId : $jsonBody"
+
+        try {
+            Write-Host "Applying updates to host $currentHostId..."
+            Put-AGMAPIData -endpoint "/host/$currentHostId" -body $jsonBody
+            Write-Host "Successfully updated host $currentHostId."
+        }
+        catch {
+            Write-Error "Error updating host $currentHostId : $($_.Exception.Message)"
+        }
+    } # End of Update-AGMHostInternal
+
+    # Main logic based on ParameterSet
+    if ($PSCmdlet.ParameterSetName -eq 'Individual') {
+        Write-Host "Processing individual host: $HostId"
+        $hostInfo = @{ HostId = $HostId }
+        if ($PSBoundParameters.ContainsKey('Secret')) { $hostInfo.Secret = $Secret }
+        if ($PSBoundParameters.ContainsKey('IPAddress')) { $hostInfo.IPAddress = $IPAddress }
+        if ($PSBoundParameters.ContainsKey('Hostname')) { $hostInfo.Hostname = $Hostname }
+        if ($PSBoundParameters.ContainsKey('DiskPref')) { $hostInfo.DiskPref = $DiskPref }
+        if ($PSBoundParameters.ContainsKey('AlternateIPs')) { $hostInfo.AlternateIPs = $AlternateIPs -join ',' } # Join for consistency
+        if ($PSBoundParameters.ContainsKey('FriendlyName')) { $hostInfo.FriendlyName = $FriendlyName }
+
+        Update-AGMHostInternal -HostInfo ([PSCustomObject]$hostInfo)
+    }
+    elseif ($PSCmdlet.ParameterSetName -eq 'CsvInput') {
+        if (-not (Test-Path $CsvPath)) {
+            Write-Error "CSV file not found: $CsvPath"
+            return
+        }
+        Write-Host "Processing hosts from CSV file: $CsvPath"
+        try {
+            $csvData = Import-Csv -Path $CsvPath
+            if ($null -eq $csvData) {
+                Write-Warning "CSV file is empty or could not be read."
+                return
+            }
+
+            foreach ($row in $csvData) {
+                if (-not $row.PSObject.Properties.Name -contains 'HostId') {
+                     Write-Error "CSV is missing mandatory 'HostId' column."
+                     return
+                }
+                 Write-Host "--- Processing HostId $($row.HostId) from CSV ---"
+                Update-AGMHostInternal -HostInfo $row
+            }
+        }
+        catch {
+            Write-Error "Error processing CSV file: $($_.Exception.Message)"
+        }
+    }
+
+}
