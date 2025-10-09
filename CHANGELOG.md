@@ -1,4 +1,7 @@
 # Change log
+## AGMPowerCLI 0.0.0.62
+* Set-AGMHostConfig.
+
 ## AGMPowerCLI 0.0.0.61
 * Fix wrong compare syntax in Connect-AGM function.
 
