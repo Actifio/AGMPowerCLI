@@ -2623,3 +2623,66 @@ function Get-AGMWorkFlow ([string]$filtervalue,[string]$keyword,[switch][alias("
         Get-AGMAPIData -endpoint /workflow -limit $limit -sort $sort
     }
 }
+
+<#
+    .SYNOPSIS
+    Gets the effective, merged configuration options for a specified application and optionally saves the output as a JSON file.
+
+    .EXAMPLE
+    # Display output to console
+    Get-AGMApplicationEffectiveOption -id 153054121
+
+    .EXAMPLE
+    # Save output to a file
+    Get-AGMApplicationEffectiveOption -id 153054121 -OutputFilePath "C:\Logs\AppOptions.json"
+
+    .DESCRIPTION
+    A function to display the final, merged configuration options for a given application. 
+    If -OutputFilePath is specified, the output is converted to JSON and written to the file.
+    
+#>
+Function Get-AGMApplicationEffectiveOption {
+    [CmdletBinding()]
+    param (
+        # Mandatory: ID of the Application
+        [Parameter(Mandatory=$true)]
+        [string]$id,
+
+        # Optional: Full path to save the output as a JSON file
+        [Parameter(Mandatory=$false)]
+        [string]$OutputFilePath
+    )
+
+    Write-Verbose "Fetching effective options for Application ID: $id"
+    
+    # 1. Execute the primary API call
+    # Assuming Get-AGMAPIData handles the connection and returns a PowerShell object
+    $result = Get-AGMAPIData -endpoint "/application/$id/effectiveoption"
+
+    # 2. Check if output path was provided
+    if ($PSCmdlet.MyInvocation.BoundParameters.ContainsKey('OutputFilePath')) {
+        if ($result) {
+            Write-Verbose "Converting output to JSON and saving to $OutputFilePath"
+            
+            try {
+                # Convert the PowerShell object to JSON string with pretty formatting (Depth 5 is conservative)
+                $jsonOutput = $result | ConvertTo-Json -Depth 5
+                
+                # Write the JSON string to the specified file
+                $jsonOutput | Out-File -FilePath $OutputFilePath -Encoding UTF8 -Force
+                
+                Write-Host "Successfully saved effective options to: $OutputFilePath" -ForegroundColor Green
+            }
+            catch {
+                Write-Error "Failed to save JSON output to file. Error: $($_.Exception.Message)"
+                # Return the result object to the pipeline anyway
+                return $result
+            }
+        }
+    }
+    
+    # 3. Always return the original PowerShell object to the pipeline
+    if ($result) {
+        return $result
+    }
+}

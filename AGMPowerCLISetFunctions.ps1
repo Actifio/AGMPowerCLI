@@ -901,3 +901,178 @@ function Set-AGMHostConfig {
     }
 
 }
+
+<#
+    .SYNOPSIS
+    Sets one or more configuration options for a specified AGM Application.
+
+    .DESCRIPTION
+    The Set-AGMApplicationOptions function updates 'settable options' on an AGM Application.
+    It can operate in two modes:
+
+    1.  Individual Mode: Sets a single option by specifying the option name and value directly as parameters.
+    2.  BulkFile Mode: Reads a JSON file containing an array of name/value pairs and applies each as an option to the application.
+
+    The function includes support for -WhatIf and -Confirm to preview and verify changes before they are sent to the AGM.
+
+    .PARAMETER ApplicationId
+    The unique identifier of the AGM Application you want to modify. This parameter is mandatory in all cases.
+
+    .PARAMETER OptionName
+    The name of the specific option you want to set on the application. This is used only with the 'Individual' parameter set.
+
+    .PARAMETER OptionValue
+    The value you want to assign to the OptionName. This is used only with the 'Individual' parameter set.
+
+    .PARAMETER JsonFilePath
+    The full path to a JSON file. This file must contain a JSON array of objects, where each object has a 'name' and a 'value' key.
+    Example JSON content:
+    [
+        { "name": "inactivity_timeout", "value": "3600" },
+        { "name": "another_option", "value": "true" }
+    ]
+    This parameter is used only with the 'BulkFile' parameter set.
+
+    .EXAMPLE
+    Set-AGMApplicationOptions -ApplicationId 12345 -OptionName 'inactivity_timeout' -OptionValue '7200'
+
+    Sets the option 'inactivity_timeout' to '7200' for the AGM Application with ID 12345.
+
+    .EXAMPLE
+    Set-AGMApplicationOptions -ApplicationId 12345 -OptionName 'inactivity_timeout' -OptionValue '3600' -WhatIf
+
+    Displays what would happen if the command were run, but does not actually change any settings on Application ID 12345.
+
+    .EXAMPLE
+    Set-AGMApplicationOptions -ApplicationId 67890 -JsonFilePath 'C:\temp\my_app_options.json'
+
+    Reads the options from 'C:\temp\my_app_options.json' and applies each name/value pair to Application ID 67890.
+
+    .EXAMPLE
+    Set-AGMApplicationOptions -ApplicationId 67890 -JsonFilePath 'C:\temp\my_app_options.json' -Confirm
+
+    Prompts for confirmation before applying each option found in the JSON file to Application ID 67890.
+
+    .INPUTS
+    None. This function does not accept input from the pipeline.
+
+    .OUTPUTS
+    None. This function does not return any objects. It writes status messages to the host console.
+
+    .NOTES
+    Requires the 'Post-AGMAPIData' function to be loaded in the session to communicate with the AGM API.
+    The API endpoint used is /application/$ApplicationId/settableoption.
+    #>
+Function Set-AGMApplicationOptions {
+    [CmdletBinding(DefaultParameterSetName='Individual', SupportsShouldProcess = $true)]
+    param (
+        # Mandatory: ID of the Application to modify (Required for all sets)
+        [Parameter(Mandatory=$true)]
+        [string]$ApplicationId,
+
+        # --- Parameter Set: Individual Option Setting ---
+        [Parameter(Mandatory=$true, ParameterSetName='Individual')]
+        [string]$OptionName,
+
+        [Parameter(Mandatory=$true, ParameterSetName='Individual')]
+        [string]$OptionValue,
+
+        # --- Parameter Set: Bulk Setting via JSON File ---
+        [Parameter(Mandatory=$true, ParameterSetName='BulkFile')]
+        [string]$JsonFilePath
+    )
+
+
+    # Internal function to handle setting a single option
+    function Update-SingleOption {
+        param(
+            [string]$AppId,
+            [string]$Name,
+            [string]$Value
+        )
+
+        $payloadObject = [ordered]@{
+            name  = $Name
+            value = $Value
+        }
+        $json = $payloadObject | ConvertTo-Json -Compress
+        $createEndpoint = "/application/$AppId/settableoption"
+
+        if ($PSCmdlet.ShouldProcess("App ID $AppId", "Attempt to set option '$Name' to '$Value'")) {
+            Write-Verbose "Attempting to POST option $Name to $createEndpoint"
+            $result = Post-AGMAPIData -endpoint $createEndpoint -body $json
+
+            # Check for error message in the result
+            if ($result -and $result.errormessage) {
+                $errorMessage = $result.errormessage
+                Write-Warning "POST to $createEndpoint returned an API error: $errorMessage"
+
+                if ($errorMessage -like '*duplicate policyoption*') {
+                    Write-Host "Option '$Name' already exists for App ID $AppId. Attempting to update." -ForegroundColor Yellow
+
+                    try {
+                        $getEndpoint = "/application/$AppId/settableoption"
+                        Write-Verbose "Fetching existing options from $getEndpoint"
+                        $existingOptions = Get-AGMAPIData -endpoint $getEndpoint
+
+                        if ($existingOptions -and $existingOptions.items) {
+                            $targetOption = $existingOptions | Where-Object { $_.name -eq $Name }
+
+                            if ($targetOption) {
+                                $optionId = $targetOption.id
+                                $updateEndpoint = "/application/$AppId/settableoption/$optionId"
+                                Write-Verbose "Found existing option ID: $optionId. Attempting to PUT to $updateEndpoint"
+
+                                if ($PSCmdlet.ShouldProcess("App ID $AppId Option ID $optionId", "UPDATE option '$Name' to '$Value'")) {
+                                    $putResult = Put-AGMAPIData -endpoint $updateEndpoint -body $json
+                                    if ($putResult -and -not $putResult.errormessage) {
+                                        Write-Host "Successfully UPDATED option '$Name' to '$Value' for App ID $AppId (Option ID: $optionId)." -ForegroundColor Green
+                                    } else {
+                                        Write-Error "Failed to UPDATE option '$Name': $($putResult.errormessage)"
+                                    }
+                                }
+                            } else {
+                                Write-Error "Duplicate error reported, but could not find existing option with name '$Name' for App ID $AppId."
+                            }
+                        } else {
+                             Write-Error "Duplicate error reported, but failed to fetch existing options for App ID $AppId. Response: $($existingOptions | ConvertTo-Json -Depth 3)"
+                        }
+                    } catch {
+                        Write-Error "Exception during option update process: $($_.Exception.Message)"
+                    }
+                } else {
+                    Write-Error "Failed to set option '$Name' on App ID $AppId due to API error: $errorMessage"
+                }
+            } elseif ($result -and $result.id) {
+                 Write-Host "Successfully set option '$Name' to '$Value' for App ID $AppId (New ID: $($result.id))." -ForegroundColor Green
+            } else {
+                 Write-Error "Failed to set option '$Name' on App ID $AppId. Unexpected API response: $( $result | ConvertTo-Json -Depth 3 )"
+            }
+        }
+    }
+
+    if ($PSCmdlet.ParameterSetName -eq 'Individual') {
+        Update-SingleOption -AppId $ApplicationId -Name $OptionName -Value $OptionValue
+    }
+    elseif ($PSCmdlet.ParameterSetName -eq 'BulkFile') {
+        Write-Host "Processing configuration options from file: $JsonFilePath" -ForegroundColor Cyan
+        if (-not (Test-Path $JsonFilePath)) {
+            Write-Error "JSON file not found: $JsonFilePath"; return
+        }
+        try {
+            $jsonString = Get-Content -Path $JsonFilePath -Raw
+            $extractedData = $jsonString | ConvertFrom-Json
+        }
+        catch {
+            Write-Error "Failed to read or parse JSON file: $($_.Exception.Message)"; return
+        }
+
+        foreach ($Option in $extractedData) {
+            if (-not ($Option.PSObject.Properties.Name -contains 'name' -and $Option.PSObject.Properties.Name -contains 'value')) {
+                Write-Warning "Skipping item: Object is missing 'name' or 'value': $( $Option | ConvertTo-Json -Compress )"; continue
+            }
+            Update-SingleOption -AppId $ApplicationId -Name $Option.name -Value $Option.value
+        }
+        Write-Host "Bulk configuration update complete for Application ID: $ApplicationId" -ForegroundColor Green
+    }
+}

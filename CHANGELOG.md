@@ -1,4 +1,7 @@
 # Change log
+## AGMPowerCLI 0.0.0.63
+* Get-AGMApplicationEffectiveOption and Set-AGMApplicationOptions.
+
 ## AGMPowerCLI 0.0.0.62
 * Set-AGMHostConfig.
 
