@@ -821,3 +821,53 @@ function New-AGMVMApp {
 
     Post-AGMAPIData -endpoint "/host/$vCenterId/host/$ClusterName/addvms" -body $json
 }
+
+Function New-AGMLogicalGroup ([string]$name,[string]$clusterid,[string]$description) 
+{
+    <#
+    .SYNOPSIS
+    Creates a new Logical Group (LG) in the AGM system.
+
+    .EXAMPLE
+    New-AGMLogicalGroup -name "GCP-VM-Group" -clusterid "28075556" -description "Logical Group for GCP VMs"
+
+    Creates a Logical Group named 'GCP-VM-Group' associated with the specified cluster ID.
+
+    .EXAMPLE
+    New-AGMLogicalGroup -name "TestGroup" -clusterid "28075556"
+
+    Creates a Logical Group with only a name and cluster ID.
+
+    .DESCRIPTION
+    A function to create a Logical Group. Logical Groups are used to organize applications
+    that are protected by the same appliance (cluster).
+
+    To learn the Cluster ID, use the 'Get-AGMAppliance' command.
+    #>
+
+    if (!($name))
+    {
+        [string]$name = Read-Host "Logical Group Name"
+    }
+    if (!($clusterid))
+    {
+        [string]$clusterid = Read-Host "Cluster ID"
+    }
+    
+    # 1. Construct the Main JSON Body
+    $body = [ordered]@{
+        name = $name;
+        description = $description; # PowerShell sends empty string if not provided
+        cluster = [ordered]@{
+            id = $clusterid
+        }
+    }
+
+    $json = $body | ConvertTo-Json -Compress
+
+    Write-Verbose "New-AGMLogicalGroup: JSON Payload: $json"
+
+    # 2. Call the AGM API
+    # The endpoint is /logicalgroup and the method is POST for creation.
+    Post-AGMAPIData -endpoint "/logicalgroup" -body $json
+}

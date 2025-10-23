@@ -2686,3 +2686,63 @@ Function Get-AGMApplicationEffectiveOption {
         return $result
     }
 }
+
+Function Get-AGMLogicalGroup ([string]$id,[string]$logicalgroupid,[string]$filtervalue,[switch][alias("o")]$options,[int]$limit,[string]$sort)
+{
+    <#
+    .SYNOPSIS
+    Gets a list of AGM Logical Groups. Logical groups are simple groups of Applications with the same SLT/SLP
+
+    .EXAMPLE
+    Get-AGMLogicalGroup 
+    Will display all logical groups
+
+    .EXAMPLE
+    Get-AGMLogicalGroup -id 3
+    Will display logical group ID 3
+
+    .EXAMPLE
+    Get-AGMLogicalGroup -limit 2
+    Will display a maximum of two objects 
+
+    .EXAMPLE
+    Get-AGMLogicalGroup -filtervalue "name~Group" -limit 10 -sort id:desc
+    Looks for logical groups with "Group" in the name, limited to 10 results, sorted by ID descending. 
+
+    .DESCRIPTION
+    A function to display AGM Logical Groups.
+    Multiple filtervalues need to be encased in double quotes and separated by the & symbol
+    Filtervalues can be =, <, >, ~ (fuzzy) or ! (not)
+    Multiple sorts need to be encased in double quotes and separated by the , symbol
+    Sorts can only be asc for ascending or desc for descending.
+    
+    #>
+
+    $datefields = "modifydate,syncdate"
+    # if user doesn't ask for a limit, send 0 so we know to ignore it
+    if (!($limit))
+    { 
+        $limit = "0"
+    }
+    if (!($sort))
+    {
+        $sort = ""
+    }
+    if ($logicalgroupid) { $id = $logicalgroupid }
+    if ($options)
+    { 
+        Get-AGMAPIData -endpoint /logicalgroup -o
+    }
+    elseif ($id)
+    { 
+        Get-AGMAPIData -endpoint /logicalgroup/$id -datefields $datefields
+    }
+    elseif ($filtervalue)
+    {
+        Get-AGMAPIData -endpoint /logicalgroup -filtervalue $filtervalue -datefields $datefields -limit $limit -sort $sort
+    }
+    else
+    {
+        Get-AGMAPIData -endpoint /logicalgroup -datefields $datefields -limit $limit -sort $sort
+    }
+}
