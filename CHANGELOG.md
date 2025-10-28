@@ -1,4 +1,7 @@
 # Change log
+## AGMPowerCLI 0.0.0.64
+* New-AGMLogicalGroup and Set-AGMLogicalGroupMember.
+
 ## AGMPowerCLI 0.0.0.63
 * Get-AGMApplicationEffectiveOption and Set-AGMApplicationOptions.
 

@@ -1076,3 +1076,75 @@ Function Set-AGMApplicationOptions {
         Write-Host "Bulk configuration update complete for Application ID: $ApplicationId" -ForegroundColor Green
     }
 }
+
+Function Set-AGMLogicalGroupMember ([Parameter(Mandatory=$true)][string]$id,[Parameter(Mandatory=$true)][ValidateSet("add", "remove")][string]$action,[Parameter(Mandatory=$true)][string]$applicationid) 
+{
+    <#
+    .SYNOPSIS
+    Adds or removes members (Application IDs) from a Logical Group with pre-execution validation.
+
+    .EXAMPLE
+    Set-AGMLogicalGroupMember -id 164867931 -action add -applicationid "28119652,28119567,37586690"
+    
+    Adds Application IDs to the Logical Group with ID 164867931, after validating existence.
+
+    .DESCRIPTION
+    A function to modify the membership of a Logical Group. It first checks if the Logical Group exists
+    and then verifies that all specified Application IDs exist before proceeding with the add/remove action.
+    This version uses direct JSON string construction for compatibility with the API.
+    #>
+
+    # --- 1. Validate Logical Group ID Existence ---
+    Write-Verbose "Validating Logical Group ID: $id"
+    $groupCheck = Get-AGMLogicalGroup -id $id
+    if (!($groupCheck.id -eq $id))
+    {
+        Get-AGMErrorMessage -messagetoprint "ERROR: Logical Group with ID $id does not exist."
+        return
+    }
+
+    # --- 2. Prepare and Validate Application IDs ---
+    $memberStrings = $applicationid.Split(",")
+    $membersArray = @()
+    $invalidAppIds = @()
+
+    Write-Verbose "Validating Application IDs: $($memberStrings -join ', ')"
+    foreach ($memberId in $memberStrings)
+    {
+        $trimmedId = $memberId.Trim()
+        if ([string]::IsNullOrEmpty($trimmedId)) { continue }
+
+        $appCheck = Get-AGMApplication -id $trimmedId
+        if ($appCheck.id -eq $trimmedId)
+        {
+            # App ID exists, add to the array for the payload as a string for easy joining
+            $membersArray += $trimmedId
+        }
+        else
+        {
+            $invalidAppIds += $trimmedId
+        }
+    }
+
+    if ($invalidAppIds.Count -gt 0)
+    {
+        Get-AGMErrorMessage -messagetoprint "ERROR: The following Application IDs do not exist or could not be found: $($invalidAppIds -join ', ')"
+        return
+    }
+
+    if ($membersArray.Count -eq 0)
+    {
+        Get-AGMErrorMessage -messagetoprint "ERROR: No valid Application IDs were provided after validation."
+        return
+    }
+
+    # --- 3. Construct the JSON Payload (using string concatenation for API compatibility) ---
+    # This ensures the output is: [{"action":"add","members":[28119652,28119567,37586690]}]
+    $memberIdString = $membersArray -join ","
+    $json = '[{"action":"' + $action + '","members":[' + $memberIdString + ']}]'
+
+    Write-Verbose "Set-AGMLogicalGroupMember: JSON Payload: $json"
+
+    # --- 4. Call the AGM API ---
+    Post-AGMAPIData -endpoint "/logicalgroup/$id/member" -body $json
+}
