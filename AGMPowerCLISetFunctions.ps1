@@ -737,7 +737,7 @@ Assumes the existence of Get-AGMAPIData, Put-AGMAPIData, and Connect-AGM functio
 The script will connect to AGM using hardcoded values, consider parameterizing this.
 #>
 function Set-AGMHostConfig {
-    [CmdletBinding(DefaultParameterSetName='Individual')]
+    [CmdletBinding(DefaultParameterSetName='Individual', SupportsShouldProcess = $true)]
     param(
         # Individual Host Parameter Set
         [Parameter(Mandatory=$true, ParameterSetName='Individual')]
@@ -764,12 +764,14 @@ function Set-AGMHostConfig {
 
         # CSV Input Parameter Set
         [Parameter(Mandatory=$true, ParameterSetName='CsvInput')]
-        [string]$CsvPath
+        [string]$CsvPath,
+
+        [Parameter(Mandatory=$false, ParameterSetName='CsvInput')]
+        [int]$ThrottleLimit = 4
     )
 
-
-    # Internal function to process the update for a single host's data
-    function Update-AGMHostInternal {
+    # --- Definition of Update-AGMHostInternal for SEQUENTIAL (Individual) PATH ---
+    function Update-AGMHostInternal_Sequential {
         param(
             [Parameter(Mandatory=$true)]
             [PSCustomObject]$HostInfo
@@ -785,9 +787,13 @@ function Set-AGMHostConfig {
         $currentHost = $null
         try {
             $currentHost = Get-AGMHost -filtervalue "id=$currentHostId"
-            if (-not $currentHost -or $currentHost.id -ne $currentHostId) {
-                Write-Error "Failed to fetch host details for ID: $currentHostId"
+            if (-not $currentHost) {
+                Write-Error "Failed to fetch host details for ID: $currentHostId (Not Found)"
                 return
+            }
+            if ($currentHost.id -ne $currentHostId) {
+                 Write-Error "Failed to fetch host details for ID: $currentHostId (ID Mismatch: Expected $currentHostId, Got '$($currentHost.id)')"
+                 return
             }
         }
         catch {
@@ -796,24 +802,19 @@ function Set-AGMHostConfig {
         }
 
         Write-Verbose "Successfully fetched host: $($currentHost.name)"
-
         $updateBody = $currentHost | ConvertTo-Json -Depth 10 | ConvertFrom-Json
         $update = $false
 
-        # Helper to check if a property exists in the HostInfo object
         $propExists = { param($propName) $HostInfo.PSObject.Properties.Name -contains $propName }
 
+        # --- Apply Updates ---
         if ((& $propExists 'Secret') -and -not [string]::IsNullOrWhiteSpace($HostInfo.Secret)) {
-            if (-not $updateBody.udsagent) {
+             if (-not $updateBody.udsagent) {
                  $updateBody | Add-Member -MemberType NoteProperty -Name 'udsagent' -Value ([PSCustomObject]@{});
-            }
-            if ($updateBody.udsagent.PSObject.Properties.Match('shared_secret').Count -eq 0) {
-                $updateBody.udsagent | Add-Member -MemberType NoteProperty -Name 'shared_secret' -Value $HostInfo.Secret
-            } else {
-                $updateBody.udsagent.shared_secret = $HostInfo.Secret
-            }
-            Write-Verbose "Updating Secret for $currentHostId"
-            $update = $true
+             }
+             $updateBody.udsagent.shared_secret = $HostInfo.Secret
+             Write-Verbose "Updating Secret for $currentHostId"
+             $update = $true
         }
         if ((& $propExists 'IPAddress') -and -not [string]::IsNullOrWhiteSpace($HostInfo.IPAddress)) {
             $updateBody.ipaddress = $HostInfo.IPAddress
@@ -830,8 +831,8 @@ function Set-AGMHostConfig {
             Write-Verbose "Updating DiskPref to $($HostInfo.DiskPref) for $currentHostId"
             $update = $true
         }
-        if ((& $propExists 'AlternateIPs') -and -not [string]::IsNullOrWhiteSpace($HostInfo.AlternateIPs)) {
-            $altIps = $HostInfo.AlternateIPs -split ',' | ForEach-Object {$_.Trim()}
+        if ((& $propExists 'AlternateIPs') -and $HostInfo.AlternateIPs) {
+            $altIps = $HostInfo.AlternateIPs -split ',' | ForEach-Object {$_.Trim()} | Where-Object {$_}
             $updateBody.alternateip = $altIps
             Write-Verbose "Updating AlternateIPs for $currentHostId"
             $update = $true
@@ -846,60 +847,188 @@ function Set-AGMHostConfig {
             Write-Warning "No changes specified or values are empty for host $currentHostId."
             return
         }
-
         $jsonBody = $updateBody | ConvertTo-Json -Depth 10 -Compress
         Write-Verbose "Updated JSON Payload for $currentHostId : $jsonBody"
 
-        try {
-            Write-Host "Applying updates to host $currentHostId..."
-            Put-AGMAPIData -endpoint "/host/$currentHostId" -body $jsonBody
-            Write-Host "Successfully updated host $currentHostId."
+        if ($PSCmdlet.ShouldProcess("host ID $currentHostId", "Apply Configuration")) {
+            try {
+                Write-Host "Applying updates to host $currentHostId..."
+                Put-AGMAPIData -endpoint "/host/$currentHostId" -body $jsonBody
+                Write-Host "Successfully updated host $currentHostId."
+            }
+            catch {
+                Write-Error "Error updating host $currentHostId : $($_.Exception.Message)"
+            }
         }
-        catch {
-            Write-Error "Error updating host $currentHostId : $($_.Exception.Message)"
-        }
-    } # End of Update-AGMHostInternal
+    } # End of Sequential Update-AGMHostInternal_Sequential
 
     # Main logic based on ParameterSet
     if ($PSCmdlet.ParameterSetName -eq 'Individual') {
         Write-Host "Processing individual host: $HostId"
-        $hostInfo = @{ HostId = $HostId }
-        if ($PSBoundParameters.ContainsKey('Secret')) { $hostInfo.Secret = $Secret }
-        if ($PSBoundParameters.ContainsKey('IPAddress')) { $hostInfo.IPAddress = $IPAddress }
-        if ($PSBoundParameters.ContainsKey('Hostname')) { $hostInfo.Hostname = $Hostname }
-        if ($PSBoundParameters.ContainsKey('DiskPref')) { $hostInfo.DiskPref = $DiskPref }
-        if ($PSBoundParameters.ContainsKey('AlternateIPs')) { $hostInfo.AlternateIPs = $AlternateIPs -join ',' } # Join for consistency
-        if ($PSBoundParameters.ContainsKey('FriendlyName')) { $hostInfo.FriendlyName = $FriendlyName }
+        $hostInfoData = @{ HostId = $HostId }
+        if ($PSBoundParameters.ContainsKey('Secret')) { $hostInfoData.Secret = $Secret }
+        if ($PSBoundParameters.ContainsKey('IPAddress')) { $hostInfoData.IPAddress = $IPAddress }
+        if ($PSBoundParameters.ContainsKey('Hostname')) { $hostInfoData.Hostname = $Hostname }
+        if ($PSBoundParameters.ContainsKey('DiskPref')) { $hostInfoData.DiskPref = $DiskPref }
+        if ($PSBoundParameters.ContainsKey('AlternateIPs')) { $hostInfoData.AlternateIPs = $AlternateIPs -join ',' }
+        if ($PSBoundParameters.ContainsKey('FriendlyName')) { $hostInfoData.FriendlyName = $FriendlyName }
 
-        Update-AGMHostInternal -HostInfo ([PSCustomObject]$hostInfo)
+        Update-AGMHostInternal_Sequential -HostInfo ([PSCustomObject]$hostInfoData)
     }
     elseif ($PSCmdlet.ParameterSetName -eq 'CsvInput') {
         if (-not (Test-Path $CsvPath)) {
             Write-Error "CSV file not found: $CsvPath"
             return
         }
-        Write-Host "Processing hosts from CSV file: $CsvPath"
+        Write-Host "Processing hosts from CSV file: $CsvPath using $ThrottleLimit threads" -ForegroundColor Cyan
+
         try {
-            $csvData = Import-Csv -Path $CsvPath
-            if ($null -eq $csvData) {
+            $csvData = Import-Csv -Path $CsvPath -Encoding UTF8
+            if ($null -eq $csvData -or $csvData.Count -eq 0) {
                 Write-Warning "CSV file is empty or could not be read."
                 return
             }
 
-            foreach ($row in $csvData) {
-                if (-not $row.PSObject.Properties.Name -contains 'HostId') {
-                     Write-Error "CSV is missing mandatory 'HostId' column."
-                     return
-                }
-                 Write-Host "--- Processing HostId $($row.HostId) from CSV ---"
-                Update-AGMHostInternal -HostInfo $row
+            $properties = $csvData[0].PSObject.Properties.Name
+            Write-Host "Detected CSV Headers: $($properties -join ', ')"
+            if (-not ($properties -contains 'HostId')) {
+                Write-Error "The imported CSV data is missing the mandatory 'HostId' column."
+                return
             }
+
+            $inputItems = $csvData | ForEach-Object {
+                $hash = @{}
+                foreach ($prop in $_.PSObject.Properties) {
+                    $hash[$prop.Name] = $prop.Value
+                }
+                $hash
+            }
+
+            Write-Host "Converted CSV to $($inputItems.Count) hashtable items."
+
+            # Variables to be passed into the parallel script block from the CALLING session's global scope
+            $AGMIP_parent = $global:AGMIP
+            $AGMUser_parent = $global:AGMUser # e.g., <REDACTED_PII>
+            $OAuthClientId_parent = $global:OAuthClientId # e.g., from GCP credentials
+
+            if ([string]::IsNullOrWhiteSpace($AGMIP_parent) -or [string]::IsNullOrWhiteSpace($AGMUser_parent) -or [string]::IsNullOrWhiteSpace($OAuthClientId_parent)) {
+                 Write-Error "Required global variables for connection not set in the calling session: $global:AGMIP, $global:AGMUser, $global:OAuthClientId"
+                 return
+            }
+
+            $Results = $inputItems | ForEach-Object -Parallel {
+                $HostInfo = $_
+
+                if ($null -eq $HostInfo) {
+                    return [PSCustomObject]@{ HostId = "N/A"; Status = "Error: Input HostInfo is NULL" }
+                }
+
+                # --- Module Loading ---
+                try {
+                    Write-Verbose "ThreadID $($PSTask.Task.Id): Loading VMware.VimAutomation.Core..."
+                    Import-Module VMware.VimAutomation.Core -Force -ErrorAction Stop
+                    Write-Verbose "ThreadID $($PSTask.Task.Id): Loading VMware.Sdk.vSphere..."
+                    Import-Module VMware.Sdk.vSphere -Force -ErrorAction Stop
+                    Write-Verbose "ThreadID $($PSTask.Task.Id): Loading AGMPowerCLI..."
+                    Import-Module AGMPowerCLI -Force -ErrorAction Stop
+                }
+                catch {
+                    return [PSCustomObject]@{ HostId = $HostInfo['HostId']; Status = "Error: Module Load Failed - $($_.Exception.Message)" }
+                }
+
+                # --- Establish AGM Connection in this Runspace ---
+                try {
+                    Write-Verbose "ThreadID $($PSTask.Task.Id): Connecting to AGM '$($using:AGMIP_parent)' as user '$($using:AGMUser_parent)'..."
+                    Connect-AGM -agmip $using:AGMIP_parent -agmuser $using:AGMUser_parent 
+
+                    if ([string]::IsNullOrWhiteSpace($global:AGMSESSIONID)) {
+                        throw "Connect-AGM completed but $global:AGMSESSIONID is not set in this thread."
+                    }
+                     Write-Verbose "ThreadID $($PSTask.Task.Id): AGM Connection established."
+                }
+                catch {
+                    return [PSCustomObject]@{ HostId = $HostInfo['HostId']; Status = "Error: AGM Connection Failed - $($_.Exception.Message)" }
+                }
+
+                # --- Definition of Update-AGMHostInternal for PARALLEL PATH ---
+                function Update-AGMHostInternal_Parallel {
+                    param(
+                        [Parameter(Mandatory=$true)]
+                        [hashtable]$HostInfo
+                    )
+
+                    $currentHostId = $HostInfo['HostId']
+                    if ([string]::IsNullOrWhiteSpace($currentHostId)) {
+                        return [PSCustomObject]@{ HostId = "N/A"; Status = "Error: Missing HostId value" }
+                    }
+
+                    Write-Verbose "ThreadID $($PSTask.Task.Id): Fetching config for Host ID: $currentHostId"
+                    $currentHost = $null
+                    try {
+                        # $global:AGMSESSIONID and $global:AGMIP are expected to be set by Connect-AGM in this runspace
+                        $currentHost = Get-AGMHost -filtervalue "id=$currentHostId"
+                        if (-not $currentHost) {
+                            return [PSCustomObject]@{ HostId = $currentHostId; Status = "Error: Fetch Failed (Host $currentHostId not found by Get-AGMHost)" }
+                        }
+                        if ([string]::IsNullOrWhiteSpace($currentHost.id)) {
+                             return [PSCustomObject]@{ HostId = $currentHostId; Status = "Error: Fetch returned object, but 'id' property is missing or empty" }
+                        }
+                        if ($currentHost.id -ne $currentHostId) {
+                             return [PSCustomObject]@{ HostId = $currentHostId; Status = "Error: Fetch Failed (ID mismatch: Expected $currentHostId, Got '$($currentHost.id)')" }
+                        }
+                    }
+                    catch {
+                         return [PSCustomObject]@{ HostId = $currentHostId; Status = "Error: Exception on Fetch - $($_.Exception.Message)" }
+                    }
+
+                    $updateBody = $currentHost | ConvertTo-Json -Depth 10 | ConvertFrom-Json
+                    $update = $false
+
+                    if ($HostInfo.ContainsKey('Secret') -and -not [string]::IsNullOrWhiteSpace($HostInfo['Secret'])) {
+                         if (-not $updateBody.udsagent) { $updateBody | Add-Member -MemberType NoteProperty -Name 'udsagent' -Value ([PSCustomObject]@{}); }
+                         $updateBody.udsagent.shared_secret = $HostInfo['Secret']; $update = $true
+                    }
+                    if ($HostInfo.ContainsKey('IPAddress') -and -not [string]::IsNullOrWhiteSpace($HostInfo['IPAddress'])) { $updateBody.ipaddress = $HostInfo['IPAddress']; $update = $true }
+                    if ($HostInfo.ContainsKey('Hostname') -and -not [string]::IsNullOrWhiteSpace($HostInfo['Hostname'])) { $updateBody.hostname = $HostInfo['Hostname']; $update = $true }
+                    if ($HostInfo.ContainsKey('DiskPref') -and -not [string]::IsNullOrWhiteSpace($HostInfo['DiskPref'])) { $updateBody.diskpref = $HostInfo['DiskPref']; $update = $true }
+                    if ($HostInfo.ContainsKey('AlternateIPs') -and $HostInfo['AlternateIPs']) {
+                        $altIps = $HostInfo['AlternateIPs'] -split ',' | ForEach-Object {$_.Trim()} | Where-Object {$_}
+                        $updateBody.alternateip = $altIps; $update = $true
+                    }
+                    if ($HostInfo.ContainsKey('FriendlyName') -and -not [string]::IsNullOrWhiteSpace($HostInfo['FriendlyName'])) { $updateBody.friendlypath = $HostInfo['FriendlyName']; $update = $true }
+
+                    if (-not $update) {
+                        return [PSCustomObject]@{ HostId = $currentHostId; Status = "Warning: No Changes" }
+                    }
+
+                    $jsonBody = $updateBody | ConvertTo-Json -Depth 10 -Compress
+                    try {
+                        Write-Host "ThreadID $($PSTask.Task.Id): Applying updates to host $currentHostId..."
+                         Put-AGMAPIData -endpoint "/host/$currentHostId" -body $jsonBody
+                        return [PSCustomObject]@{ HostId = $currentHostId; Status = "Success" }
+                    }
+                    catch {
+                        return [PSCustomObject]@{ HostId = $currentHostId; Status = "Error: Exception on PUT - $($_.Exception.Message)" }
+                    }
+                }
+                # --- End of Embedded Function Definition ---
+
+                if (-not $HostInfo.ContainsKey('HostId')) {
+                     return [PSCustomObject]@{ HostId = "N/A"; Status = "Error: Missing HostId key" }
+                }
+                Write-Host "ThreadID $($PSTask.Task.Id): --- Starting update for HostId $($HostInfo['HostId']) ---"
+                Update-AGMHostInternal_Parallel -HostInfo $HostInfo
+
+            } -ThrottleLimit $ThrottleLimit
+
+            Write-Host "--- Parallel CSV processing complete ---" -ForegroundColor Green
+            Write-Host "Summary of parallel updates:"
+            $Results | Format-Table -AutoSize
         }
         catch {
             Write-Error "Error processing CSV file: $($_.Exception.Message)"
         }
     }
-
 }
 
 <#
