@@ -26,7 +26,7 @@
 RootModule = 'AGMPowerCLI.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.0.0.64'
+ModuleVersion = '0.0.0.65'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()

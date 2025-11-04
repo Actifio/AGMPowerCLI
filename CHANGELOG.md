@@ -1,4 +1,7 @@
 # Change log
+## AGMPowerCLI 0.0.0.65
+* Enhance Set-AGMHostConfig to support parallel execution.
+
 ## AGMPowerCLI 0.0.0.64
 * New-AGMLogicalGroup and Set-AGMLogicalGroupMember.
 
