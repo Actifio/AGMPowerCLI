@@ -809,12 +809,16 @@ function Set-AGMHostConfig {
 
         # --- Apply Updates ---
         if ((& $propExists 'Secret') -and -not [string]::IsNullOrWhiteSpace($HostInfo.Secret)) {
-             if (-not $updateBody.udsagent) {
+            if (-not $updateBody.udsagent) {
                  $updateBody | Add-Member -MemberType NoteProperty -Name 'udsagent' -Value ([PSCustomObject]@{});
-             }
-             $updateBody.udsagent.shared_secret = $HostInfo.Secret
-             Write-Verbose "Updating Secret for $currentHostId"
-             $update = $true
+            }
+            if ($updateBody.udsagent.PSObject.Properties.Match('shared_secret').Count -eq 0) {
+                $updateBody.udsagent | Add-Member -MemberType NoteProperty -Name 'shared_secret' -Value $HostInfo.Secret
+            } else {
+                $updateBody.udsagent.shared_secret = $HostInfo.Secret
+            }
+            Write-Verbose "Updating Secret for $currentHostId"
+            $update = $true
         }
         if ((& $propExists 'IPAddress') -and -not [string]::IsNullOrWhiteSpace($HostInfo.IPAddress)) {
             $updateBody.ipaddress = $HostInfo.IPAddress
