@@ -1,4 +1,7 @@
 # Change log
+## AGMPowerCLI 0.0.0.66
+* Fix Set-AGMHostConfig secret key updation.
+
 ## AGMPowerCLI 0.0.0.65
 * Enhance Set-AGMHostConfig to support parallel execution.
 
