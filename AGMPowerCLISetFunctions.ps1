@@ -804,7 +804,10 @@ function Set-AGMHostConfig {
         Write-Verbose "Successfully fetched host: $($currentHost.name)"
         $updateBody = $currentHost | ConvertTo-Json -Depth 10 | ConvertFrom-Json
         $update = $false
-
+        if ($updateBody.PSObject.Properties.Name -contains 'nfsoption') {
+        $updateBody.PSObject.Properties.Remove('nfsoption')
+        Write-Verbose "Removed 'nfsoption' from update payload to prevent API errors."
+        }
         $propExists = { param($propName) $HostInfo.PSObject.Properties.Name -contains $propName }
 
         # --- Apply Updates ---
