@@ -1,4 +1,7 @@
 # Change log
+## AGMPowerCLI 0.0.0.67
+* Remove nfsoption field from the payload during hostupdate.
+
 ## AGMPowerCLI 0.0.0.66
 * Fix Set-AGMHostConfig secret key updation.
 
